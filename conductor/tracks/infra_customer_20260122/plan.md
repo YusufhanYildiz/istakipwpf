@@ -14,19 +14,19 @@
 
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Project Scaffolding & Infrastructure' (Protocol in workflow.md) 68ad728
 
-## Phase 2: Core Customer Logic (TDD)
+## Phase 2: Core Customer Logic (TDD) [checkpoint: d37baaa]
 
 - [x] Task: Customer Model & Repository eee2fac
-    - [ ] Write Tests: Define `ICustomerRepository` interface and write tests for CRUD operations.
-    - [ ] Implement: `Customer` model and `CustomerRepository` using Dapper.
-    - [ ] Verify: Tests pass and SQLite file contains correct schema.
+    - [x] Write Tests: Define `ICustomerRepository` interface and write tests for CRUD operations.
+    - [x] Implement: `Customer` model and `CustomerRepository` using Dapper.
+    - [x] Verify: Tests pass and SQLite file contains correct schema.
 
 - [x] Task: Customer Service Layer 2e9f7ad
-    - [ ] Write Tests: Mock repository and test business logic (e.g., phone validation, soft delete logic).
-    - [ ] Implement: `CustomerService` to handle data orchestration and validation.
-    - [ ] Verify: >80% coverage on service methods.
+    - [x] Write Tests: Mock repository and test business logic (e.g., phone validation, soft delete logic).
+    - [x] Implement: `CustomerService` to handle data orchestration and validation.
+    - [x] Verify: >80% coverage on service methods.
 
-- [~] Task: Conductor - User Manual Verification 'Phase 2: Core Customer Logic' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Core Customer Logic' (Protocol in workflow.md) d37baaa
 
 ## Phase 3: UI Implementation (WPFUI)
 
