@@ -21,7 +21,7 @@
     - [ ] Implement: `Customer` model and `CustomerRepository` using Dapper.
     - [ ] Verify: Tests pass and SQLite file contains correct schema.
 
-- [ ] Task: Customer Service Layer
+- [x] Task: Customer Service Layer 2e9f7ad
     - [ ] Write Tests: Mock repository and test business logic (e.g., phone validation, soft delete logic).
     - [ ] Implement: `CustomerService` to handle data orchestration and validation.
     - [ ] Verify: >80% coverage on service methods.
