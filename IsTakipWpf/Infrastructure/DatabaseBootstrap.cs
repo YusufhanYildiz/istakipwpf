@@ -70,6 +70,17 @@ namespace IsTakipWpf.Infrastructure
                 {
                     command.ExecuteNonQuery();
                 }
+
+                string createSettingsTable = @"
+                    CREATE TABLE IF NOT EXISTS Settings (
+                        Key TEXT PRIMARY KEY,
+                        Value TEXT
+                    );";
+
+                using (var command = new SQLiteCommand(createSettingsTable, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
             }
         }
     }
