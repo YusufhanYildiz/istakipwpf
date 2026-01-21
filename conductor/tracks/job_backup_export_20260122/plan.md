@@ -28,19 +28,19 @@
 
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Job Module Core' (Protocol in workflow.md) bcef801
 
-## Phase 3: Backup & Export Services
+## Phase 3: Backup & Export Services [checkpoint: 3783b97]
 
 - [x] Task: Backup & Restore Service 2dbb2c9
-    - [ ] Write Tests: Verify database file copy and restore logic.
-    - [ ] Implement: `BackupService` with manual/auto triggers and restore capability.
-    - [ ] Verify: Successfully creates and restores backups.
+    - [x] Write Tests: Verify database file copy and restore logic.
+    - [x] Implement: `BackupService` with manual/auto triggers and restore capability.
+    - [x] Verify: Successfully creates and restores backups.
 
 - [x] Task: Integration Services (Excel/PDF) 57e2e95
-    - [ ] Write Tests: Verify Excel schema validation and PDF generation logic.
-    - [ ] Implement: `ExcelService` (ClosedXML) and `ReportingService` (iTextSharp).
-    - [ ] Verify: Bulk import/export and PDF generation work without data loss.
+    - [x] Write Tests: Verify Excel schema validation and PDF generation logic.
+    - [x] Implement: `ExcelService` (ClosedXML) and `ReportingService` (iTextSharp).
+    - [x] Verify: Bulk import/export and PDF generation work without data loss.
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Backup & Export Services' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Backup & Export Services' (Protocol in workflow.md) 3783b97
 
 ## Phase 4: UI Implementation (Material Design)
 
