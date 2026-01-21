@@ -42,16 +42,20 @@
 
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Backup & Export Services' (Protocol in workflow.md) 3783b97
 
-## Phase 4: UI Implementation (Material Design)
+## Phase 4: UI Implementation (Material Design) [checkpoint: c1bc569]
 
-- [ ] Task: Job Management UI
-    - [ ] Create `JobListViewModel` and `JobListView` (Global Task Board).
-    - [ ] Implement color-coded status badges and filtering logic.
-    - [ ] Create `AddEditJobDialog` using MaterialDesign DialogHost.
+- [x] Task: Job Management UI 185df31
+    - [x] Create `JobListViewModel` and `JobListView` (Global Task Board).
+    - [x] Implement color-coded status badges and filtering logic.
+    - [x] Create `AddEditJobDialog` using MaterialDesign DialogHost.
 
-- [ ] Task: Settings & Notifications
-    - [ ] Create `SettingsViewModel` and `SettingsView`.
-    - [ ] Implement Snackbar notifications for all modules.
-    - [ ] Hook into Application Exit event for the backup prompt.
+- [x] Task: Settings & Notifications 972daba
+    - [x] Create `SettingsViewModel` and `SettingsView`.
+    - [x] Implement Snackbar notifications for all modules.
+    - [x] Hook into Application Exit event for the backup prompt.
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: UI Implementation' (Protocol in workflow.md)
+- [x] Task: UI Refinements 8675f61
+    - [x] Update `CustomerListView` DataGrid to include the "Adres" column.
+    - [x] Finalize Side Navigation with "İş Takibi" and "Ayarlar".
+
+- [x] Task: Conductor - User Manual Verification 'Phase 4: UI Implementation' (Protocol in workflow.md) c1bc569
