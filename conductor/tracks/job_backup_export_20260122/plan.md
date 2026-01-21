@@ -16,7 +16,7 @@
 
 ## Phase 2: Job Module Core (TDD)
 
-- [ ] Task: Job Model & Repository
+- [x] Task: Job Model & Repository 62bdf57
     - [ ] Write Tests: Define `IJobRepository` and write tests for CRUD and customer-based queries.
     - [ ] Implement: `Job` model and `JobRepository` using Dapper.
     - [ ] Verify: All repository tests pass.
