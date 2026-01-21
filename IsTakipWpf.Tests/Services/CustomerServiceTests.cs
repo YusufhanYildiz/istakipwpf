@@ -29,7 +29,7 @@ namespace IsTakipWpf.Tests.Services
 
             // Assert
             Assert.False(result.Success);
-            Assert.Equal("Ad alanÄ± boÅŸ bÄ±rakÄ±lamaz.", result.Message);
+            Assert.Equal("Ad alanı boş bırakılamaz.", result.Message);
             _mockRepo.Verify(r => r.AddAsync(It.IsAny<Customer>()), Times.Never);
         }
 
@@ -60,7 +60,7 @@ namespace IsTakipWpf.Tests.Services
 
             // Assert
             Assert.False(result.Success);
-            Assert.Equal("Telefon numarasÄ± geÃ§ersiz.", result.Message);
+            Assert.Equal("Telefon numarası geçersiz.", result.Message);
         }
     }
 }

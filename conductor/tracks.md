@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Project Infrastructure & Core Customer Management**
+- [~] **Track: Project Infrastructure & Core Customer Management**
   *Link: [./tracks/infra_customer_20260122/](./tracks/infra_customer_20260122/)*

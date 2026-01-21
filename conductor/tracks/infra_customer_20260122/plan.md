@@ -26,7 +26,7 @@
     - [ ] Implement: `CustomerService` to handle data orchestration and validation.
     - [ ] Verify: >80% coverage on service methods.
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Core Customer Logic' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Phase 2: Core Customer Logic' (Protocol in workflow.md)
 
 ## Phase 3: UI Implementation (WPFUI)
 
