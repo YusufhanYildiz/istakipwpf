@@ -51,6 +51,7 @@ namespace IsTakipWpf
             // Repositories
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ISettingsRepository, SettingsRepository>();
+            services.AddScoped<IJobRepository, JobRepository>();
 
             // Services
             services.AddScoped<ICustomerService, CustomerService>();
