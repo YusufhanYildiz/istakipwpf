@@ -45,6 +45,9 @@ namespace IsTakipWpf
 
         private void ConfigureServices(IServiceCollection services)
         {
+            // UI
+            services.AddSingleton<MaterialDesignThemes.Wpf.ISnackbarMessageQueue>(new MaterialDesignThemes.Wpf.SnackbarMessageQueue());
+
             // Main Window
             services.AddSingleton<MainWindow>();
 
@@ -62,11 +65,16 @@ namespace IsTakipWpf
 
             // ViewModels
             services.AddSingleton<MainWindowViewModel>();
+            services.AddTransient<DashboardViewModel>();
             services.AddTransient<CustomerListViewModel>();
+            services.AddTransient<JobListViewModel>();
+            services.AddTransient<SettingsViewModel>();
 
             // Views
             services.AddTransient<DashboardView>();
             services.AddTransient<CustomerListView>();
+            services.AddTransient<JobListView>();
+            services.AddTransient<SettingsView>();
         }
     }
 }

@@ -11,6 +11,7 @@ namespace IsTakipWpf.ViewModels
     public class CustomerListViewModel : ViewModelBase
     {
         private readonly ICustomerService _customerService;
+        private readonly MaterialDesignThemes.Wpf.ISnackbarMessageQueue _messageQueue;
         private string _searchTerm;
         private bool _isLoading;
 
@@ -40,9 +41,10 @@ namespace IsTakipWpf.ViewModels
         public ICommand EditCustomerCommand { get; }
         public ICommand DeleteCustomerCommand { get; }
 
-        public CustomerListViewModel(ICustomerService customerService)
+        public CustomerListViewModel(ICustomerService customerService, MaterialDesignThemes.Wpf.ISnackbarMessageQueue messageQueue)
         {
             _customerService = customerService;
+            _messageQueue = messageQueue;
 
             LoadCustomersCommand = new RelayCommand(async _ => await LoadCustomersAsync());
             SearchCommand = new RelayCommand(async _ => await SearchAsync());
@@ -115,6 +117,7 @@ namespace IsTakipWpf.ViewModels
             var result = await _customerService.DeleteCustomerAsync(customer.Id);
             if (result)
             {
+                _messageQueue.Enqueue("Müşteri başarıyla silindi.");
                 await LoadCustomersAsync();
             }
         }

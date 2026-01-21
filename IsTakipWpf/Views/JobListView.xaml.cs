@@ -3,9 +3,9 @@ using IsTakipWpf.ViewModels;
 
 namespace IsTakipWpf.Views
 {
-    public partial class DashboardView : UserControl
+    public partial class JobListView : UserControl
     {
-        public DashboardView(DashboardViewModel viewModel)
+        public JobListView(JobListViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;

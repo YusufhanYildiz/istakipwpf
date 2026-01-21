@@ -15,9 +15,12 @@ namespace IsTakipWpf.ViewModels
             set => SetProperty(ref _currentView, value);
         }
 
-        public MainWindowViewModel(IServiceProvider serviceProvider)
+        public MaterialDesignThemes.Wpf.ISnackbarMessageQueue MessageQueue { get; }
+
+        public MainWindowViewModel(IServiceProvider serviceProvider, MaterialDesignThemes.Wpf.ISnackbarMessageQueue messageQueue)
         {
             _serviceProvider = serviceProvider;
+            MessageQueue = messageQueue;
             // Initial view
             CurrentView = _serviceProvider.GetRequiredService<DashboardView>();
         }
@@ -31,6 +34,12 @@ namespace IsTakipWpf.ViewModels
                     break;
                 case "Customers":
                     CurrentView = _serviceProvider.GetRequiredService<CustomerListView>();
+                    break;
+                case "Jobs":
+                    CurrentView = _serviceProvider.GetRequiredService<JobListView>();
+                    break;
+                case "Settings":
+                    CurrentView = _serviceProvider.GetRequiredService<SettingsView>();
                     break;
             }
         }

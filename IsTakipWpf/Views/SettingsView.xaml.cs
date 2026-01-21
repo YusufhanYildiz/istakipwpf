@@ -3,9 +3,9 @@ using IsTakipWpf.ViewModels;
 
 namespace IsTakipWpf.Views
 {
-    public partial class DashboardView : UserControl
+    public partial class SettingsView : UserControl
     {
-        public DashboardView(DashboardViewModel viewModel)
+        public SettingsView(SettingsViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;
