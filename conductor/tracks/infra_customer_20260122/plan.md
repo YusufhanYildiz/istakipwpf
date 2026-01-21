@@ -1,18 +1,18 @@
 # Implementation Plan: Project Infrastructure & Core Customer Management
 
-## Phase 1: Project Scaffolding & Infrastructure
+## Phase 1: Project Scaffolding & Infrastructure [checkpoint: 68ad728]
 
 - [x] Task: Create .NET 4.8 WPF Project Structure a191573
-    - [ ] Initialize Visual Studio Solution and Project.
-    - [ ] Install NuGet Packages: WPFUI, Dapper, System.Data.SQLite, Microsoft.Extensions.DependencyInjection.
-    - [ ] Set up Folder Structure: `Models`, `ViewModels`, `Views`, `Services`, `Repositories`, `Infrastructure`.
+    - [x] Initialize Visual Studio Solution and Project.
+    - [x] Install NuGet Packages: WPFUI, Dapper, System.Data.SQLite, Microsoft.Extensions.DependencyInjection.
+    - [x] Set up Folder Structure: `Models`, `ViewModels`, `Views`, `Services`, `Repositories`, `Infrastructure`.
 
 - [x] Task: Database & DI Setup d8c7b25
-    - [ ] Implement `DatabaseBootstrap` to create SQLite file and `Customers` table.
-    - [ ] Set up `ServiceCollection` for Dependency Injection.
-    - [ ] Create `BaseRepository` for centralized Dapper connection handling.
+    - [x] Implement `DatabaseBootstrap` to create SQLite file and `Customers` table.
+    - [x] Set up `ServiceCollection` for Dependency Injection.
+    - [x] Create `BaseRepository` for centralized Dapper connection handling.
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Project Scaffolding & Infrastructure' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Project Scaffolding & Infrastructure' (Protocol in workflow.md) 68ad728
 
 ## Phase 2: Core Customer Logic (TDD)
 
