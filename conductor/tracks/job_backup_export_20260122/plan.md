@@ -7,7 +7,7 @@
     - [ ] Implement `ISettingsRepository` and `SettingsRepository`.
     - [ ] Verify: Database correctly initializes with all tables.
 
-- [ ] Task: Customer Module Refinement
+- [x] Task: Customer Module Refinement 8675f61
     - [ ] Update `Customer` model to include any missing fields (e.g., `Phone` mapping).
     - [ ] Update `CustomerListView.xaml` to show the "Adres" column.
     - [ ] Verify: Address is correctly displayed in the Customer DataGrid.
