@@ -1,13 +1,57 @@
-﻿using System.Configuration;
-using System.Data;
+using System;
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
+using IsTakipWpf.Infrastructure;
 
-namespace IsTakipWpf;
-
-/// <summary>
-/// Interaction logic for App.xaml
-/// </summary>
-public partial class App : Application
+namespace IsTakipWpf
 {
-}
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
+    {
+        /// <summary>
+        /// Gets the application's service provider.
+        /// </summary>
+        public static IServiceProvider ServiceProvider { get; private set; }
 
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            try
+            {
+                // Initialize Database
+                DatabaseBootstrap.Initialize();
+
+                var serviceCollection = new ServiceCollection();
+                ConfigureServices(serviceCollection);
+
+                ServiceProvider = serviceCollection.BuildServiceProvider();
+
+                var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+                mainWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Uygulama baÅŸlatÄ±lÄ±rken bir hata oluÅŸtu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+                Shutdown();
+            }
+        }
+
+        private void ConfigureServices(IServiceCollection services)
+        {
+            // Main Window
+            services.AddSingleton<MainWindow>();
+
+            // Repositories
+            // services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+            // Services
+            // services.AddScoped<ICustomerService, CustomerService>();
+
+            // ViewModels
+            // services.AddTransient<CustomerListViewModel>();
+        }
+    }
+}
