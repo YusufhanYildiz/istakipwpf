@@ -21,7 +21,7 @@
     - [ ] Implement: `Job` model and `JobRepository` using Dapper.
     - [ ] Verify: All repository tests pass.
 
-- [ ] Task: Job Service Layer
+- [x] Task: Job Service Layer 0961180
     - [ ] Write Tests: Mock repository and test business logic (validation, status updates).
     - [ ] Implement: `JobService` for data orchestration.
     - [ ] Verify: >80% coverage on service methods.
