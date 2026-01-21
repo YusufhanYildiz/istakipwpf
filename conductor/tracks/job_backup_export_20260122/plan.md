@@ -30,7 +30,7 @@
 
 ## Phase 3: Backup & Export Services
 
-- [ ] Task: Backup & Restore Service
+- [x] Task: Backup & Restore Service 2dbb2c9
     - [ ] Write Tests: Verify database file copy and restore logic.
     - [ ] Implement: `BackupService` with manual/auto triggers and restore capability.
     - [ ] Verify: Successfully creates and restores backups.
