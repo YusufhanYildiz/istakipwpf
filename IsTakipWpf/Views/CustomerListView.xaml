@@ -44,6 +44,7 @@
                     <DataGridTextColumn Header="Ad" Binding="{Binding FirstName}" Width="*"/>
                     <DataGridTextColumn Header="Soyad" Binding="{Binding LastName}" Width="*"/>
                     <DataGridTextColumn Header="Telefon" Binding="{Binding PhoneNumber}" Width="*"/>
+                    <DataGridTextColumn Header="Adres" Binding="{Binding Address}" Width="2*"/>
                     <DataGridTemplateColumn Width="120">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
