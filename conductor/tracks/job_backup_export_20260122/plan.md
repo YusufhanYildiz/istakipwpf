@@ -35,7 +35,7 @@
     - [ ] Implement: `BackupService` with manual/auto triggers and restore capability.
     - [ ] Verify: Successfully creates and restores backups.
 
-- [ ] Task: Integration Services (Excel/PDF)
+- [x] Task: Integration Services (Excel/PDF) 57e2e95
     - [ ] Write Tests: Verify Excel schema validation and PDF generation logic.
     - [ ] Implement: `ExcelService` (ClosedXML) and `ReportingService` (iTextSharp).
     - [ ] Verify: Bulk import/export and PDF generation work without data loss.
