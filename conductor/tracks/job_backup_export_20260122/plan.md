@@ -2,7 +2,7 @@
 
 ## Phase 1: Infrastructure & Refinement
 
-- [ ] Task: Database Schema Update
+- [x] Task: Database Schema Update 861243a
     - [ ] Update `DatabaseBootstrap.cs` to include `Jobs` and `Settings` tables.
     - [ ] Implement `ISettingsRepository` and `SettingsRepository`.
     - [ ] Verify: Database correctly initializes with all tables.
