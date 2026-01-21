@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using IsTakipWpf.Infrastructure;
 using IsTakipWpf.Repositories;
 using IsTakipWpf.Services;
+using IsTakipWpf.ViewModels;
+using IsTakipWpf.Views;
 
 namespace IsTakipWpf
 {
@@ -53,7 +55,12 @@ namespace IsTakipWpf
             services.AddScoped<ICustomerService, CustomerService>();
 
             // ViewModels
-            // services.AddTransient<CustomerListViewModel>();
+            services.AddSingleton<MainWindowViewModel>();
+            services.AddTransient<CustomerListViewModel>();
+
+            // Views
+            services.AddTransient<DashboardView>();
+            services.AddTransient<CustomerListView>();
         }
     }
 }

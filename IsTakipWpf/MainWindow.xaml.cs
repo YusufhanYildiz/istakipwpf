@@ -1,23 +1,30 @@
-﻿using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using IsTakipWpf.ViewModels;
 
-namespace IsTakipWpf;
-
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
-public partial class MainWindow : Window
+namespace IsTakipWpf
 {
-    public MainWindow()
+    public partial class MainWindow : Window
     {
-        InitializeComponent();
+        private readonly MainWindowViewModel _viewModel;
+
+        public MainWindow(MainWindowViewModel viewModel)
+        {
+            _viewModel = viewModel;
+            DataContext = _viewModel;
+            InitializeComponent();
+        }
+
+        private void RootNavigation_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ListBox listBox && listBox.SelectedItem is ListBoxItem selectedItem)
+            {
+                _viewModel.Navigate(selectedItem.Tag?.ToString());
+                if (MenuToggleButton != null)
+                {
+                    MenuToggleButton.IsChecked = false;
+                }
+            }
+        }
     }
 }

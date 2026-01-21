@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using IsTakipWpf.Models;
@@ -26,11 +26,11 @@ namespace IsTakipWpf.Services
             try
             {
                 var id = await _repository.AddAsync(customer);
-                return (true, "MÃ¼ÅŸteri baÅŸarÄ±yla oluÅŸturuldu.", id);
+                return (true, "Müşteri başarıyla oluşturuldu.", id);
             }
             catch (Exception ex)
             {
-                return (false, $"MÃ¼ÅŸteri oluÅŸturulurken bir hata oluÅŸtu: {ex.Message}", 0);
+                return (false, $"Müşteri oluşturulurken bir hata oluştu: {ex.Message}", 0);
             }
         }
 
@@ -69,11 +69,11 @@ namespace IsTakipWpf.Services
             try
             {
                 var result = await _repository.UpdateAsync(customer);
-                return result ? (true, "MÃ¼ÅŸteri gÃ¼ncellendi.") : (false, "MÃ¼ÅŸteri bulunamadÄ± veya gÃ¼ncellenemedi.");
+                return result ? (true, "Müşteri güncellendi.") : (false, "Müşteri bulunamadı veya güncellenemedi.");
             }
             catch (Exception ex)
             {
-                return (false, $"MÃ¼ÅŸteri gÃ¼ncellenirken bir hata oluÅŸtu: {ex.Message}");
+                return (false, $"Müşteri güncellenirken bir hata oluştu: {ex.Message}");
             }
         }
 
@@ -81,18 +81,18 @@ namespace IsTakipWpf.Services
         {
             if (string.IsNullOrWhiteSpace(customer.FirstName))
             {
-                return (false, "Ad alanÄ± boÅŸ bÄ±rakÄ±lamaz.");
+                return (false, "Ad alanı boş bırakılamaz.");
             }
 
             if (string.IsNullOrWhiteSpace(customer.LastName))
             {
-                return (false, "Soyad alanÄ± boÅŸ bÄ±rakÄ±lamaz.");
+                return (false, "Soyad alanı boş bırakılamaz.");
             }
 
             // Simple phone validation - can be improved later
             if (!string.IsNullOrWhiteSpace(customer.PhoneNumber) && customer.PhoneNumber.Length < 10)
             {
-                return (false, "Telefon numarasÄ± geÃ§ersiz.");
+                return (false, "Telefon numarası geçersiz.");
             }
 
             return (true, string.Empty);

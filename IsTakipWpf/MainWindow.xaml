@@ -3,10 +3,58 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:IsTakipWpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="İş Takip Sistemi" Height="700" Width="1100"
+        WindowStartupLocation="CenterScreen"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{materialDesign:MaterialDesignFont}">
+    
+    <materialDesign:DialogHost Identifier="RootDialog">
+        <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <DockPanel MinWidth="220">
+                    <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
+                                  DockPanel.Dock="Top"
+                                  HorizontalAlignment="Right" Margin="16"
+                                  IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
+                    
+                    <ListBox x:Name="DemoItemsListBox" Margin="0 16 0 16"
+                             SelectedIndex="0"
+                             SelectionChanged="RootNavigation_SelectionChanged">
+                        <ListBoxItem Tag="Dashboard">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Home" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Panel" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem Tag="Customers">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="AccountMultiple" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Müşteriler" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                    </ListBox>
+                </DockPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
 
-    </Grid>
+            <DockPanel>
+                <materialDesign:ColorZone Padding="16" materialDesign:ElevationAssist.Elevation="Dp4"
+                                          Mode="PrimaryMid" DockPanel.Dock="Top">
+                    <DockPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <ToggleButton x:Name="MenuToggleButton" Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
+                                          IsChecked="False"
+                                          AutomationProperties.Name="HamburgerToggleButton"/>
+                            <TextBlock VerticalAlignment="Center" Margin="16 0 0 0" FontSize="20" Text="İş Takip Sistemi"/>
+                        </StackPanel>
+                    </DockPanel>
+                </materialDesign:ColorZone>
+
+                <ContentControl Content="{Binding CurrentView}" Margin="16"/>
+            </DockPanel>
+        </materialDesign:DrawerHost>
+    </materialDesign:DialogHost>
 </Window>
