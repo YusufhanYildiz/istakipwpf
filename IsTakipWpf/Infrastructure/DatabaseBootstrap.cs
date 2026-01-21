@@ -6,7 +6,7 @@ namespace IsTakipWpf.Infrastructure
 {
     public static class DatabaseBootstrap
     {
-        private static readonly string DbFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IsTakipWpf");
+        private static readonly string DbFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
         private static readonly string DbPath = Path.Combine(DbFolder, "database.db");
 
         /// <summary>
