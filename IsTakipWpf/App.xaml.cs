@@ -3,6 +3,7 @@ using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using IsTakipWpf.Infrastructure;
 using IsTakipWpf.Repositories;
+using IsTakipWpf.Services;
 
 namespace IsTakipWpf
 {
@@ -49,7 +50,7 @@ namespace IsTakipWpf
             services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             // Services
-            // services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<ICustomerService, CustomerService>();
 
             // ViewModels
             // services.AddTransient<CustomerListViewModel>();
