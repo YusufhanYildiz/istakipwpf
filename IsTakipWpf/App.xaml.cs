@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using IsTakipWpf.Infrastructure;
+using IsTakipWpf.Repositories;
 
 namespace IsTakipWpf
 {
@@ -45,7 +46,7 @@ namespace IsTakipWpf
             services.AddSingleton<MainWindow>();
 
             // Repositories
-            // services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             // Services
             // services.AddScoped<ICustomerService, CustomerService>();
