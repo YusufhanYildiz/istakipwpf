@@ -16,7 +16,7 @@
 
 ## Phase 2: Core Customer Logic (TDD)
 
-- [ ] Task: Customer Model & Repository
+- [x] Task: Customer Model & Repository eee2fac
     - [ ] Write Tests: Define `ICustomerRepository` interface and write tests for CRUD operations.
     - [ ] Implement: `Customer` model and `CustomerRepository` using Dapper.
     - [ ] Verify: Tests pass and SQLite file contains correct schema.
