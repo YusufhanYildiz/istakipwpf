@@ -7,7 +7,7 @@ namespace IsTakipWpf.Infrastructure
     public static class DatabaseBootstrap
     {
         private static readonly string DbFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
-        private static readonly string DbPath = Path.Combine(DbFolder, "database.db");
+        public static readonly string DbPath = Path.Combine(DbFolder, "database.db");
 
         /// <summary>
         /// Gets the SQLite connection string.

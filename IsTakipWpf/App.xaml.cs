@@ -56,6 +56,7 @@ namespace IsTakipWpf
             // Services
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IJobService, JobService>();
+            services.AddScoped<IBackupService, BackupService>();
 
             // ViewModels
             services.AddSingleton<MainWindowViewModel>();
