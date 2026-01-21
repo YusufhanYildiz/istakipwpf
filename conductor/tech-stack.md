@@ -6,8 +6,8 @@
 - **Architecture Pattern:** Model-View-ViewModel (MVVM)
 
 ## User Interface (UI/UX)
-- **Component Library:** [WPFUI (Lepoco)](https://github.com/lepoco/wpfui) - Modern Windows 11 style controls.
-- **Icons:** Fluent System Icons (included with WPFUI).
+- **Component Library:** [Material Design In Xaml Toolkit](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit) - Material Design for WPF.
+- **Icons:** Material Design Icons.
 - **Localization:** Standard .NET Resources (.resx) for Turkish (TR) and English (EN) support.
 
 ## Data Persistence

@@ -12,7 +12,7 @@ This track focuses on setting up the foundational technical architecture for the
 
 ## Technical Requirements
 - **Framework:** .NET Framework 4.8.
-- **UI:** WPFUI (Lepoco) for modern styling.
+- **UI:** Material Design In Xaml Toolkit for modern styling.
 - **Data Access:** Dapper as the Micro-ORM.
 - **Persistence:** SQLite local file (`AppData/database.db`).
 - **Architecture:** Strict MVVM (View -> ViewModel -> Service -> Repository).
@@ -24,7 +24,7 @@ This track focuses on setting up the foundational technical architecture for the
 - **UI:** A DataGrid showing all non-deleted customers with sorting and row actions.
 
 ## Acceptance Criteria
-- [ ] Project compiles and launches a WPFUI-styled window.
+- [ ] Project compiles and launches a Material Design styled window.
 - [ ] Database is automatically created on first run with the `Customers` table.
 - [ ] Users can add, edit, and search for customers.
 - [ ] Deleted customers are hidden from the UI but remain in the database.

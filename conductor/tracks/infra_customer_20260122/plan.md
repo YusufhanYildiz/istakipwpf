@@ -28,15 +28,15 @@
 
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Core Customer Logic' (Protocol in workflow.md) d37baaa
 
-## Phase 3: UI Implementation (WPFUI)
+## Phase 3: UI Implementation (Material Design)
 
-- [ ] Task: Main Window & Navigation
-    - [ ] Implement `MainWindow` with `WPFUI.Controls.NavigationView`.
-    - [ ] Create `DashboardView` and `CustomerListView`.
+- [~] Task: Main Window & Navigation
+    - [ ] Implement `MainWindow` with `MaterialDesignThemes.Wpf.ColorZone` and `DrawerHost`.
+    - [ ] Create `DashboardView` and `CustomerListView` using Material Design components.
 
 - [ ] Task: Customer Management UI
     - [ ] Implement `CustomerListViewModel` with Search and Sorting.
-    - [ ] Create `AddEditCustomerDialog` using WPFUI dialog components.
+    - [ ] Create `AddEditCustomerDialog` using Material Design dialog host.
     - [ ] Bind View to Service and Repository via DI.
 
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: UI Implementation' (Protocol in workflow.md)
