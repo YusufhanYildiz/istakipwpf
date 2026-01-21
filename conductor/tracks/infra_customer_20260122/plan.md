@@ -2,12 +2,12 @@
 
 ## Phase 1: Project Scaffolding & Infrastructure
 
-- [ ] Task: Create .NET 4.8 WPF Project Structure
+- [x] Task: Create .NET 4.8 WPF Project Structure a191573
     - [ ] Initialize Visual Studio Solution and Project.
     - [ ] Install NuGet Packages: WPFUI, Dapper, System.Data.SQLite, Microsoft.Extensions.DependencyInjection.
     - [ ] Set up Folder Structure: `Models`, `ViewModels`, `Views`, `Services`, `Repositories`, `Infrastructure`.
 
-- [ ] Task: Database & DI Setup
+- [x] Task: Database & DI Setup d8c7b25
     - [ ] Implement `DatabaseBootstrap` to create SQLite file and `Customers` table.
     - [ ] Set up `ServiceCollection` for Dependency Injection.
     - [ ] Create `BaseRepository` for centralized Dapper connection handling.
