@@ -14,19 +14,19 @@
 
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Refinement' (Protocol in workflow.md) 3100b22
 
-## Phase 2: Job Module Core (TDD)
+## Phase 2: Job Module Core (TDD) [checkpoint: bcef801]
 
 - [x] Task: Job Model & Repository 62bdf57
-    - [ ] Write Tests: Define `IJobRepository` and write tests for CRUD and customer-based queries.
-    - [ ] Implement: `Job` model and `JobRepository` using Dapper.
-    - [ ] Verify: All repository tests pass.
+    - [x] Write Tests: Define `IJobRepository` and write tests for CRUD and customer-based queries.
+    - [x] Implement: `Job` model and `JobRepository` using Dapper.
+    - [x] Verify: All repository tests pass.
 
 - [x] Task: Job Service Layer 0961180
-    - [ ] Write Tests: Mock repository and test business logic (validation, status updates).
-    - [ ] Implement: `JobService` for data orchestration.
-    - [ ] Verify: >80% coverage on service methods.
+    - [x] Write Tests: Mock repository and test business logic (validation, status updates).
+    - [x] Implement: `JobService` for data orchestration.
+    - [x] Verify: >80% coverage on service methods.
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Job Module Core' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Job Module Core' (Protocol in workflow.md) bcef801
 
 ## Phase 3: Backup & Export Services
 
