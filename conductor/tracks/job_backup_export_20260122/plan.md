@@ -1,18 +1,18 @@
 # Implementation Plan: Job Tracking, Backup, and Export/Import Implementation
 
-## Phase 1: Infrastructure & Refinement
+## Phase 1: Infrastructure & Refinement [checkpoint: 3100b22]
 
 - [x] Task: Database Schema Update 861243a
-    - [ ] Update `DatabaseBootstrap.cs` to include `Jobs` and `Settings` tables.
-    - [ ] Implement `ISettingsRepository` and `SettingsRepository`.
-    - [ ] Verify: Database correctly initializes with all tables.
+    - [x] Update `DatabaseBootstrap.cs` to include `Jobs` and `Settings` tables.
+    - [x] Implement `ISettingsRepository` and `SettingsRepository`.
+    - [x] Verify: Database correctly initializes with all tables.
 
 - [x] Task: Customer Module Refinement 8675f61
-    - [ ] Update `Customer` model to include any missing fields (e.g., `Phone` mapping).
-    - [ ] Update `CustomerListView.xaml` to show the "Adres" column.
-    - [ ] Verify: Address is correctly displayed in the Customer DataGrid.
+    - [x] Update `Customer` model to include any missing fields (e.g., `Phone` mapping).
+    - [x] Update `CustomerListView.xaml` to show the "Adres" column.
+    - [x] Verify: Address is correctly displayed in the Customer DataGrid.
 
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Refinement' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Refinement' (Protocol in workflow.md) 3100b22
 
 ## Phase 2: Job Module Core (TDD)
 
