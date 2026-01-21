@@ -9,6 +9,7 @@
 - **Navigation:** Side navigation menu for quick switching between Customers, Jobs, and Settings.
 - **Data Grids:** All grids must support sorting and column-based filtering.
 - **Global Search:** Implement a "search-as-you-type" functionality for all main modules.
+- **Feedback:** Use Snackbar notifications for real-time operation feedback (Add, Delete, Backup, etc.).
 
 # Functional Guidelines
 
