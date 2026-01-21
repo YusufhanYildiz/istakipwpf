@@ -1,9 +1,9 @@
 # UI / UX Guidelines
 
 ## Visual Aesthetic
-- **Professional & Minimalist:** Use the WPFUI (Lepoco) library to maintain a clean, modern Windows-native look.
+- **Modern & Functional:** Use the Material Design In Xaml Toolkit to provide a modern, responsive, and highly usable interface.
 - **Whitespace & Typography:** Prioritize readability with generous spacing and standard system fonts.
-- **Color Palette:** Use standard WPFUI themes. Reserve accent colors for high-value information like status badges (Waiting: Amber, In Progress: Blue, Completed: Green, Cancelled: Red).
+- **Color Palette:** Use standard Material Design themes. Reserve primary/accent colors for high-value information like status badges (Waiting: Amber, In Progress: Blue, Completed: Green, Cancelled: Red).
 
 ## Interaction Patterns
 - **Navigation:** Side navigation menu for quick switching between Customers, Jobs, and Settings.

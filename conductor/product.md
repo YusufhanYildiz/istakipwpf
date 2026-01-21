@@ -1,5 +1,5 @@
 # Initial Concept
-Develop a fully local, offline-capable Customer & Job Tracking System using .NET Framework 4.8, WPF (MVVM), SQLite, Dapper, and WPFUI (Lepoco). The system will include Customer Management, Job/Work Tracking, and Backup/Restore modules with Excel/PDF import/export capabilities.
+Develop a fully local, offline-capable Customer & Job Tracking System using .NET Framework 4.8, WPF (MVVM), SQLite, Dapper, and Material Design In Xaml Toolkit. The system will include Customer Management, Job/Work Tracking, and Backup/Restore modules with Excel/PDF import/export capabilities.
 
 # Product Vision
 A professional, privacy-focused desktop application designed for small business owners and solopreneurs who require absolute data ownership and offline reliability.
