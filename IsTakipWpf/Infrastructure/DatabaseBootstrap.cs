@@ -90,12 +90,20 @@ namespace IsTakipWpf.Infrastructure
                     if (count == 0)
                     {
                         // Initial password is "admin"
-                        // Since AuthService isn't ready yet, I'll insert a plain value or a placeholder.
-                        // Actually, I should probably do this in the AuthService initialization or a later task.
-                        // But for schema task, ensuring it exists is good.
-                        string insertDefault = "INSERT INTO Settings (Key, Value) VALUES ('AdminPasswordHash', 'admin');";
-                        using (var insertCmd = new SQLiteCommand(insertDefault, connection))
+                        // We also need a salt
+                        string salt = Guid.NewGuid().ToString("N");
+                        
+                        string insertHash = "INSERT OR IGNORE INTO Settings (Key, Value) VALUES ('AdminPasswordHash', 'admin');";
+                        string insertSalt = "INSERT OR IGNORE INTO Settings (Key, Value) VALUES ('AdminPasswordSalt', @salt);";
+                        
+                        using (var insertCmd = new SQLiteCommand(insertHash, connection))
                         {
+                            insertCmd.ExecuteNonQuery();
+                        }
+                        
+                        using (var insertCmd = new SQLiteCommand(insertSalt, connection))
+                        {
+                            insertCmd.Parameters.AddWithValue("@salt", salt);
                             insertCmd.ExecuteNonQuery();
                         }
                     }

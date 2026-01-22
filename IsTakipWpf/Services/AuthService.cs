@@ -10,6 +10,7 @@ namespace IsTakipWpf.Services
     {
         private readonly ISettingsRepository _settingsRepository;
         private const string PasswordKey = "AdminPasswordHash";
+        private const string SaltKey = "AdminPasswordSalt";
         private const string RememberMeKey = "RememberMe";
 
         public AuthService(ISettingsRepository settingsRepository)
@@ -22,20 +23,25 @@ namespace IsTakipWpf.Services
             if (string.IsNullOrEmpty(password)) return false;
 
             var storedHash = await _settingsRepository.GetValueAsync(PasswordKey);
+            var storedSalt = await _settingsRepository.GetValueAsync(SaltKey);
             
-            // Initial migration from plain text to hash
+            // Initial migration from plain text to hash+salt
             if (storedHash == "admin")
             {
                 if (password == "admin")
                 {
-                    var newHash = HashPassword("admin");
+                    var newSalt = Guid.NewGuid().ToString("N");
+                    var newHash = HashPassword("admin", newSalt);
                     await _settingsRepository.SetValueAsync(PasswordKey, newHash);
+                    await _settingsRepository.SetValueAsync(SaltKey, newSalt);
                     return true;
                 }
                 return false;
             }
 
-            var inputHash = HashPassword(password);
+            if (string.IsNullOrEmpty(storedSalt)) return false;
+
+            var inputHash = HashPassword(password, storedSalt);
             return storedHash == inputHash;
         }
 
@@ -43,8 +49,13 @@ namespace IsTakipWpf.Services
         {
             if (await AuthenticateAsync(currentPassword))
             {
-                var newHash = HashPassword(newPassword);
-                return await _settingsRepository.SetValueAsync(PasswordKey, newHash);
+                var newSalt = Guid.NewGuid().ToString("N");
+                var newHash = HashPassword(newPassword, newSalt);
+                
+                var r1 = await _settingsRepository.SetValueAsync(PasswordKey, newHash);
+                var r2 = await _settingsRepository.SetValueAsync(SaltKey, newSalt);
+                
+                return r1 && r2;
             }
             return false;
         }
@@ -60,11 +71,12 @@ namespace IsTakipWpf.Services
             await _settingsRepository.SetValueAsync(RememberMeKey, enabled.ToString());
         }
 
-        private string HashPassword(string password)
+        private string HashPassword(string password, string salt)
         {
             using (var sha256 = SHA256.Create())
             {
-                var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                var combined = password + salt;
+                var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(combined));
                 var builder = new StringBuilder();
                 foreach (var b in bytes)
                 {

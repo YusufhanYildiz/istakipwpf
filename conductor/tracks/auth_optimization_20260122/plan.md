@@ -1,7 +1,7 @@
 ﻿# 📋 Implementation Plan: Login, Şifre Yönetimi ve Optimizasyon
 
 ## Faz 1: Kimlik Doğrulama Altyapısı (Infrastructure) [checkpoint: 3820b19]
-- [ ] Task: Veritabanı Şeması Güncelleme
+- [~] Task: Veritabanı Şeması Güncelleme
     - [ ] Settings tablosuna AdminPasswordHash ve AdminPasswordSalt ekle.
     - [ ] Varsayılan şifreyi (admin) oluştur.
 - [x] Task: Kimlik Doğrulama Servisi (AuthService)
