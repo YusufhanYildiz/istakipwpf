@@ -6,5 +6,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: Login, Şifre Yönetimi ve Optimizasyon**
+- [x] **Track: Login, Şifre Yönetimi ve Optimizasyon**
 *Link: [./tracks/auth_optimization_20260122/](./tracks/auth_optimization_20260122/)*
