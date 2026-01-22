@@ -51,7 +51,7 @@
                             <Button Content="YÜKLE VE YENİDEN BAŞLAT" 
                                     Command="{Binding ApplyUpdateCommand}"
                                     Visibility="{Binding CanRestartToUpdate, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Style="{StaticResource MaterialDesignRaisedAccentButton}"/>
+                                    Style="{StaticResource MaterialDesignRaisedButton}"/>
                         </StackPanel>
                         
                         <ProgressBar IsIndeterminate="True" 
