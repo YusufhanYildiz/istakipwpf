@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:IsTakipWpf.Views"
+        xmlns:infra="clr-namespace:IsTakipWpf.Infrastructure"
         mc:Ignorable="d"
         Title="İş Takip - Giriş" Height="450" Width="400"
         WindowStartupLocation="CenterScreen"
@@ -15,6 +16,10 @@
     
     <Border CornerRadius="20" Background="{DynamicResource MaterialDesignPaper}">
         <Grid>
+            <Grid.Resources>
+                <infra:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+                <infra:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+            </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -55,11 +60,38 @@
 
                 <!-- Password with Toggle -->
                 <Grid Margin="0,0,0,15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
                     <PasswordBox x:Name="PasswordBox"
+                                Grid.Column="0"
                                 materialDesign:HintAssist.Hint="Şifre"
                                 Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
                                 FontSize="16"
-                                PasswordChanged="PasswordBox_PasswordChanged"/>
+                                PasswordChanged="PasswordBox_PasswordChanged"
+                                Visibility="{Binding IsPasswordVisible, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+                                
+                    <TextBox x:Name="VisiblePasswordBox"
+                             Grid.Column="0"
+                             materialDesign:HintAssist.Hint="Şifre"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             FontSize="16"
+                             Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                             Visibility="{Binding IsPasswordVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                    <ToggleButton Grid.Column="1"
+                                  IsChecked="{Binding IsPasswordVisible}"
+                                  Style="{StaticResource MaterialDesignActionToggleButton}"
+                                  Margin="5,0,0,0">
+                        <ToggleButton.Content>
+                            <materialDesign:PackIcon Kind="EyeOff" />
+                        </ToggleButton.Content>
+                        <materialDesign:ToggleButtonAssist.OnContent>
+                            <materialDesign:PackIcon Kind="Eye" />
+                        </materialDesign:ToggleButtonAssist.OnContent>
+                    </ToggleButton>
                 </Grid>
 
                 <CheckBox Content="Beni Hatırla" 

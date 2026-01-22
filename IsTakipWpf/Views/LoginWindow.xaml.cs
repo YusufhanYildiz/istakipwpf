@@ -20,6 +20,35 @@ namespace IsTakipWpf.Views
                         DialogResult = true;
                         Close();
                     }
+                    else if (viewModel.LoginResult == false)
+                    {
+                        // Optional: Shake animation or focus reset
+                    }
+                }
+                else if (e.PropertyName == nameof(LoginViewModel.IsPasswordVisible))
+                {
+                    if (!viewModel.IsPasswordVisible)
+                    {
+                        // Sync back to PasswordBox when switching to hidden mode
+                        if (PasswordBox.Password != viewModel.Password)
+                        {
+                            PasswordBox.Password = viewModel.Password;
+                        }
+                        PasswordBox.Focus(); // Optional: move focus back
+                    }
+                    else
+                    {
+                         // Switching to visible mode - TextBox binds automatically
+                         VisiblePasswordBox.Focus();
+                    }
+                }
+                else if (e.PropertyName == nameof(LoginViewModel.Password))
+                {
+                    // If updated from outside (e.g. Remember Me loaded it), sync PasswordBox
+                    if (!viewModel.IsPasswordVisible && PasswordBox.Password != viewModel.Password)
+                    {
+                        PasswordBox.Password = viewModel.Password;
+                    }
                 }
             };
         }
@@ -28,7 +57,11 @@ namespace IsTakipWpf.Views
         {
             if (DataContext is LoginViewModel vm)
             {
-                vm.Password = ((PasswordBox)sender).Password;
+                // Only update if PasswordBox is actually visible/active source of truth
+                if (!vm.IsPasswordVisible)
+                {
+                    vm.Password = ((PasswordBox)sender).Password;
+                }
             }
         }
 

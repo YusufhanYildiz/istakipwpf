@@ -7,9 +7,10 @@ namespace IsTakipWpf.ViewModels
     public class LoginViewModel : ViewModelBase
     {
         private readonly IAuthService _authService;
-        private string _username = "admin";
+        private string _username;
         private string _password;
         private bool _isRememberMe;
+        private bool _isPasswordVisible;
         private string _errorMessage;
         private bool? _loginResult;
 
@@ -38,6 +39,12 @@ namespace IsTakipWpf.ViewModels
             set => SetProperty(ref _isRememberMe, value);
         }
 
+        public bool IsPasswordVisible
+        {
+            get => _isPasswordVisible;
+            set => SetProperty(ref _isPasswordVisible, value);
+        }
+
         public string ErrorMessage
         {
             get => _errorMessage;
@@ -55,7 +62,24 @@ namespace IsTakipWpf.ViewModels
         private async void LoadRememberedSettings()
         {
             IsRememberMe = await _authService.GetRememberMeAsync();
-            // In a real app, we might also load the username if it's not always 'admin'
+            if (IsRememberMe)
+            {
+                var credentials = await _authService.GetSavedCredentialsAsync();
+                if (!string.IsNullOrEmpty(credentials.Username))
+                {
+                    Username = credentials.Username;
+                }
+                if (!string.IsNullOrEmpty(credentials.Password))
+                {
+                    Password = credentials.Password;
+                }
+            }
+            
+            // Default to admin if nothing loaded
+            if (string.IsNullOrEmpty(Username))
+            {
+                Username = "admin";
+            }
         }
 
         private async Task ExecuteLogin()
@@ -75,16 +99,28 @@ namespace IsTakipWpf.ViewModels
                 return;
             }
 
-            bool isAuthenticated = await _authService.AuthenticateAsync(Password);
-            if (isAuthenticated)
+            try 
             {
-                await _authService.SetRememberMeAsync(IsRememberMe);
-                LoginResult = true;
+                bool isAuthenticated = await _authService.AuthenticateAsync(Password);
+                
+                if (isAuthenticated)
+                {
+                    await _authService.SetRememberMeAsync(IsRememberMe);
+                    if (IsRememberMe)
+                    {
+                        await _authService.SaveCredentialsAsync(Username, Password);
+                    }
+                    LoginResult = true;
+                }
+                else
+                {
+                    ErrorMessage = "Hatalı şifre!";
+                    LoginResult = false;
+                }
             }
-            else
+            catch (System.Exception ex)
             {
-                ErrorMessage = "Hatalı şifre!";
-                LoginResult = false;
+                 ErrorMessage = $"Hata: {ex.Message}";
             }
         }
     }

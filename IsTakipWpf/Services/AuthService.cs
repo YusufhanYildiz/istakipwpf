@@ -69,6 +69,58 @@ namespace IsTakipWpf.Services
         public async Task SetRememberMeAsync(bool enabled)
         {
             await _settingsRepository.SetValueAsync(RememberMeKey, enabled.ToString());
+            if (!enabled)
+            {
+                await ClearSavedCredentialsAsync();
+            }
+        }
+
+        public async Task SaveCredentialsAsync(string username, string password)
+        {
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) return;
+
+            await _settingsRepository.SetValueAsync("SavedUsername", username);
+
+            try
+            {
+                var passwordBytes = Encoding.UTF8.GetBytes(password);
+                var encryptedBytes = ProtectedData.Protect(passwordBytes, null, DataProtectionScope.CurrentUser);
+                var encryptedBase64 = Convert.ToBase64String(encryptedBytes);
+                await _settingsRepository.SetValueAsync("SavedPassword", encryptedBase64);
+            }
+            catch
+            {
+                // Handle encryption error or log it
+            }
+        }
+
+        public async Task<(string Username, string Password)> GetSavedCredentialsAsync()
+        {
+            var username = await _settingsRepository.GetValueAsync("SavedUsername");
+            var encryptedPassword = await _settingsRepository.GetValueAsync("SavedPassword");
+
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(encryptedPassword))
+            {
+                return (null, null);
+            }
+
+            try
+            {
+                var encryptedBytes = Convert.FromBase64String(encryptedPassword);
+                var passwordBytes = ProtectedData.Unprotect(encryptedBytes, null, DataProtectionScope.CurrentUser);
+                var password = Encoding.UTF8.GetString(passwordBytes);
+                return (username, password);
+            }
+            catch
+            {
+                return (username, null);
+            }
+        }
+
+        public async Task ClearSavedCredentialsAsync()
+        {
+            await _settingsRepository.SetValueAsync("SavedUsername", null);
+            await _settingsRepository.SetValueAsync("SavedPassword", null);
         }
 
         private string HashPassword(string password, string salt)

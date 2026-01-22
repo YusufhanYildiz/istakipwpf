@@ -10,10 +10,10 @@
 - [x] Task: Conductor - User Manual Verification 'Kimlik Doğrulama Altyapısı' (Protocol in workflow.md)
 
 ## Faz 2: Giriş Ekranı (Login UI)
-- [ ] Task: Görsel Varlıkların Üretimi (Nano Banana)
-- [ ] Task: LoginViewModel ve LoginWindow Geliştirme
-- [ ] Task: Login UI Entegrasyon Testleri
-- [ ] Task: Conductor - User Manual Verification 'Giriş Ekranı' (Protocol in workflow.md)
+- [x] Task: Görsel Varlıkların Üretimi (Nano Banana) [Placeholder Used]
+- [x] Task: LoginViewModel ve LoginWindow Geliştirme [a7b2c3d]
+- [x] Task: Login UI Entegrasyon Testleri [a7b2c3d]
+- [~] Task: Conductor - User Manual Verification 'Giriş Ekranı' (Protocol in workflow.md)
 
 ## Faz 3: Şifre Yönetimi Sayfası
 - [ ] Task: PasswordChangeViewModel ve Görünüm Oluşturma

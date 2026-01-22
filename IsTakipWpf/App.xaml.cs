@@ -23,6 +23,9 @@ namespace IsTakipWpf
         {
             base.OnStartup(e);
 
+            // Prevent app from closing when LoginWindow (the only open window) closes
+            ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
             try
             {
                 // Initialize Database
@@ -40,7 +43,9 @@ namespace IsTakipWpf
                 if (loginWindow.ShowDialog() == true)
                 {
                     var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+                    MainWindow = mainWindow;
                     mainWindow.Show();
+                    ShutdownMode = ShutdownMode.OnMainWindowClose;
                 }
                 else
                 {

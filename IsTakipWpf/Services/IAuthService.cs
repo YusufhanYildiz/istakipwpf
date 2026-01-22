@@ -23,5 +23,21 @@ namespace IsTakipWpf.Services
         /// Sets the "Remember Me" option.
         /// </summary>
         Task SetRememberMeAsync(bool enabled);
+
+        /// <summary>
+        /// Saves the encrypted credentials.
+        /// </summary>
+        Task SaveCredentialsAsync(string username, string password);
+
+        /// <summary>
+        /// Retrieves the saved credentials (username, password).
+        /// Returns nulls if not found or decryption fails.
+        /// </summary>
+        Task<(string Username, string Password)> GetSavedCredentialsAsync();
+
+        /// <summary>
+        /// Clears any saved credentials.
+        /// </summary>
+        Task ClearSavedCredentialsAsync();
     }
 }

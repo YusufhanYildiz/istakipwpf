@@ -96,6 +96,24 @@ namespace IsTakipWpf.Tests.Services
             _settingsRepoMock.Verify(r => r.SetValueAsync("RememberMe", "True"), Times.Once);
         }
 
+        [Fact]
+        public async Task SaveCredentialsAsync_ShouldEncryptAndSave()
+        {
+            // Arrange
+            string username = "testuser";
+            string password = "testpassword";
+
+            _settingsRepoMock.Setup(r => r.SetValueAsync("SavedUsername", username)).ReturnsAsync(true);
+            _settingsRepoMock.Setup(r => r.SetValueAsync("SavedPassword", It.IsAny<string>())).ReturnsAsync(true);
+
+            // Act
+            await _authService.SaveCredentialsAsync(username, password);
+
+            // Assert
+            _settingsRepoMock.Verify(r => r.SetValueAsync("SavedUsername", username), Times.Once);
+            _settingsRepoMock.Verify(r => r.SetValueAsync("SavedPassword", It.Is<string>(s => !string.IsNullOrEmpty(s) && s != password)), Times.Once);
+        }
+
         private string HashPassword(string password, string salt)
         {
             using (var sha256 = System.Security.Cryptography.SHA256.Create())
