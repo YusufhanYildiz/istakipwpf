@@ -5,41 +5,65 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <StackPanel>
-            <TextBlock Text="Panel" Style="{StaticResource MaterialDesignHeadline4TextBlock}" Margin="0,0,0,24"/>
-            
-            <UniformGrid Columns="3" Margin="0,0,0,24">
-                <materialDesign:Card Padding="16" Margin="0,0,16,0" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueMidForegroundBrush}">
+             d:DesignHeight="700" d:DesignWidth="1000">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="16">
+            <StackPanel>
+                <TextBlock Text="Panel" Style="{StaticResource MaterialDesignHeadline4TextBlock}" Margin="0,0,0,24"/>
+                
+                <UniformGrid Columns="3" Margin="0,0,0,24">
+                    <materialDesign:Card Padding="16" Margin="0,0,16,0" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueMidForegroundBrush}">
+                        <StackPanel>
+                            <TextBlock Text="Toplam Müşteri" Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+                            <TextBlock Text="{Binding TotalCustomers}" FontSize="36" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </materialDesign:Card>
+
+                    <materialDesign:Card Padding="16" Margin="0,0,16,0" Background="LightBlue">
+                        <StackPanel>
+                            <TextBlock Text="Devam Eden İşler" Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+                            <TextBlock Text="{Binding ActiveJobs}" FontSize="36" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </materialDesign:Card>
+
+                    <materialDesign:Card Padding="16" Background="Orange">
+                        <StackPanel>
+                            <TextBlock Text="Bekleyen İşler" Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+                            <TextBlock Text="{Binding WaitingJobs}" FontSize="36" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </UniformGrid>
+
+                <materialDesign:Card Padding="24" materialDesign:ElevationAssist.Elevation="Dp2" Margin="0,0,0,16">
                     <StackPanel>
-                        <TextBlock Text="Toplam Müşteri" Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
-                        <TextBlock Text="{Binding TotalCustomers}" FontSize="36" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <materialDesign:PackIcon Kind="FileExcel" Foreground="Green" Width="24" Height="24" VerticalAlignment="Center"/>
+                            <TextBlock Text="Excel Veri Aktarım Rehberi" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        
+                        <TextBlock Text="Dışarıdaki verilerinizi sisteme hızlıca aktarmak için aşağıdaki adımları izleyin:" 
+                                   Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="0,0,0,12" FontWeight="SemiBold"/>
+                        
+                        <materialDesign:ColorZone Mode="Light" Padding="16" CornerRadius="4">
+                            <StackPanel>
+                                <TextBlock Text="1. Hazırlık: Excel dosyanızın ilk satırında şu başlıkların olduğundan emin olun:" Margin="0,0,0,8"/>
+                                <TextBlock Text="   • Ad | Soyad | Telefon | Adres" FontWeight="Bold" Foreground="{DynamicResource PrimaryHueMidBrush}" Margin="0,0,0,16"/>
+                                <TextBlock Text="2. Sayfaya Gidin: Sol menüden 'Müşteriler' sekmesine tıklayın." Margin="0,0,0,8"/>
+                                <TextBlock Text="3. İçe Aktar: Üst kısımdaki 'EXCEL İÇE AKTAR' butonuna basın ve dosyanızı seçin." Margin="0,0,0,8"/>
+                                <TextBlock Text="4. Onay: Yükleme tamamlandığında ekranın altındaki bildirim çubuğunda sonucun görülecektir." Margin="0,0,0,8"/>
+                            </StackPanel>
+                        </materialDesign:ColorZone>
                     </StackPanel>
                 </materialDesign:Card>
 
-                <materialDesign:Card Padding="16" Margin="0,0,16,0" Background="LightBlue">
+                <materialDesign:Card Padding="24">
                     <StackPanel>
-                        <TextBlock Text="Devam Eden İşler" Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
-                        <TextBlock Text="{Binding ActiveJobs}" FontSize="36" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        <TextBlock Text="Hoş Geldiniz" Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+                        <TextBlock Text="Müşteri ve İş Takip Sistemine Hoş Geldiniz. Bu uygulama ile tüm süreçlerinizi yerel ve güvenli bir şekilde yönetebilirsiniz." 
+                                   Margin="0,10,0,0" Style="{StaticResource MaterialDesignBody1TextBlock}"/>
                     </StackPanel>
                 </materialDesign:Card>
-
-                <materialDesign:Card Padding="16" Background="Orange">
-                    <StackPanel>
-                        <TextBlock Text="Bekleyen İşler" Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
-                        <TextBlock Text="{Binding WaitingJobs}" FontSize="36" FontWeight="Bold" HorizontalAlignment="Right"/>
-                    </StackPanel>
-                </materialDesign:Card>
-            </UniformGrid>
-
-            <materialDesign:Card Padding="32">
-                <StackPanel>
-                    <TextBlock Text="Hoş Geldiniz" Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
-                    <TextBlock Text="Müşteri ve İş Takip Sistemine Hoş Geldiniz. Yukarıdaki özet kartlarından güncel durumu takip edebilirsiniz." 
-                               Margin="0,10,0,0" Style="{StaticResource MaterialDesignBody1TextBlock}"/>
-                </StackPanel>
-            </materialDesign:Card>
-        </StackPanel>
-    </Grid>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

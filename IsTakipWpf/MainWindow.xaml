@@ -1,4 +1,4 @@
-<Window x:Class="IsTakipWpf.MainWindow"
+﻿<Window x:Class="IsTakipWpf.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -43,6 +43,12 @@
                                     <TextBlock Text="İş Takibi" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </ListBoxItem>
+                            <ListBoxItem Tag="Settings">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Settings" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Ayarlar &amp; Yedekleme" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </ListBoxItem>
                         </ListBox>
                     </DockPanel>
                 </materialDesign:DrawerHost.LeftDrawerContent>
@@ -54,7 +60,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <ToggleButton x:Name="MenuToggleButton" Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
                                               IsChecked="False"
-                                              AutomationProperties.Name="HamburgerToggleButton"/>
+                                              AutomationProperties.Name="HamburgerToggleButton" Checked="MenuToggleButton_Checked"/>
                                 <TextBlock VerticalAlignment="Center" Margin="16 0 0 0" FontSize="20" Text="İş Takip Sistemi"/>
                             </StackPanel>
                         </DockPanel>

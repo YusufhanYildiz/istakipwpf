@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+             d:DesignHeight="700" d:DesignWidth="1000">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -15,24 +15,34 @@
 
         <TextBlock Grid.Row="0" Text="Müşteriler" Style="{StaticResource MaterialDesignHeadline4TextBlock}" Margin="0,0,0,20"/>
 
-        <Grid Grid.Row="1" Margin="0,0,0,15">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <materialDesign:Card Grid.Row="1" Margin="0,0,0,16" Padding="16">
+            <DockPanel>
+                <Button DockPanel.Dock="Right" 
+                        Content="YENİ MÜŞTERİ" 
+                        Command="{Binding AddCustomerCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        materialDesign:ButtonAssist.CornerRadius="2"/>
 
-            <TextBox materialDesign:HintAssist.Hint="Ara (Ad, Soyad veya Telefon)..." 
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                     Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
-                     Margin="0,0,16,0"
-                     materialDesign:TextFieldAssist.HasClearButton="True"/>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                    <TextBox materialDesign:HintAssist.Hint="Ara (Ad, Soyad veya Telefon)..." 
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                             Width="250"
+                             Margin="0,0,16,0"
+                             materialDesign:TextFieldAssist.HasClearButton="True"/>
 
-            <Button Grid.Column="1" 
-                    Content="YENİ MÜŞTERİ" 
-                    Command="{Binding AddCustomerCommand}"
-                    Style="{StaticResource MaterialDesignRaisedButton}"
-                    materialDesign:ButtonAssist.CornerRadius="2"/>
-        </Grid>
+                    <Button Command="{Binding ImportExcelCommand}" ToolTip="Excel'den İçe Aktar" Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,4,0">
+                        <materialDesign:PackIcon Kind="FileImport" />
+                    </Button>
+                    <Button Command="{Binding ExportExcelCommand}" ToolTip="Excel'e Dışa Aktar" Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,4,0">
+                        <materialDesign:PackIcon Kind="FileExport" />
+                    </Button>
+                    <Button Command="{Binding ExportPdfCommand}" ToolTip="PDF'e Dışa Aktar" Style="{StaticResource MaterialDesignFlatButton}">
+                        <materialDesign:PackIcon Kind="FilePdfBox" />
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </materialDesign:Card>
 
         <materialDesign:Card Grid.Row="2" materialDesign:ElevationAssist.Elevation="Dp2">
             <DataGrid ItemsSource="{Binding Customers}"
@@ -41,11 +51,18 @@
                       HeadersVisibility="All"
                       IsReadOnly="True">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Ad" Binding="{Binding FirstName}" Width="*"/>
-                    <DataGridTextColumn Header="Soyad" Binding="{Binding LastName}" Width="*"/>
-                    <DataGridTextColumn Header="Telefon" Binding="{Binding PhoneNumber}" Width="*"/>
-                    <DataGridTextColumn Header="Adres" Binding="{Binding Address}" Width="2*"/>
-                    <DataGridTemplateColumn Width="120">
+                    <DataGridTextColumn Header="Ad" Binding="{Binding FirstName}" Width="Auto"/>
+                    <DataGridTextColumn Header="Soyad" Binding="{Binding LastName}" Width="Auto"/>
+                    <DataGridTextColumn Header="Telefon" Binding="{Binding PhoneNumber}" Width="Auto"/>
+                    <DataGridTextColumn Header="Adres" Binding="{Binding Address}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextWrapping" Value="Wrap"/>
+                                <Setter Property="MaxHeight" Value="40"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn Width="100">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

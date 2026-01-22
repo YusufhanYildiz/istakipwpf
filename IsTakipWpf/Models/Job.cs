@@ -1,12 +1,17 @@
-using System;
+﻿using System;
+using System.ComponentModel;
 
 namespace IsTakipWpf.Models
 {
     public enum JobStatus
     {
+        [Description("Bekliyor")]
         Bekliyor = 0,
+        [Description("Devam Ediyor")]
         DevamEdiyor = 1,
+        [Description("Tamamlandı")]
         Tamamlandi = 2,
+        [Description("İptal Edildi")]
         IptalEdildi = 3
     }
 
@@ -23,7 +28,6 @@ namespace IsTakipWpf.Models
         public DateTime UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
 
-        // Navigation property for UI display
         public string CustomerFullName { get; set; }
     }
 }

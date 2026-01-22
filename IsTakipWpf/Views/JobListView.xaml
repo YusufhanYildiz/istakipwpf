@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="1000">
-    <Grid>
+             d:DesignHeight="700" d:DesignWidth="1000">
+    <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -16,39 +16,53 @@
         <TextBlock Grid.Row="0" Text="İş Takibi" Style="{StaticResource MaterialDesignHeadline4TextBlock}" Margin="0,0,0,20"/>
 
         <materialDesign:Card Grid.Row="1" Margin="0,0,0,16" Padding="16">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+            <StackPanel>
+                <Grid Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <TextBox materialDesign:HintAssist.Hint="İş Başlığı veya Açıklama Ara..." 
-                         Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                         Margin="0,0,16,0"
-                         materialDesign:TextFieldAssist.HasClearButton="True"/>
+                    <TextBox materialDesign:HintAssist.Hint="İş Başlığı veya Açıklama Ara..." 
+                             Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             Margin="0,0,16,0"
+                             materialDesign:TextFieldAssist.HasClearButton="True"/>
 
-                <ComboBox Grid.Column="1" materialDesign:HintAssist.Hint="Müşteri Filtrele"
-                          ItemsSource="{Binding Customers}"
-                          SelectedItem="{Binding SelectedCustomer}"
-                          DisplayMemberPath="FullName"
-                          Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                          Margin="0,0,16,0"
-                          materialDesign:TextFieldAssist.HasClearButton="True"/>
+                    <ComboBox Grid.Column="1" materialDesign:HintAssist.Hint="Müşteri Filtrele"
+                              ItemsSource="{Binding Customers}"
+                              SelectedItem="{Binding SelectedCustomer}"
+                              DisplayMemberPath="FullName"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                              Margin="0,0,16,0"
+                              materialDesign:TextFieldAssist.HasClearButton="True"/>
 
-                <ComboBox Grid.Column="2" materialDesign:HintAssist.Hint="Durum Filtrele"
-                          ItemsSource="{Binding Statuses}"
-                          SelectedItem="{Binding SelectedStatus}"
-                          Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                          Margin="0,0,16,0"
-                          materialDesign:TextFieldAssist.HasClearButton="True"/>
+                    <ComboBox Grid.Column="2" materialDesign:HintAssist.Hint="Durum Filtrele"
+                              ItemsSource="{Binding Statuses}"
+                              SelectedItem="{Binding SelectedStatus}"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                              Margin="0,0,16,0"
+                              materialDesign:TextFieldAssist.HasClearButton="True"/>
 
-                <Button Grid.Column="3" Content="YENİ İŞ" 
-                        Command="{Binding AddJobCommand}"
-                        Style="{StaticResource MaterialDesignRaisedButton}"/>
-            </Grid>
+                    <Button Grid.Column="3" Content="YENİ İŞ" 
+                            Command="{Binding AddJobCommand}"
+                            Style="{StaticResource MaterialDesignRaisedButton}"/>
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Command="{Binding ImportExcelCommand}" ToolTip="Excel'den İçe Aktar" Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,4,0">
+                        <materialDesign:PackIcon Kind="FileImport" />
+                    </Button>
+                    <Button Command="{Binding ExportExcelCommand}" ToolTip="Excel'e Dışa Aktar" Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,4,0">
+                        <materialDesign:PackIcon Kind="FileExport" />
+                    </Button>
+                    <Button Command="{Binding ExportPdfCommand}" ToolTip="PDF'e Dışa Aktar" Style="{StaticResource MaterialDesignFlatButton}">
+                        <materialDesign:PackIcon Kind="FilePdfBox" />
+                    </Button>
+                </StackPanel>
+            </StackPanel>
         </materialDesign:Card>
 
         <materialDesign:Card Grid.Row="2" materialDesign:ElevationAssist.Elevation="Dp2">
@@ -58,8 +72,16 @@
                       HeadersVisibility="All"
                       IsReadOnly="True">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Müşteri" Binding="{Binding CustomerFullName}" Width="*"/>
-                    <DataGridTextColumn Header="İş Başlığı" Binding="{Binding JobTitle}" Width="1.5*"/>
+                    <DataGridTextColumn Header="Müşteri" Binding="{Binding CustomerFullName}" Width="Auto"/>
+                    <DataGridTextColumn Header="İş Başlığı" Binding="{Binding JobTitle}" Width="Auto"/>
+                    <DataGridTextColumn Header="Açıklama" Binding="{Binding Description}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextWrapping" Value="Wrap"/>
+                                <Setter Property="MaxHeight" Value="40"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTemplateColumn Header="Durum" Width="120">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -79,13 +101,13 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Border.Style>
-                                    <TextBlock Text="{Binding Status}" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding Status, Converter={StaticResource EnumToDescriptionConverter}}" FontWeight="SemiBold"/>
                                 </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Başlangıç" Binding="{Binding StartDate, StringFormat='dd.MM.yyyy'}" Width="100"/>
-                    <DataGridTextColumn Header="Bitiş" Binding="{Binding EndDate, StringFormat='dd.MM.yyyy'}" Width="100"/>
+                    <DataGridTextColumn Header="Başlangıç" Binding="{Binding StartDate, StringFormat='dd.MM.yyyy'}" Width="Auto"/>
+                    <DataGridTextColumn Header="Bitiş" Binding="{Binding EndDate, StringFormat='dd.MM.yyyy'}" Width="Auto"/>
                     <DataGridTemplateColumn Width="100">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

@@ -49,7 +49,17 @@ namespace IsTakipWpf.ViewModels
 
         private async Task InitializeAsync()
         {
-            BackupFolder = await _settingsRepository.GetValueAsync("BackupFolder") ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var savedFolder = await _settingsRepository.GetValueAsync("BackupFolder");
+            if (string.IsNullOrEmpty(savedFolder))
+            {
+                savedFolder = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "backup");
+                if (!System.IO.Directory.Exists(savedFolder))
+                {
+                    System.IO.Directory.CreateDirectory(savedFolder);
+                }
+            }
+            BackupFolder = savedFolder;
+
             var autoBackupStr = await _settingsRepository.GetValueAsync("AutoBackupOnExit");
             AutoBackupOnExit = autoBackupStr == "True";
 

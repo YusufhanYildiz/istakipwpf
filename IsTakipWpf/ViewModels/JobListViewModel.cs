@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using IsTakipWpf.Models;
 using IsTakipWpf.Services;
+using Microsoft.Win32;
 
 namespace IsTakipWpf.ViewModels
 {
@@ -12,6 +13,8 @@ namespace IsTakipWpf.ViewModels
     {
         private readonly IJobService _jobService;
         private readonly ICustomerService _customerService;
+        private readonly IExcelService _excelService;
+        private readonly IReportingService _reportingService;
         private readonly MaterialDesignThemes.Wpf.ISnackbarMessageQueue _messageQueue;
         private string _searchTerm;
         private JobStatus? _selectedStatus;
@@ -40,27 +43,36 @@ namespace IsTakipWpf.ViewModels
             set { if (SetProperty(ref _selectedCustomer, value)) _ = FilterAsync(); }
         }
 
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set => SetProperty(ref _isLoading, value);
-        }
+        public bool IsLoading { get => _isLoading; set => SetProperty(ref _isLoading, value); }
 
         public ICommand AddJobCommand { get; }
         public ICommand EditJobCommand { get; }
         public ICommand DeleteJobCommand { get; }
         public ICommand RefreshCommand { get; }
+        public ICommand ImportExcelCommand { get; }
+        public ICommand ExportExcelCommand { get; }
+        public ICommand ExportPdfCommand { get; }
 
-        public JobListViewModel(IJobService jobService, ICustomerService customerService, MaterialDesignThemes.Wpf.ISnackbarMessageQueue messageQueue)
+        public JobListViewModel(
+            IJobService jobService, 
+            ICustomerService customerService,
+            IExcelService excelService,
+            IReportingService reportingService,
+            MaterialDesignThemes.Wpf.ISnackbarMessageQueue messageQueue)
         {
             _jobService = jobService;
             _customerService = customerService;
+            _excelService = excelService;
+            _reportingService = reportingService;
             _messageQueue = messageQueue;
 
             AddJobCommand = new RelayCommand(async _ => await AddJobAsync());
             EditJobCommand = new RelayCommand(async job => await EditJobAsync(job as Job));
             DeleteJobCommand = new RelayCommand(async job => await DeleteJobAsync(job as Job));
             RefreshCommand = new RelayCommand(async _ => await InitializeAsync());
+            ImportExcelCommand = new RelayCommand(async _ => await ImportExcelAsync());
+            ExportExcelCommand = new RelayCommand(async _ => await ExportExcelAsync());
+            ExportPdfCommand = new RelayCommand(async _ => await ExportPdfAsync());
 
             _ = InitializeAsync();
         }
@@ -73,13 +85,9 @@ namespace IsTakipWpf.ViewModels
                 var customers = await _customerService.GetActiveCustomersAsync();
                 Customers.Clear();
                 foreach (var c in customers) Customers.Add(c);
-
                 await FilterAsync();
             }
-            finally
-            {
-                IsLoading = false;
-            }
+            finally { IsLoading = false; }
         }
 
         private async Task FilterAsync()
@@ -93,7 +101,6 @@ namespace IsTakipWpf.ViewModels
         {
             var viewModel = new AddEditJobViewModel(_jobService, _customerService);
             var view = new Views.AddEditJobDialog { DataContext = viewModel };
-
             var result = await MaterialDesignThemes.Wpf.DialogHost.Show(view, "RootDialog");
             if (result is bool b && b) await FilterAsync();
         }
@@ -103,7 +110,6 @@ namespace IsTakipWpf.ViewModels
             if (job == null) return;
             var viewModel = new AddEditJobViewModel(_jobService, _customerService, job);
             var view = new Views.AddEditJobDialog { DataContext = viewModel };
-
             var result = await MaterialDesignThemes.Wpf.DialogHost.Show(view, "RootDialog");
             if (result is bool b && b) await FilterAsync();
         }
@@ -115,6 +121,37 @@ namespace IsTakipWpf.ViewModels
             {
                 _messageQueue.Enqueue("İş başarıyla silindi.");
                 await FilterAsync();
+            }
+        }
+
+        private async Task ImportExcelAsync()
+        {
+            var openFileDialog = new OpenFileDialog { Filter = "Excel Dosyası (*.xlsx)|*.xlsx" };
+            if (openFileDialog.ShowDialog() == true)
+            {
+                var result = await _excelService.ImportJobsAsync(openFileDialog.FileName);
+                _messageQueue.Enqueue(result.Message);
+                if (result.Success) await FilterAsync();
+            }
+        }
+
+        private async Task ExportExcelAsync()
+        {
+            var saveFileDialog = new SaveFileDialog { Filter = "Excel Dosyası (*.xlsx)|*.xlsx", FileName = "Isler.xlsx" };
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var result = await _excelService.ExportJobsAsync(saveFileDialog.FileName, Jobs);
+                _messageQueue.Enqueue(result.Message);
+            }
+        }
+
+        private async Task ExportPdfAsync()
+        {
+            var saveFileDialog = new SaveFileDialog { Filter = "PDF Dosyası (*.pdf)|*.pdf", FileName = "Isler.pdf" };
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var result = await _reportingService.ExportJobsToPdfAsync(saveFileDialog.FileName, Jobs);
+                _messageQueue.Enqueue(result.Message);
             }
         }
     }

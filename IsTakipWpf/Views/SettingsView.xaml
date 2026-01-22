@@ -5,63 +5,73 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <StackPanel>
-            <TextBlock Text="Ayarlar &amp; Yedekleme" Style="{StaticResource MaterialDesignHeadline4TextBlock}" Margin="0,0,0,20"/>
+             d:DesignHeight="700" d:DesignWidth="800">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <materialDesign:Card Padding="16" Margin="0,0,0,16">
-                <StackPanel>
-                    <TextBlock Text="Yedekleme Ayarları" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,16"/>
-                    
-                    <Grid Margin="0,0,0,16">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBox materialDesign:HintAssist.Hint="Yedekleme Klasörü" 
-                                 Text="{Binding BackupFolder}"
-                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                 IsReadOnly="True"/>
-                        <Button Grid.Column="1" Content="..." Command="{Binding SelectFolderCommand}" Margin="8,0,0,0"/>
-                    </Grid>
+        <TextBlock Grid.Row="0" Text="Ayarlar &amp; Yedekleme" Style="{StaticResource MaterialDesignHeadline4TextBlock}" Margin="0,0,0,20"/>
 
-                    <ToggleButton Content="Çıkışta otomatik yedekleme yap" 
-                                  IsChecked="{Binding AutoBackupOnExit}"
-                                  Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                  HorizontalAlignment="Left"/>
-                </StackPanel>
-            </materialDesign:Card>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <materialDesign:Card Padding="16" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="Yedekleme Ayarları" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,16"/>
+                        
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox materialDesign:HintAssist.Hint="Yedekleme Klasörü" 
+                                     Text="{Binding BackupFolder}"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     IsReadOnly="True"/>
+                            <Button Grid.Column="1" Content="..." Command="{Binding SelectFolderCommand}" Margin="8,0,0,0"/>
+                        </Grid>
 
-            <materialDesign:Card Padding="16">
-                <StackPanel>
-                    <Grid Margin="0,0,0,16">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Yedekleme Geçmişi" Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
-                        <Button Grid.Column="1" Content="ŞİMDİ YEDEKLE" Command="{Binding CreateManualBackupCommand}"/>
-                    </Grid>
+                        <ToggleButton Content="Çıkışta otomatik yedekleme yap" 
+                                      IsChecked="{Binding AutoBackupOnExit}"
+                                      Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                      HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </materialDesign:Card>
 
-                    <DataGrid ItemsSource="{Binding BackupHistory}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Tarih" Binding="{Binding BackupDate, StringFormat='dd.MM.yyyy HH:mm'}" Width="150"/>
-                            <DataGridTextColumn Header="Dosya Yolu" Binding="{Binding FilePath}" Width="*"/>
-                            <DataGridTemplateColumn Width="100">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Content="GERİ YÜKLE" 
-                                                Style="{StaticResource MaterialDesignFlatButton}"
-                                                Command="{Binding DataContext.RestoreBackupCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
-            </materialDesign:Card>
-        </StackPanel>
+                <materialDesign:Card Padding="16" materialDesign:ElevationAssist.Elevation="Dp2">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Yedekleme Geçmişi" Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+                            <Button Grid.Column="1" Content="ŞİMDİ YEDEKLE" Command="{Binding CreateManualBackupCommand}"/>
+                        </Grid>
+
+                        <DataGrid ItemsSource="{Binding BackupHistory}" 
+                                  AutoGenerateColumns="False" 
+                                  CanUserAddRows="False" 
+                                  IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Tarih" Binding="{Binding BackupDate, StringFormat='dd.MM.yyyy HH:mm'}" Width="Auto"/>
+                                <DataGridTextColumn Header="Dosya Yolu" Binding="{Binding FilePath}" Width="*"/>
+                                <DataGridTemplateColumn Width="150">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="GERİ YÜKLE" 
+                                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                                    Command="{Binding DataContext.RestoreBackupCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </materialDesign:Card>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

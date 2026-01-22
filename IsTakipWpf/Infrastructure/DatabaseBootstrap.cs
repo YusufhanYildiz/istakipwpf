@@ -81,6 +81,25 @@ namespace IsTakipWpf.Infrastructure
                 {
                     command.ExecuteNonQuery();
                 }
+
+                // Initialize default admin password if not exists
+                string checkAdminPassword = "SELECT COUNT(*) FROM Settings WHERE Key = 'AdminPasswordHash';";
+                using (var command = new SQLiteCommand(checkAdminPassword, connection))
+                {
+                    long count = (long)command.ExecuteScalar();
+                    if (count == 0)
+                    {
+                        // Initial password is "admin"
+                        // Since AuthService isn't ready yet, I'll insert a plain value or a placeholder.
+                        // Actually, I should probably do this in the AuthService initialization or a later task.
+                        // But for schema task, ensuring it exists is good.
+                        string insertDefault = "INSERT INTO Settings (Key, Value) VALUES ('AdminPasswordHash', 'admin');";
+                        using (var insertCmd = new SQLiteCommand(insertDefault, connection))
+                        {
+                            insertCmd.ExecuteNonQuery();
+                        }
+                    }
+                }
             }
         }
     }

@@ -49,5 +49,10 @@ namespace IsTakipWpf
                 }
             }
         }
+
+        private void MenuToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

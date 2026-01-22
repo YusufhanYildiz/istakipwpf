@@ -12,6 +12,7 @@
             </ResourceDictionary.MergedDictionaries>
             <infra:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <infra:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+            <infra:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
