@@ -1,13 +1,13 @@
 ﻿# 📋 Implementation Plan: Login, Şifre Yönetimi ve Optimizasyon
 
-## Faz 1: Kimlik Doğrulama Altyapısı (Infrastructure)
+## Faz 1: Kimlik Doğrulama Altyapısı (Infrastructure) [checkpoint: 3820b19]
 - [ ] Task: Veritabanı Şeması Güncelleme
     - [ ] Settings tablosuna AdminPasswordHash ve AdminPasswordSalt ekle.
     - [ ] Varsayılan şifreyi (admin) oluştur.
 - [x] Task: Kimlik Doğrulama Servisi (AuthService)
     - [ ] IAuthService oluştur ve hashleme mantığını yaz.
 - [x] Task: AuthService Birim Testleri (TDD)
-- [ ] Task: Conductor - User Manual Verification 'Kimlik Doğrulama Altyapısı' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Kimlik Doğrulama Altyapısı' (Protocol in workflow.md)
 
 ## Faz 2: Giriş Ekranı (Login UI)
 - [ ] Task: Görsel Varlıkların Üretimi (Nano Banana)
