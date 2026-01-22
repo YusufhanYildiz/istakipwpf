@@ -10,6 +10,12 @@ namespace IsTakipWpf.Repositories
 {
     public class JobRepository : BaseRepository, IJobRepository
     {
+        private const string SelectBase = @"
+            SELECT j.*, (c.FirstName || ' ' || c.LastName) as CustomerFullName, 
+                   c.City as CustomerCity, c.District as CustomerDistrict 
+            FROM Jobs j
+            JOIN Customers c ON j.CustomerId = c.Id";
+
         public async Task<int> AddAsync(Job job)
         {
             job.CreatedDate = DateTime.Now;
@@ -31,10 +37,7 @@ namespace IsTakipWpf.Repositories
 
         public async Task<IEnumerable<Job>> GetAllAsync(bool includeDeleted = false)
         {
-            string sql = @"
-                SELECT j.*, (c.FirstName || ' ' || c.LastName) as CustomerFullName 
-                FROM Jobs j
-                JOIN Customers c ON j.CustomerId = c.Id";
+            string sql = SelectBase;
             
             if (!includeDeleted)
             {
@@ -49,11 +52,7 @@ namespace IsTakipWpf.Repositories
 
         public async Task<IEnumerable<Job>> GetByCustomerIdAsync(int customerId)
         {
-            const string sql = @"
-                SELECT j.*, (c.FirstName || ' ' || c.LastName) as CustomerFullName 
-                FROM Jobs j
-                JOIN Customers c ON j.CustomerId = c.Id
-                WHERE j.CustomerId = @CustomerId AND j.IsDeleted = 0";
+            string sql = $"{SelectBase} WHERE j.CustomerId = @CustomerId AND j.IsDeleted = 0";
 
             using (var connection = CreateConnection())
             {
@@ -63,11 +62,7 @@ namespace IsTakipWpf.Repositories
 
         public async Task<Job> GetByIdAsync(int id)
         {
-            const string sql = @"
-                SELECT j.*, (c.FirstName || ' ' || c.LastName) as CustomerFullName 
-                FROM Jobs j
-                JOIN Customers c ON j.CustomerId = c.Id
-                WHERE j.Id = @Id";
+            string sql = $"{SelectBase} WHERE j.Id = @Id";
 
             using (var connection = CreateConnection())
             {
@@ -75,13 +70,9 @@ namespace IsTakipWpf.Repositories
             }
         }
 
-        public async Task<IEnumerable<Job>> SearchAsync(string searchTerm, int? customerId = null, JobStatus? status = null)
+        public async Task<IEnumerable<Job>> SearchAsync(string searchTerm, int? customerId = null, JobStatus? status = null, string city = null, string district = null)
         {
-            var sql = new StringBuilder(@"
-                SELECT j.*, (c.FirstName || ' ' || c.LastName) as CustomerFullName 
-                FROM Jobs j
-                JOIN Customers c ON j.CustomerId = c.Id
-                WHERE j.IsDeleted = 0");
+            var sql = new StringBuilder($"{SelectBase} WHERE j.IsDeleted = 0");
 
             var parameters = new DynamicParameters();
 
@@ -101,6 +92,18 @@ namespace IsTakipWpf.Repositories
             {
                 sql.Append(" AND j.Status = @Status");
                 parameters.Add("Status", (int)status.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(city))
+            {
+                sql.Append(" AND c.City = @City");
+                parameters.Add("City", city);
+            }
+
+            if (!string.IsNullOrWhiteSpace(district))
+            {
+                sql.Append(" AND c.District = @District");
+                parameters.Add("District", district);
             }
 
             using (var connection = CreateConnection())

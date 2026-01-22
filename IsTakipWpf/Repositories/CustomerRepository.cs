@@ -16,8 +16,8 @@ namespace IsTakipWpf.Repositories
             customer.IsDeleted = false;
 
             const string sql = @"
-                INSERT INTO Customers (FirstName, LastName, PhoneNumber, Address, CreatedDate, UpdatedDate, IsDeleted)
-                VALUES (@FirstName, @LastName, @PhoneNumber, @Address, @CreatedDate, @UpdatedDate, @IsDeleted);
+                INSERT INTO Customers (FirstName, LastName, PhoneNumber, City, District, Address, CreatedDate, UpdatedDate, IsDeleted)
+                VALUES (@FirstName, @LastName, @PhoneNumber, @City, @District, @Address, @CreatedDate, @UpdatedDate, @IsDeleted);
                 SELECT last_insert_rowid();";
 
             using (var connection = CreateConnection())
@@ -48,16 +48,35 @@ namespace IsTakipWpf.Repositories
             }
         }
 
-        public async Task<IEnumerable<Customer>> SearchAsync(string searchTerm)
+        public async Task<IEnumerable<Customer>> SearchAsync(string searchTerm, string city = null, string district = null)
         {
-            const string sql = @"
+            var sql = @"
                 SELECT * FROM Customers 
-                WHERE IsDeleted = 0 
-                AND (FirstName LIKE @Search OR LastName LIKE @Search OR PhoneNumber LIKE @Search)";
+                WHERE IsDeleted = 0";
+            
+            var parameters = new DynamicParameters();
+            
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                sql += " AND (FirstName LIKE @Search OR LastName LIKE @Search OR PhoneNumber LIKE @Search OR Address LIKE @Search)";
+                parameters.Add("Search", $"%{searchTerm}%");
+            }
+            
+            if (!string.IsNullOrWhiteSpace(city))
+            {
+                sql += " AND City = @City";
+                parameters.Add("City", city);
+            }
+            
+            if (!string.IsNullOrWhiteSpace(district))
+            {
+                sql += " AND District = @District";
+                parameters.Add("District", district);
+            }
 
             using (var connection = CreateConnection())
             {
-                return await connection.QueryAsync<Customer>(sql, new { Search = $"%{searchTerm}%" });
+                return await connection.QueryAsync<Customer>(sql, parameters);
             }
         }
 
@@ -80,7 +99,9 @@ namespace IsTakipWpf.Repositories
                 UPDATE Customers 
                 SET FirstName = @FirstName, 
                     LastName = @LastName, 
-                    PhoneNumber = @PhoneNumber, 
+                    PhoneNumber = @PhoneNumber,
+                    City = @City,
+                    District = @District,
                     Address = @Address, 
                     UpdatedDate = @UpdatedDate 
                 WHERE Id = @Id";

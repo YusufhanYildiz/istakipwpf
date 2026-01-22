@@ -28,6 +28,14 @@ namespace IsTakipWpf.Models
         public DateTime UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
 
-        public string CustomerFullName { get; set; }
-    }
-}
+                public string CustomerFullName { get; set; }
+
+                public string CustomerCity { get; set; }
+
+                public string CustomerDistrict { get; set; }
+
+            }
+
+        }
+
+        

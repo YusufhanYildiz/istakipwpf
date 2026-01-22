@@ -31,16 +31,51 @@
                              Margin="0,0,16,0"
                              materialDesign:TextFieldAssist.HasClearButton="True"/>
 
-                    <Button Command="{Binding ImportExcelCommand}" ToolTip="Excel'den İçe Aktar" Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,4,0">
-                        <materialDesign:PackIcon Kind="FileImport" />
+                    <ComboBox materialDesign:HintAssist.Hint="İl Filtrele"
+                              ItemsSource="{Binding Cities}"
+                              SelectedItem="{Binding SelectedCityFilter}"
+                              DisplayMemberPath="Name"
+                              Width="120" Margin="0,0,8,0"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                              materialDesign:TextFieldAssist.HasClearButton="True"/>
+                    
+                    <ComboBox materialDesign:HintAssist.Hint="İlçe Filtrele"
+                              ItemsSource="{Binding Districts}"
+                              SelectedItem="{Binding SelectedDistrictFilter}"
+                              Width="120" Margin="0,0,16,0"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                              materialDesign:TextFieldAssist.HasClearButton="True"/>
+
+                    <Button Command="{Binding ImportExcelCommand}" 
+                            Style="{StaticResource MaterialDesignOutlinedButton}" 
+                            Margin="0,0,8,0"
+                            ToolTip="Excel dosyasındaki müşterileri sisteme aktarır">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileImport" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="EXCEL İÇE AKTAR" VerticalAlignment="Center"/>
+                        </StackPanel>
                     </Button>
-                    <Button Command="{Binding ExportExcelCommand}" ToolTip="Excel'e Dışa Aktar" Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,4,0">
-                        <materialDesign:PackIcon Kind="FileExport" />
+                    
+                    <Button Command="{Binding ExportExcelCommand}" 
+                            Style="{StaticResource MaterialDesignOutlinedButton}" 
+                            Margin="0,0,8,0"
+                            ToolTip="Tüm müşteri listesini Excel dosyası olarak kaydeder">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileExport" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="EXCEL ÇIKTI" VerticalAlignment="Center"/>
+                        </StackPanel>
                     </Button>
-                    <Button Command="{Binding ExportPdfCommand}" ToolTip="PDF'e Dışa Aktar" Style="{StaticResource MaterialDesignFlatButton}">
-                        <materialDesign:PackIcon Kind="FilePdfBox" />
+                    
+                    <Button Command="{Binding ExportPdfCommand}" 
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            ToolTip="Müşteri listesini PDF raporu olarak hazırlar">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FilePdfBox" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="PDF RAPORU" VerticalAlignment="Center"/>
+                        </StackPanel>
                     </Button>
                 </StackPanel>
+
             </DockPanel>
         </materialDesign:Card>
 
@@ -53,6 +88,8 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Ad" Binding="{Binding FirstName}" Width="Auto"/>
                     <DataGridTextColumn Header="Soyad" Binding="{Binding LastName}" Width="Auto"/>
+                    <DataGridTextColumn Header="İl" Binding="{Binding City}" Width="Auto"/>
+                    <DataGridTextColumn Header="İlçe" Binding="{Binding District}" Width="Auto"/>
                     <DataGridTextColumn Header="Telefon" Binding="{Binding PhoneNumber}" Width="Auto"/>
                     <DataGridTextColumn Header="Adres" Binding="{Binding Address}" Width="*">
                         <DataGridTextColumn.ElementStyle>

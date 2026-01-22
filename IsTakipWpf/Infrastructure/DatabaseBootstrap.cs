@@ -108,6 +108,45 @@ namespace IsTakipWpf.Infrastructure
                         }
                     }
                 }
+
+                // Migrations
+                AddColumnIfNotExists(connection, "Customers", "City", "TEXT");
+                AddColumnIfNotExists(connection, "Customers", "District", "TEXT");
+            }
+        }
+
+        private static void AddColumnIfNotExists(SQLiteConnection connection, string tableName, string columnName, string columnType)
+        {
+            try
+            {
+                var checkColumn = $"PRAGMA table_info({tableName})";
+                bool exists = false;
+                using (var cmd = new SQLiteCommand(checkColumn, connection))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var name = reader["name"]?.ToString();
+                        if (columnName.Equals(name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!exists)
+                {
+                    var addColumn = $"ALTER TABLE {tableName} ADD COLUMN {columnName} {columnType}";
+                    using (var cmd = new SQLiteCommand(addColumn, connection))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (SQLiteException ex) when (ex.Message.Contains("duplicate column name"))
+            {
+                // Ignore if it somehow already exists
             }
         }
     }

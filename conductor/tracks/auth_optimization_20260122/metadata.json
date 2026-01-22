@@ -1,8 +1,0 @@
-﻿{
-  "track_id": "auth_optimization_20260122",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-01-22T03:36:05Z",
-  "updated_at": "2026-01-22T03:36:05Z",
-  "description": "Giriş sistemi (Login), ana menüde şifre değiştirme sayfası ve uygulamanın sürekli artan RAM kullanımına yönelik performans optimizasyonu çalışması."
-}

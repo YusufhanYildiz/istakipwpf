@@ -27,23 +27,33 @@ namespace IsTakipWpf.ViewModels
 
         public void Navigate(string target)
         {
+            UserControl view = null;
             switch (target)
             {
                 case "Dashboard":
-                    CurrentView = _serviceProvider.GetRequiredService<DashboardView>();
+                    view = _serviceProvider.GetRequiredService<DashboardView>();
                     break;
                 case "Customers":
-                    CurrentView = _serviceProvider.GetRequiredService<CustomerListView>();
+                    view = _serviceProvider.GetRequiredService<CustomerListView>();
                     break;
                 case "Jobs":
-                    CurrentView = _serviceProvider.GetRequiredService<JobListView>();
+                    view = _serviceProvider.GetRequiredService<JobListView>();
                     break;
                 case "Settings":
-                    CurrentView = _serviceProvider.GetRequiredService<SettingsView>();
+                    view = _serviceProvider.GetRequiredService<SettingsView>();
                     break;
                 case "Security":
-                    CurrentView = _serviceProvider.GetRequiredService<PasswordChangeView>();
+                    view = _serviceProvider.GetRequiredService<PasswordChangeView>();
                     break;
+            }
+
+            if (view != null)
+            {
+                CurrentView = view;
+                if (view.DataContext is IRefreshable refreshable)
+                {
+                    _ = refreshable.RefreshAsync();
+                }
             }
         }
     }

@@ -25,6 +25,23 @@
                      Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0,0,0,16"/>
 
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox Grid.Column="0" materialDesign:HintAssist.Hint="İl"
+                          ItemsSource="{Binding Cities}"
+                          SelectedItem="{Binding SelectedCity}"
+                          DisplayMemberPath="Name"
+                          Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+                <ComboBox Grid.Column="2" materialDesign:HintAssist.Hint="İlçe"
+                          ItemsSource="{Binding Districts}"
+                          SelectedItem="{Binding SelectedDistrict}"
+                          Style="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+            </Grid>
+
             <TextBox materialDesign:HintAssist.Hint="Adres" 
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                      Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}"

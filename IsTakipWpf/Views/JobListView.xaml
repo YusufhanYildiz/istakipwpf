@@ -20,8 +20,10 @@
                 <Grid Margin="0,0,0,16">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="200"/>
-                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="120"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
@@ -31,35 +33,69 @@
                              Margin="0,0,16,0"
                              materialDesign:TextFieldAssist.HasClearButton="True"/>
 
-                    <ComboBox Grid.Column="1" materialDesign:HintAssist.Hint="Müşteri Filtrele"
+                    <ComboBox Grid.Column="1" materialDesign:HintAssist.Hint="Müşteri"
                               ItemsSource="{Binding Customers}"
                               SelectedItem="{Binding SelectedCustomer}"
                               DisplayMemberPath="FullName"
                               Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                              Margin="0,0,16,0"
+                              Margin="0,0,12,0"
                               materialDesign:TextFieldAssist.HasClearButton="True"/>
 
-                    <ComboBox Grid.Column="2" materialDesign:HintAssist.Hint="Durum Filtrele"
+                    <ComboBox Grid.Column="2" materialDesign:HintAssist.Hint="İl"
+                              ItemsSource="{Binding Cities}"
+                              SelectedItem="{Binding SelectedCityFilter}"
+                              DisplayMemberPath="Name"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                              Margin="0,0,12,0"
+                              materialDesign:TextFieldAssist.HasClearButton="True"/>
+
+                    <ComboBox Grid.Column="3" materialDesign:HintAssist.Hint="İlçe"
+                              ItemsSource="{Binding Districts}"
+                              SelectedItem="{Binding SelectedDistrictFilter}"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                              Margin="0,0,12,0"
+                              materialDesign:TextFieldAssist.HasClearButton="True"/>
+
+                    <ComboBox Grid.Column="4" materialDesign:HintAssist.Hint="Durum"
                               ItemsSource="{Binding Statuses}"
                               SelectedItem="{Binding SelectedStatus}"
                               Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                               Margin="0,0,16,0"
                               materialDesign:TextFieldAssist.HasClearButton="True"/>
 
-                    <Button Grid.Column="3" Content="YENİ İŞ" 
+                    <Button Grid.Column="5" Content="YENİ İŞ" 
                             Command="{Binding AddJobCommand}"
                             Style="{StaticResource MaterialDesignRaisedButton}"/>
                 </Grid>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button Command="{Binding ImportExcelCommand}" ToolTip="Excel'den İçe Aktar" Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,4,0">
-                        <materialDesign:PackIcon Kind="FileImport" />
+                    <Button Command="{Binding ImportExcelCommand}" 
+                            Style="{StaticResource MaterialDesignOutlinedButton}" 
+                            Margin="0,0,8,0"
+                            ToolTip="Excel dosyasındaki işleri sisteme aktarır">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileImport" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="EXCEL İÇE AKTAR" VerticalAlignment="Center"/>
+                        </StackPanel>
                     </Button>
-                    <Button Command="{Binding ExportExcelCommand}" ToolTip="Excel'e Dışa Aktar" Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,4,0">
-                        <materialDesign:PackIcon Kind="FileExport" />
+                    
+                    <Button Command="{Binding ExportExcelCommand}" 
+                            Style="{StaticResource MaterialDesignOutlinedButton}" 
+                            Margin="0,0,8,0"
+                            ToolTip="İş listesini Excel dosyası olarak kaydeder">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FileExport" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="EXCEL ÇIKTI" VerticalAlignment="Center"/>
+                        </StackPanel>
                     </Button>
-                    <Button Command="{Binding ExportPdfCommand}" ToolTip="PDF'e Dışa Aktar" Style="{StaticResource MaterialDesignFlatButton}">
-                        <materialDesign:PackIcon Kind="FilePdfBox" />
+                    
+                    <Button Command="{Binding ExportPdfCommand}" 
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            ToolTip="İş listesini PDF raporu olarak hazırlar">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FilePdfBox" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="PDF RAPORU" VerticalAlignment="Center"/>
+                        </StackPanel>
                     </Button>
                 </StackPanel>
             </StackPanel>
@@ -73,16 +109,9 @@
                       IsReadOnly="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Müşteri" Binding="{Binding CustomerFullName}" Width="Auto"/>
-                    <DataGridTextColumn Header="İş Başlığı" Binding="{Binding JobTitle}" Width="Auto"/>
-                    <DataGridTextColumn Header="Açıklama" Binding="{Binding Description}" Width="*">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="TextWrapping" Value="Wrap"/>
-                                <Setter Property="MaxHeight" Value="40"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTemplateColumn Header="Durum" Width="120">
+                    <DataGridTextColumn Header="İl" Binding="{Binding CustomerCity}" Width="Auto"/>
+                    <DataGridTextColumn Header="İlçe" Binding="{Binding CustomerDistrict}" Width="Auto"/>
+                    <DataGridTemplateColumn Header="Durum" Width="150">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Border Padding="8,2" CornerRadius="4" HorizontalAlignment="Left">
@@ -106,6 +135,15 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="İş Başlığı" Binding="{Binding JobTitle}" Width="Auto"/>
+                    <DataGridTextColumn Header="Açıklama" Binding="{Binding Description}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextWrapping" Value="Wrap"/>
+                                <Setter Property="MaxHeight" Value="40"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTextColumn Header="Başlangıç" Binding="{Binding StartDate, StringFormat='dd.MM.yyyy'}" Width="Auto"/>
                     <DataGridTextColumn Header="Bitiş" Binding="{Binding EndDate, StringFormat='dd.MM.yyyy'}" Width="Auto"/>
                     <DataGridTemplateColumn Width="100">

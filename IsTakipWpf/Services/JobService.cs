@@ -49,9 +49,9 @@ namespace IsTakipWpf.Services
             return await _repository.GetByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Job>> SearchJobsAsync(string searchTerm, int? customerId = null, JobStatus? status = null)
+        public async Task<IEnumerable<Job>> SearchJobsAsync(string searchTerm, int? customerId = null, JobStatus? status = null, string city = null, string district = null)
         {
-            return await _repository.SearchAsync(searchTerm, customerId, status);
+            return await _repository.SearchAsync(searchTerm, customerId, status, city, district);
         }
 
         public async Task<(bool Success, string Message)> UpdateJobAsync(Job job)

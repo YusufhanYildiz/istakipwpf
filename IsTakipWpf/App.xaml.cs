@@ -85,22 +85,23 @@ namespace IsTakipWpf
             services.AddScoped<IReportingService, ReportingService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddSingleton<IThemeService, ThemeService>();
+            services.AddSingleton<ILocationService, LocationService>();
 
             // ViewModels
             services.AddSingleton<MainWindowViewModel>();
             services.AddTransient<LoginViewModel>();
-            services.AddTransient<DashboardViewModel>();
-            services.AddTransient<CustomerListViewModel>();
-            services.AddTransient<JobListViewModel>();
-            services.AddTransient<SettingsViewModel>();
-            services.AddTransient<PasswordChangeViewModel>();
+            services.AddSingleton<DashboardViewModel>();
+            services.AddSingleton<CustomerListViewModel>();
+            services.AddSingleton<JobListViewModel>();
+            services.AddSingleton<SettingsViewModel>();
+            services.AddSingleton<PasswordChangeViewModel>();
 
             // Views
-            services.AddTransient<DashboardView>();
-            services.AddTransient<CustomerListView>();
-            services.AddTransient<JobListView>();
-            services.AddTransient<SettingsView>();
-            services.AddTransient<PasswordChangeView>();
+            services.AddSingleton<DashboardView>();
+            services.AddSingleton<CustomerListView>();
+            services.AddSingleton<JobListView>();
+            services.AddSingleton<SettingsView>();
+            services.AddSingleton<PasswordChangeView>();
         }
     }
 }

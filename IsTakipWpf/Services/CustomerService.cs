@@ -49,13 +49,13 @@ namespace IsTakipWpf.Services
             return await _repository.GetByIdAsync(id);
         }
 
-        public async Task<IEnumerable<Customer>> SearchCustomersAsync(string searchTerm)
+        public async Task<IEnumerable<Customer>> SearchCustomersAsync(string searchTerm, string city = null, string district = null)
         {
-            if (string.IsNullOrWhiteSpace(searchTerm))
+            if (string.IsNullOrWhiteSpace(searchTerm) && string.IsNullOrWhiteSpace(city) && string.IsNullOrWhiteSpace(district))
             {
                 return await GetActiveCustomersAsync();
             }
-            return await _repository.SearchAsync(searchTerm);
+            return await _repository.SearchAsync(searchTerm, city, district);
         }
 
         public async Task<(bool Success, string Message)> UpdateCustomerAsync(Customer customer)

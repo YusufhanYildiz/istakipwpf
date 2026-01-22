@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,21 +9,45 @@ using Microsoft.Win32;
 
 namespace IsTakipWpf.ViewModels
 {
-    public class CustomerListViewModel : ViewModelBase
+    public class CustomerListViewModel : ViewModelBase, IRefreshable
     {
         private readonly ICustomerService _customerService;
+        private readonly ILocationService _locationService;
         private readonly IExcelService _excelService;
         private readonly IReportingService _reportingService;
         private readonly MaterialDesignThemes.Wpf.ISnackbarMessageQueue _messageQueue;
         private string _searchTerm;
         private bool _isLoading;
+        private City _selectedCityFilter;
+        private string _selectedDistrictFilter;
 
         public ObservableCollection<Customer> Customers { get; } = new ObservableCollection<Customer>();
+        public ObservableCollection<City> Cities { get; } = new ObservableCollection<City>();
+        public ObservableCollection<string> Districts { get; } = new ObservableCollection<string>();
 
         public string SearchTerm
         {
             get => _searchTerm;
             set { if (SetProperty(ref _searchTerm, value)) _ = SearchAsync(); }
+        }
+
+        public City SelectedCityFilter
+        {
+            get => _selectedCityFilter;
+            set
+            {
+                if (SetProperty(ref _selectedCityFilter, value))
+                {
+                    _ = LoadFilterDistrictsAsync();
+                    _ = SearchAsync();
+                }
+            }
+        }
+
+        public string SelectedDistrictFilter
+        {
+            get => _selectedDistrictFilter;
+            set { if (SetProperty(ref _selectedDistrictFilter, value)) _ = SearchAsync(); }
         }
 
         public bool IsLoading { get => _isLoading; set => SetProperty(ref _isLoading, value); }
@@ -36,14 +60,17 @@ namespace IsTakipWpf.ViewModels
         public ICommand ImportExcelCommand { get; }
         public ICommand ExportExcelCommand { get; }
         public ICommand ExportPdfCommand { get; }
+        public ICommand ClearFiltersCommand { get; }
 
         public CustomerListViewModel(
             ICustomerService customerService, 
+            ILocationService locationService,
             IExcelService excelService,
             IReportingService reportingService,
             MaterialDesignThemes.Wpf.ISnackbarMessageQueue messageQueue)
         {
             _customerService = customerService;
+            _locationService = locationService;
             _excelService = excelService;
             _reportingService = reportingService;
             _messageQueue = messageQueue;
@@ -56,8 +83,22 @@ namespace IsTakipWpf.ViewModels
             ImportExcelCommand = new RelayCommand(async _ => await ImportExcelAsync());
             ExportExcelCommand = new RelayCommand(async _ => await ExportExcelAsync());
             ExportPdfCommand = new RelayCommand(async _ => await ExportPdfAsync());
+            ClearFiltersCommand = new RelayCommand(_ => ClearFilters());
             
-            _ = LoadCustomersAsync();
+            _ = InitializeAsync();
+        }
+
+        private async Task InitializeAsync()
+        {
+            var cities = await _locationService.GetCitiesAsync();
+            Cities.Clear();
+            foreach (var city in cities) Cities.Add(city);
+            await LoadCustomersAsync();
+        }
+
+        public async Task RefreshAsync()
+        {
+            await LoadCustomersAsync();
         }
 
         private async Task LoadCustomersAsync()
@@ -65,7 +106,7 @@ namespace IsTakipWpf.ViewModels
             IsLoading = true;
             try
             {
-                var customers = await _customerService.GetActiveCustomersAsync();
+                var customers = await _customerService.SearchCustomersAsync(SearchTerm, SelectedCityFilter?.Name, SelectedDistrictFilter);
                 Customers.Clear();
                 foreach (var customer in customers) Customers.Add(customer);
             }
@@ -74,14 +115,29 @@ namespace IsTakipWpf.ViewModels
 
         private async Task SearchAsync()
         {
-            var results = await _customerService.SearchCustomersAsync(SearchTerm);
-            Customers.Clear();
-            foreach (var customer in results) Customers.Add(customer);
+            await LoadCustomersAsync();
+        }
+
+        private async Task LoadFilterDistrictsAsync()
+        {
+            Districts.Clear();
+            if (SelectedCityFilter != null)
+            {
+                var districts = await _locationService.GetDistrictsAsync(SelectedCityFilter.Name);
+                foreach (var d in districts) Districts.Add(d);
+            }
+        }
+
+        private void ClearFilters()
+        {
+            SearchTerm = string.Empty;
+            SelectedCityFilter = null;
+            SelectedDistrictFilter = null;
         }
 
         private async Task AddCustomerAsync()
         {
-            var viewModel = new AddEditCustomerViewModel(_customerService);
+            var viewModel = new AddEditCustomerViewModel(_customerService, _locationService);
             var view = new Views.AddEditCustomerDialog { DataContext = viewModel };
             var result = await MaterialDesignThemes.Wpf.DialogHost.Show(view, "RootDialog");
             if (result is bool b && b) await LoadCustomersAsync();
@@ -90,7 +146,7 @@ namespace IsTakipWpf.ViewModels
         private async Task EditCustomerAsync(Customer customer)
         {
             if (customer == null) return;
-            var viewModel = new AddEditCustomerViewModel(_customerService, customer);
+            var viewModel = new AddEditCustomerViewModel(_customerService, _locationService, customer);
             var view = new Views.AddEditCustomerDialog { DataContext = viewModel };
             var result = await MaterialDesignThemes.Wpf.DialogHost.Show(view, "RootDialog");
             if (result is bool b && b) await LoadCustomersAsync();

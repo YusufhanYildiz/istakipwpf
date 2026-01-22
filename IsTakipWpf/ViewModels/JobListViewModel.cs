@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,10 +9,11 @@ using Microsoft.Win32;
 
 namespace IsTakipWpf.ViewModels
 {
-    public class JobListViewModel : ViewModelBase
+    public class JobListViewModel : ViewModelBase, IRefreshable
     {
         private readonly IJobService _jobService;
         private readonly ICustomerService _customerService;
+        private readonly ILocationService _locationService;
         private readonly IExcelService _excelService;
         private readonly IReportingService _reportingService;
         private readonly MaterialDesignThemes.Wpf.ISnackbarMessageQueue _messageQueue;
@@ -20,9 +21,13 @@ namespace IsTakipWpf.ViewModels
         private JobStatus? _selectedStatus;
         private Customer _selectedCustomer;
         private bool _isLoading;
+        private City _selectedCityFilter;
+        private string _selectedDistrictFilter;
 
         public ObservableCollection<Job> Jobs { get; } = new ObservableCollection<Job>();
         public ObservableCollection<Customer> Customers { get; } = new ObservableCollection<Customer>();
+        public ObservableCollection<City> Cities { get; } = new ObservableCollection<City>();
+        public ObservableCollection<string> Districts { get; } = new ObservableCollection<string>();
         public Array Statuses => Enum.GetValues(typeof(JobStatus));
 
         public string SearchTerm
@@ -43,6 +48,25 @@ namespace IsTakipWpf.ViewModels
             set { if (SetProperty(ref _selectedCustomer, value)) _ = FilterAsync(); }
         }
 
+        public City SelectedCityFilter
+        {
+            get => _selectedCityFilter;
+            set
+            {
+                if (SetProperty(ref _selectedCityFilter, value))
+                {
+                    _ = LoadFilterDistrictsAsync();
+                    _ = FilterAsync();
+                }
+            }
+        }
+
+        public string SelectedDistrictFilter
+        {
+            get => _selectedDistrictFilter;
+            set { if (SetProperty(ref _selectedDistrictFilter, value)) _ = FilterAsync(); }
+        }
+
         public bool IsLoading { get => _isLoading; set => SetProperty(ref _isLoading, value); }
 
         public ICommand AddJobCommand { get; }
@@ -52,16 +76,19 @@ namespace IsTakipWpf.ViewModels
         public ICommand ImportExcelCommand { get; }
         public ICommand ExportExcelCommand { get; }
         public ICommand ExportPdfCommand { get; }
+        public ICommand ClearFiltersCommand { get; }
 
         public JobListViewModel(
             IJobService jobService, 
             ICustomerService customerService,
+            ILocationService locationService,
             IExcelService excelService,
             IReportingService reportingService,
             MaterialDesignThemes.Wpf.ISnackbarMessageQueue messageQueue)
         {
             _jobService = jobService;
             _customerService = customerService;
+            _locationService = locationService;
             _excelService = excelService;
             _reportingService = reportingService;
             _messageQueue = messageQueue;
@@ -73,8 +100,14 @@ namespace IsTakipWpf.ViewModels
             ImportExcelCommand = new RelayCommand(async _ => await ImportExcelAsync());
             ExportExcelCommand = new RelayCommand(async _ => await ExportExcelAsync());
             ExportPdfCommand = new RelayCommand(async _ => await ExportPdfAsync());
+            ClearFiltersCommand = new RelayCommand(_ => ClearFilters());
 
             _ = InitializeAsync();
+        }
+
+        public async Task RefreshAsync()
+        {
+            await InitializeAsync();
         }
 
         private async Task InitializeAsync()
@@ -85,6 +118,11 @@ namespace IsTakipWpf.ViewModels
                 var customers = await _customerService.GetActiveCustomersAsync();
                 Customers.Clear();
                 foreach (var c in customers) Customers.Add(c);
+
+                var cities = await _locationService.GetCitiesAsync();
+                Cities.Clear();
+                foreach (var city in cities) Cities.Add(city);
+
                 await FilterAsync();
             }
             finally { IsLoading = false; }
@@ -92,9 +130,28 @@ namespace IsTakipWpf.ViewModels
 
         private async Task FilterAsync()
         {
-            var results = await _jobService.SearchJobsAsync(SearchTerm, SelectedCustomer?.Id, SelectedStatus);
+            var results = await _jobService.SearchJobsAsync(SearchTerm, SelectedCustomer?.Id, SelectedStatus, SelectedCityFilter?.Name, SelectedDistrictFilter);
             Jobs.Clear();
             foreach (var job in results) Jobs.Add(job);
+        }
+
+        private async Task LoadFilterDistrictsAsync()
+        {
+            Districts.Clear();
+            if (SelectedCityFilter != null)
+            {
+                var districts = await _locationService.GetDistrictsAsync(SelectedCityFilter.Name);
+                foreach (var d in districts) Districts.Add(d);
+            }
+        }
+
+        private void ClearFilters()
+        {
+            SearchTerm = string.Empty;
+            SelectedCustomer = null;
+            SelectedStatus = null;
+            SelectedCityFilter = null;
+            SelectedDistrictFilter = null;
         }
 
         private async Task AddJobAsync()
