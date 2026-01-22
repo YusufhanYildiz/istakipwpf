@@ -88,12 +88,14 @@ namespace IsTakipWpf
             services.AddTransient<CustomerListViewModel>();
             services.AddTransient<JobListViewModel>();
             services.AddTransient<SettingsViewModel>();
+            services.AddTransient<PasswordChangeViewModel>();
 
             // Views
             services.AddTransient<DashboardView>();
             services.AddTransient<CustomerListView>();
             services.AddTransient<JobListView>();
             services.AddTransient<SettingsView>();
+            services.AddTransient<PasswordChangeView>();
         }
     }
 }

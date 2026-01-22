@@ -41,6 +41,9 @@ namespace IsTakipWpf.ViewModels
                 case "Settings":
                     CurrentView = _serviceProvider.GetRequiredService<SettingsView>();
                     break;
+                case "Security":
+                    CurrentView = _serviceProvider.GetRequiredService<PasswordChangeView>();
+                    break;
             }
         }
     }

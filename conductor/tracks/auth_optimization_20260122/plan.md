@@ -16,10 +16,10 @@
 - [x] Task: Conductor - User Manual Verification 'Giriş Ekranı' [a6e87b4]
 
 ## Faz 3: Şifre Yönetimi Sayfası
-- [~] Task: PasswordChangeViewModel ve Görünüm Oluşturma
-- [ ] Task: Navigasyon Güncellemesi
-- [ ] Task: Şifre Değiştirme Testleri
-- [ ] Task: Conductor - User Manual Verification 'Şifre Yönetimi Sayfası' (Protocol in workflow.md)
+- [x] Task: PasswordChangeViewModel ve Görünüm Oluşturma [da3e039]
+- [x] Task: Navigasyon Güncellemesi [da3e039]
+- [x] Task: Şifre Değiştirme Testleri [da3e039]
+- [~] Task: Conductor - User Manual Verification 'Şifre Yönetimi Sayfası' (Protocol in workflow.md)
 
 ## Faz 4: Performans Analizi ve Optimizasyon
 - [ ] Task: Bellek Kullanım Analizi (Profilleme)
