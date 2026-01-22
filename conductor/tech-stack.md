@@ -14,6 +14,7 @@
 - **Database Engine:** [SQLite](https://www.sqlite.org/) - Zero-configuration, serverless, file-based SQL engine.
 - **Micro-ORM:** [Dapper](https://github.com/DapperLib/Dapper) - High-performance object mapper for .NET.
 - **Connection Management:** System.Data.SQLite (NuGet package).
+- **Location Services:** Custom offline `LocationService` containing comprehensive datasets for Turkey (81 provinces and their districts).
 - **Security:** `System.Security.Cryptography.ProtectedData` (DPAPI) for secure local credential storage.
 
 ## File Integration & Reporting
