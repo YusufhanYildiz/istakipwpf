@@ -6,6 +6,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 
 
-- [~] **Track: İl ve İlçe Yönetimi Entegrasyonu**
+- [x] **Track: İl ve İlçe Yönetimi Entegrasyonu**
 
 *Link: [./tracks/location_feature_20260122/](./tracks/location_feature_20260122/)*
