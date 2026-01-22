@@ -5,3 +5,6 @@
 *.userosscache
 *.sln.docstates
 .vs/
+/publish/
+/releases/
+/*.nupkg

@@ -15,69 +15,191 @@
 
         <TextBlock Grid.Row="0" Text="Müşteriler" Style="{StaticResource MaterialDesignHeadline4TextBlock}" Margin="0,0,0,20"/>
 
-        <materialDesign:Card Grid.Row="1" Margin="0,0,0,16" Padding="16">
-            <DockPanel>
-                <Button DockPanel.Dock="Right" 
-                        Content="YENİ MÜŞTERİ" 
-                        Command="{Binding AddCustomerCommand}"
-                        Style="{StaticResource MaterialDesignRaisedButton}"
-                        materialDesign:ButtonAssist.CornerRadius="2"/>
+                <materialDesign:Card Grid.Row="1" Margin="0,0,0,16" Padding="16">
 
-                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-                    <TextBox materialDesign:HintAssist.Hint="Ara (Ad, Soyad veya Telefon)..." 
-                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                             Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
-                             Width="250"
-                             Margin="0,0,16,0"
-                             materialDesign:TextFieldAssist.HasClearButton="True"/>
+                    <StackPanel>
 
-                    <ComboBox materialDesign:HintAssist.Hint="İl Filtrele"
-                              ItemsSource="{Binding Cities}"
-                              SelectedItem="{Binding SelectedCityFilter}"
-                              DisplayMemberPath="Name"
-                              Width="120" Margin="0,0,8,0"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                              materialDesign:TextFieldAssist.HasClearButton="True"/>
-                    
-                    <ComboBox materialDesign:HintAssist.Hint="İlçe Filtrele"
-                              ItemsSource="{Binding Districts}"
-                              SelectedItem="{Binding SelectedDistrictFilter}"
-                              Width="120" Margin="0,0,16,0"
-                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                              materialDesign:TextFieldAssist.HasClearButton="True"/>
+                        <!-- Üst Satır: Ana Aksiyonlar -->
 
-                    <Button Command="{Binding ImportExcelCommand}" 
-                            Style="{StaticResource MaterialDesignOutlinedButton}" 
-                            Margin="0,0,8,0"
-                            ToolTip="Excel dosyasındaki müşterileri sisteme aktarır">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="FileImport" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="EXCEL İÇE AKTAR" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    
-                    <Button Command="{Binding ExportExcelCommand}" 
-                            Style="{StaticResource MaterialDesignOutlinedButton}" 
-                            Margin="0,0,8,0"
-                            ToolTip="Tüm müşteri listesini Excel dosyası olarak kaydeder">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="FileExport" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="EXCEL ÇIKTI" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    
-                    <Button Command="{Binding ExportPdfCommand}" 
-                            Style="{StaticResource MaterialDesignOutlinedButton}"
-                            ToolTip="Müşteri listesini PDF raporu olarak hazırlar">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="FilePdfBox" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="PDF RAPORU" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
+                                        <DockPanel Margin="0,0,0,16">
 
-            </DockPanel>
-        </materialDesign:Card>
+                                            <Button DockPanel.Dock="Left" 
+
+                                                    Command="{Binding AddCustomerCommand}"
+
+                        
+
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+
+                                    materialDesign:ButtonAssist.CornerRadius="10"
+
+                                    Height="40">
+
+                                <Button.Content>
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <materialDesign:PackIcon Kind="Plus" Margin="0,0,8,0" VerticalAlignment="Center"/>
+
+                                        <TextBlock Text="YENİ MÜŞTERİ EKLE" VerticalAlignment="Center"/>
+
+                                    </StackPanel>
+
+                                </Button.Content>
+
+                            </Button>
+
+        
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+                                <Button Command="{Binding ImportExcelCommand}" 
+
+                                        Style="{StaticResource MaterialDesignOutlinedButton}" 
+
+                                        Margin="0,0,8,0"
+
+                                        ToolTip="Excel'den Aktar">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <materialDesign:PackIcon Kind="FileImport" Margin="0,0,8,0" VerticalAlignment="Center"/>
+
+                                        <TextBlock Text="İÇE AKTAR" VerticalAlignment="Center"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button Command="{Binding ExportExcelCommand}" 
+
+                                        Style="{StaticResource MaterialDesignOutlinedButton}" 
+
+                                        Margin="0,0,8,0"
+
+                                        ToolTip="Excel Çıktısı">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <materialDesign:PackIcon Kind="FileExport" Margin="0,0,8,0" VerticalAlignment="Center"/>
+
+                                        <TextBlock Text="EXCEL" VerticalAlignment="Center"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                                <Button Command="{Binding ExportPdfCommand}" 
+
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+
+                                        ToolTip="PDF Raporu">
+
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <materialDesign:PackIcon Kind="FilePdfBox" Margin="0,0,8,0" VerticalAlignment="Center"/>
+
+                                        <TextBlock Text="PDF" VerticalAlignment="Center"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                            </StackPanel>
+
+                        </DockPanel>
+
+        
+
+                        <Separator Background="{DynamicResource MaterialDesignDivider}" Margin="-16,0,-16,16" />
+
+        
+
+                        <!-- Alt Satır: Filtreleme Alanları -->
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+
+                                <ColumnDefinition Width="2*"/>
+
+                                <ColumnDefinition Width="1*"/>
+
+                                <ColumnDefinition Width="1*"/>
+
+                                <ColumnDefinition Width="Auto"/>
+
+                            </Grid.ColumnDefinitions>
+
+        
+
+                            <TextBox Grid.Column="0" 
+
+                                     materialDesign:HintAssist.Hint="Müşteri Ara (Ad, Soyad, Telefon...)" 
+
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+
+                                     Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+
+                                     Margin="0,0,16,0"
+
+                                     materialDesign:TextFieldAssist.HasClearButton="True"/>
+
+        
+
+                            <ComboBox Grid.Column="1" 
+
+                                      materialDesign:HintAssist.Hint="İl Seçin"
+
+                                      ItemsSource="{Binding Cities}"
+
+                                      SelectedItem="{Binding SelectedCityFilter}"
+
+                                      DisplayMemberPath="Name"
+
+                                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+
+                                      Margin="0,0,16,0"
+
+                                      materialDesign:TextFieldAssist.HasClearButton="True"/>
+
+                            
+
+                            <ComboBox Grid.Column="2" 
+
+                                      materialDesign:HintAssist.Hint="İlçe Seçin"
+
+                                      ItemsSource="{Binding Districts}"
+
+                                      SelectedItem="{Binding SelectedDistrictFilter}"
+
+                                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+
+                                      Margin="0,0,16,0"
+
+                                      materialDesign:TextFieldAssist.HasClearButton="True"/>
+
+        
+
+                            <Button Grid.Column="3" 
+
+                                    Command="{Binding ClearFiltersCommand}"
+
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+
+                                    ToolTip="Filtreleri Temizle">
+
+                                <materialDesign:PackIcon Kind="FilterRemove" />
+
+                            </Button>
+
+                        </Grid>
+
+                    </StackPanel>
+
+                </materialDesign:Card>
+
+        
 
         <materialDesign:Card Grid.Row="2" materialDesign:ElevationAssist.Elevation="Dp2">
             <DataGrid ItemsSource="{Binding Customers}"

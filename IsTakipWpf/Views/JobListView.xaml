@@ -17,23 +17,73 @@
 
         <materialDesign:Card Grid.Row="1" Margin="0,0,0,16" Padding="16">
             <StackPanel>
-                <Grid Margin="0,0,0,16">
+                <!-- Üst Satır: Ana Aksiyonlar -->
+                <DockPanel Margin="0,0,0,16">
+                    <Button DockPanel.Dock="Left" 
+                            Command="{Binding AddJobCommand}"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            materialDesign:ButtonAssist.CornerRadius="10"
+                            Height="40">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="BriefcasePlus" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="YENİ İŞ EKLE" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Command="{Binding ImportExcelCommand}" 
+                                Style="{StaticResource MaterialDesignOutlinedButton}" 
+                                Margin="0,0,8,0"
+                                ToolTip="İşleri Excel'den Aktar">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="FileImport" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="İÇE AKTAR" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding ExportExcelCommand}" 
+                                Style="{StaticResource MaterialDesignOutlinedButton}" 
+                                Margin="0,0,8,0"
+                                ToolTip="İş Listesi Excel">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="FileExport" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="EXCEL" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{Binding ExportPdfCommand}" 
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                ToolTip="İş Listesi PDF">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="FilePdfBox" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="PDF" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </DockPanel>
+
+                <Separator Background="{DynamicResource MaterialDesignDivider}" Margin="-16,0,-16,16" />
+
+                <!-- Alt Satır: Gelişmiş Filtreleme -->
+                <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox materialDesign:HintAssist.Hint="İş Başlığı veya Açıklama Ara..." 
+                    <TextBox Grid.Column="0" 
+                             materialDesign:HintAssist.Hint="İş Başlığı veya Açıklama Ara..." 
                              Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                             Margin="0,0,16,0"
+                             Margin="0,0,12,0"
                              materialDesign:TextFieldAssist.HasClearButton="True"/>
 
-                    <ComboBox Grid.Column="1" materialDesign:HintAssist.Hint="Müşteri"
+                    <ComboBox Grid.Column="1" 
+                              materialDesign:HintAssist.Hint="Müşteri Seçin"
                               ItemsSource="{Binding Customers}"
                               SelectedItem="{Binding SelectedCustomer}"
                               DisplayMemberPath="FullName"
@@ -41,7 +91,8 @@
                               Margin="0,0,12,0"
                               materialDesign:TextFieldAssist.HasClearButton="True"/>
 
-                    <ComboBox Grid.Column="2" materialDesign:HintAssist.Hint="İl"
+                    <ComboBox Grid.Column="2" 
+                              materialDesign:HintAssist.Hint="İl"
                               ItemsSource="{Binding Cities}"
                               SelectedItem="{Binding SelectedCityFilter}"
                               DisplayMemberPath="Name"
@@ -49,55 +100,29 @@
                               Margin="0,0,12,0"
                               materialDesign:TextFieldAssist.HasClearButton="True"/>
 
-                    <ComboBox Grid.Column="3" materialDesign:HintAssist.Hint="İlçe"
+                    <ComboBox Grid.Column="3" 
+                              materialDesign:HintAssist.Hint="İlçe"
                               ItemsSource="{Binding Districts}"
                               SelectedItem="{Binding SelectedDistrictFilter}"
                               Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                               Margin="0,0,12,0"
                               materialDesign:TextFieldAssist.HasClearButton="True"/>
 
-                    <ComboBox Grid.Column="4" materialDesign:HintAssist.Hint="Durum"
+                    <ComboBox Grid.Column="4" 
+                              materialDesign:HintAssist.Hint="Durum"
                               ItemsSource="{Binding Statuses}"
                               SelectedItem="{Binding SelectedStatus}"
                               Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                              Margin="0,0,16,0"
+                              Margin="0,0,12,0"
                               materialDesign:TextFieldAssist.HasClearButton="True"/>
 
-                    <Button Grid.Column="5" Content="YENİ İŞ" 
-                            Command="{Binding AddJobCommand}"
-                            Style="{StaticResource MaterialDesignRaisedButton}"/>
+                    <Button Grid.Column="5" 
+                            Command="{Binding ClearFiltersCommand}"
+                            Style="{StaticResource MaterialDesignFlatButton}"
+                            ToolTip="Filtreleri Temizle">
+                        <materialDesign:PackIcon Kind="FilterRemove" />
+                    </Button>
                 </Grid>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button Command="{Binding ImportExcelCommand}" 
-                            Style="{StaticResource MaterialDesignOutlinedButton}" 
-                            Margin="0,0,8,0"
-                            ToolTip="Excel dosyasındaki işleri sisteme aktarır">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="FileImport" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="EXCEL İÇE AKTAR" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    
-                    <Button Command="{Binding ExportExcelCommand}" 
-                            Style="{StaticResource MaterialDesignOutlinedButton}" 
-                            Margin="0,0,8,0"
-                            ToolTip="İş listesini Excel dosyası olarak kaydeder">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="FileExport" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="EXCEL ÇIKTI" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    
-                    <Button Command="{Binding ExportPdfCommand}" 
-                            Style="{StaticResource MaterialDesignOutlinedButton}"
-                            ToolTip="İş listesini PDF raporu olarak hazırlar">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="FilePdfBox" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="PDF RAPORU" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
             </StackPanel>
         </materialDesign:Card>
 

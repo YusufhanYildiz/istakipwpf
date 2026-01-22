@@ -6,6 +6,7 @@ using IsTakipWpf.Repositories;
 using IsTakipWpf.Services;
 using IsTakipWpf.ViewModels;
 using IsTakipWpf.Views;
+using Velopack;
 
 namespace IsTakipWpf
 {
@@ -21,6 +22,9 @@ namespace IsTakipWpf
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            // Velopack: Handle install/uninstall/update events early
+            VelopackApp.Build().Run();
+
             base.OnStartup(e);
 
             // Prevent app from closing when LoginWindow (the only open window) closes
@@ -86,6 +90,7 @@ namespace IsTakipWpf
             services.AddScoped<IAuthService, AuthService>();
             services.AddSingleton<IThemeService, ThemeService>();
             services.AddSingleton<ILocationService, LocationService>();
+            services.AddSingleton<IUpdateService, UpdateService>();
 
             // ViewModels
             services.AddSingleton<MainWindowViewModel>();
