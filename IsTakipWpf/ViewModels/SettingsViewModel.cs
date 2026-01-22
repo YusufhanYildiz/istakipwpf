@@ -12,9 +12,11 @@ namespace IsTakipWpf.ViewModels
     {
         private readonly IBackupService _backupService;
         private readonly ISettingsRepository _settingsRepository;
+        private readonly IThemeService _themeService;
         private readonly MaterialDesignThemes.Wpf.ISnackbarMessageQueue _messageQueue;
         private string _backupFolder;
         private bool _autoBackupOnExit;
+        private AppTheme _selectedTheme;
 
         public string BackupFolder
         {
@@ -28,16 +30,31 @@ namespace IsTakipWpf.ViewModels
             set { if (SetProperty(ref _autoBackupOnExit, value)) _ = SaveSettingsAsync(); }
         }
 
+        public AppTheme SelectedTheme
+        {
+            get => _selectedTheme;
+            set
+            {
+                if (SetProperty(ref _selectedTheme, value))
+                {
+                    _themeService.SetTheme(value);
+                }
+            }
+        }
+
+        public System.Collections.Generic.IEnumerable<AppTheme> Themes => (AppTheme[])Enum.GetValues(typeof(AppTheme));
+
         public ObservableCollection<BackupInfo> BackupHistory { get; } = new ObservableCollection<BackupInfo>();
 
         public ICommand SelectFolderCommand { get; }
         public ICommand CreateManualBackupCommand { get; }
         public ICommand RestoreBackupCommand { get; }
 
-        public SettingsViewModel(IBackupService backupService, ISettingsRepository settingsRepository, MaterialDesignThemes.Wpf.ISnackbarMessageQueue messageQueue)
+        public SettingsViewModel(IBackupService backupService, ISettingsRepository settingsRepository, IThemeService themeService, MaterialDesignThemes.Wpf.ISnackbarMessageQueue messageQueue)
         {
             _backupService = backupService;
             _settingsRepository = settingsRepository;
+            _themeService = themeService;
             _messageQueue = messageQueue;
 
             SelectFolderCommand = new RelayCommand(_ => SelectFolder());
@@ -49,6 +66,9 @@ namespace IsTakipWpf.ViewModels
 
         private async Task InitializeAsync()
         {
+            // Load Theme
+            SelectedTheme = _themeService.GetCurrentTheme();
+
             var savedFolder = await _settingsRepository.GetValueAsync("BackupFolder");
             if (string.IsNullOrEmpty(savedFolder))
             {

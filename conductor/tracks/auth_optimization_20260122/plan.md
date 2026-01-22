@@ -15,14 +15,68 @@
 - [x] Task: Login UI Entegrasyon Testleri [a6e87b4]
 - [x] Task: Conductor - User Manual Verification 'Giriş Ekranı' [a6e87b4]
 
-## Faz 3: Şifre Yönetimi Sayfası
-- [x] Task: PasswordChangeViewModel ve Görünüm Oluşturma [da3e039]
-- [x] Task: Navigasyon Güncellemesi [da3e039]
-- [x] Task: Şifre Değiştirme Testleri [da3e039]
-- [~] Task: Conductor - User Manual Verification 'Şifre Yönetimi Sayfası' (Protocol in workflow.md)
+## Faz 3: Şifre Yönetimi Sayfası [checkpoint: 06f407f]
 
-## Faz 4: Performans Analizi ve Optimizasyon
+- [x] Task: PasswordChangeViewModel ve Görünüm Oluşturma [da3e039]
+
+- [x] Task: Navigasyon Güncellemesi [da3e039]
+
+- [x] Task: Şifre Değiştirme Testleri [da3e039]
+
+- [x] Task: Conductor - User Manual Verification 'Şifre Yönetimi Sayfası' [06f407f]
+
+
+
+## Faz 4: Tema Yönetimi (Dark Mode)
+
+
+
+- [x] Task: ThemeService ve Altyapı
+
+
+
+    - [x] IThemeService oluştur.
+
+
+
+    - [x] Sistem temasını algılama.
+
+
+
+    - [x] Ayarları kaydetme.
+
+
+
+- [x] Task: Ayarlar Sayfası Güncellemesi
+
+
+
+    - [x] Koyu/Açık/Sistem seçeneği ekle.
+
+
+
+- [x] Task: UI Kontrolleri ve Stil Uyarlaması
+
+
+
+    - [x] DataGrid ve Butonların koyu modda görünürlüğünü test et.
+
+
+
+- [~] Task: Conductor - User Manual Verification 'Tema Yönetimi'
+
+
+
+
+
+
+
+## Faz 5: Performans Analizi ve Optimizasyon
+
 - [ ] Task: Bellek Kullanım Analizi (Profilleme)
+
 - [ ] Task: View ve ViewModel Temizliği (Optimization)
+
 - [ ] Task: Stabilite ve RAM Testi
+
 - [ ] Task: Conductor - User Manual Verification 'Performans ve Optimizasyon' (Protocol in workflow.md)

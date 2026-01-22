@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:infra="clr-namespace:IsTakipWpf.Infrastructure"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="800">
     <Grid Margin="16">
@@ -16,6 +17,24 @@
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel>
+                <materialDesign:Card Padding="16" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="Görünüm Ayarları" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,16"/>
+                        <ComboBox materialDesign:HintAssist.Hint="Tema"
+                                  ItemsSource="{Binding Themes}"
+                                  SelectedItem="{Binding SelectedTheme}"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  Width="200"
+                                  HorizontalAlignment="Left">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                </materialDesign:Card>
+
                 <materialDesign:Card Padding="16" Margin="0,0,0,16">
                     <StackPanel>
                         <TextBlock Text="Yedekleme Ayarları" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,16"/>

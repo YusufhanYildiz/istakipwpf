@@ -36,6 +36,10 @@ namespace IsTakipWpf
 
                 ServiceProvider = serviceCollection.BuildServiceProvider();
 
+                // Apply Theme
+                var themeService = ServiceProvider.GetRequiredService<IThemeService>();
+                themeService.LoadThemeAsync().GetAwaiter().GetResult();
+
                 // Show Login Window First
                 var loginViewModel = ServiceProvider.GetRequiredService<LoginViewModel>();
                 var loginWindow = new LoginWindow(loginViewModel);
@@ -80,6 +84,7 @@ namespace IsTakipWpf
             services.AddScoped<IExcelService, ExcelService>();
             services.AddScoped<IReportingService, ReportingService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddSingleton<IThemeService, ThemeService>();
 
             // ViewModels
             services.AddSingleton<MainWindowViewModel>();
