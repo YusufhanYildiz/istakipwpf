@@ -106,12 +106,16 @@ namespace IsTakipWpf.ViewModels
 
         private async Task CheckForUpdatesAsync()
         {
+            if (IsUpdateChecking) return;
+            
             IsUpdateChecking = true;
             UpdateStatus = "Güncellemeler denetleniyor...";
             
             try
             {
-                _availableUpdate = await _updateService.CheckForUpdatesAsync();
+                // UI Thread'i bloklamamak için Task.Run kullanılabilir
+                _availableUpdate = await Task.Run(async () => await _updateService.CheckForUpdatesAsync());
+                
                 if (_availableUpdate != null)
                 {
                     UpdateStatus = $"Yeni sürüm mevcut: {_availableUpdate.TargetFullRelease.Version}";

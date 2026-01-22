@@ -11,6 +11,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <infra:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <infra:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+            <infra:InverseBooleanConverter x:Key="InverseBooleanConverter" />
             <infra:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
             <infra:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter" />
         </ResourceDictionary>

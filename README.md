@@ -2,7 +2,7 @@
 
 Müşteri yönetimi, iş takibi ve raporlama süreçlerini dijitalleştiren, gizlilik odaklı ve tamamen yerel (offline) çalışan bir masaüstü uygulaması.
 
-![Logo](IsTakipWpf/logo.png)
+![Logo](logo.png)
 
 ## 🚀 Özellikler
 - **Müşteri Yönetimi:** Detaylı müşteri kaydı, arama ve filtreleme.
