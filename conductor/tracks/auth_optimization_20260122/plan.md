@@ -27,11 +27,11 @@
 
 
 
-## Faz 4: Tema Yönetimi (Dark Mode)
+## Faz 4: Tema Yönetimi (Dark Mode) [checkpoint: 51f1071]
 
 
 
-- [x] Task: ThemeService ve Altyapı
+- [x] Task: ThemeService ve Altyapı [0a1561a]
 
 
 
@@ -47,7 +47,7 @@
 
 
 
-- [x] Task: Ayarlar Sayfası Güncellemesi
+- [x] Task: Ayarlar Sayfası Güncellemesi [0a1561a]
 
 
 
@@ -55,7 +55,7 @@
 
 
 
-- [x] Task: UI Kontrolleri ve Stil Uyarlaması
+- [x] Task: UI Kontrolleri ve Stil Uyarlaması [0a1561a]
 
 
 
@@ -63,7 +63,7 @@
 
 
 
-- [~] Task: Conductor - User Manual Verification 'Tema Yönetimi'
+- [x] Task: Conductor - User Manual Verification 'Tema Yönetimi' [51f1071]
 
 
 
@@ -73,10 +73,22 @@
 
 ## Faz 5: Performans Analizi ve Optimizasyon
 
-- [ ] Task: Bellek Kullanım Analizi (Profilleme)
+
+
+- [~] Task: Bellek Kullanım Analizi (Profilleme)
+
+
 
 - [ ] Task: View ve ViewModel Temizliği (Optimization)
 
+
+
 - [ ] Task: Stabilite ve RAM Testi
 
+
+
 - [ ] Task: Conductor - User Manual Verification 'Performans ve Optimizasyon' (Protocol in workflow.md)
+
+
+
+
