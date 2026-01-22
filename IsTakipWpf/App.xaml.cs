@@ -33,12 +33,23 @@ namespace IsTakipWpf
 
                 ServiceProvider = serviceCollection.BuildServiceProvider();
 
-                var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-                mainWindow.Show();
+                // Show Login Window First
+                var loginViewModel = ServiceProvider.GetRequiredService<LoginViewModel>();
+                var loginWindow = new LoginWindow(loginViewModel);
+                
+                if (loginWindow.ShowDialog() == true)
+                {
+                    var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+                    mainWindow.Show();
+                }
+                else
+                {
+                    Shutdown();
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Uygulama baÅŸlatÄ±lÄ±rken bir hata oluÅŸtu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Uygulama başlatılırken bir hata oluştu: {ex.Message}", "Hata", MessageBoxButton.OK, MessageBoxImage.Error);
                 Shutdown();
             }
         }
@@ -48,8 +59,9 @@ namespace IsTakipWpf
             // UI
             services.AddSingleton<MaterialDesignThemes.Wpf.ISnackbarMessageQueue>(new MaterialDesignThemes.Wpf.SnackbarMessageQueue());
 
-            // Main Window
+            // Windows
             services.AddSingleton<MainWindow>();
+            services.AddTransient<LoginWindow>();
 
             // Repositories
             services.AddScoped<ICustomerRepository, CustomerRepository>();
@@ -62,9 +74,11 @@ namespace IsTakipWpf
             services.AddScoped<IBackupService, BackupService>();
             services.AddScoped<IExcelService, ExcelService>();
             services.AddScoped<IReportingService, ReportingService>();
+            services.AddScoped<IAuthService, AuthService>();
 
             // ViewModels
             services.AddSingleton<MainWindowViewModel>();
+            services.AddTransient<LoginViewModel>();
             services.AddTransient<DashboardViewModel>();
             services.AddTransient<CustomerListViewModel>();
             services.AddTransient<JobListViewModel>();
