@@ -4,6 +4,7 @@
 - **Modern & Functional:** Use the Material Design In Xaml Toolkit to provide a modern, responsive, and highly usable interface.
 - **Whitespace & Typography:** Prioritize readability with generous spacing and standard system fonts.
 - **Color Palette:** Use standard Material Design themes. Reserve primary/accent colors for high-value information like status badges (Waiting: Amber, In Progress: Blue, Completed: Green, Cancelled: Red).
+- **Theme Management:** Support Light, Dark, and System Default themes, ensuring accessibility and high contrast in all modes.
 
 ## Interaction Patterns
 - **Navigation:** Side navigation menu for quick switching between Customers, Jobs, and Settings.
@@ -26,5 +27,6 @@
 
 ## Architectural Standards
 - **Strict MVVM:** No business logic in View code-behind files. Use commands and data binding exclusively.
+- **View Optimization:** Use Singleton pattern for main views to minimize RAM growth, supplemented by `IRefreshable` for data updates on navigation.
 - **Repository Pattern:** Abstract Dapper queries into repository classes for maintainability.
 - **Localization:** All UI strings must be stored in Resource files, defaulting to Turkish (TR).

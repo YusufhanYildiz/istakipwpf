@@ -16,5 +16,6 @@ A professional, privacy-focused desktop application designed for small business 
 # Functional Scope
 - **Customer Management:** Full CRUD operations with search, soft-delete, and schema-validated Excel imports.
 - **Job Tracking:** Lifecycle management of tasks (Waiting to Completed) with color-coded status indicators and date-range filtering.
+- **Authentication & Security:** Secure login system with a single Admin account, encrypted password hashing, and local credential persistence (Remember Me).
 - **Automated Data Protection:** A robust backup service that prompts users on exit and supports scheduled maintenance to prevent data loss.
 - **Reporting & Integration:** High-quality PDF generation for customer job history and Excel integration for bulk data management.
