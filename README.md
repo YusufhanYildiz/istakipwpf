@@ -1,56 +1,60 @@
-# İş Takip ve Müşteri Yönetim Sistemi (WPF)
+<p align="center">
+  <img src="logo.png" width="128" height="128" alt="İş Takip Sistemi Logo">
+</p>
 
-Modern, performanslı ve kullanıcı dostu bir Müşteri ve İş Takip çözümüdür. Bu uygulama, işletmelerin müşteri portföylerini yönetmelerini, iş süreçlerini takip etmelerini ve profesyonel raporlar oluşturmalarını sağlar.
+# İş Takip ve Müşteri Yönetim Sistemi
 
-## 🚀 Öne Çıkan Özellikler
+**İşletmenizi Dijitalleştirin, Süreçlerinizi Modernleştirin.**
 
-### 👥 Müşteri Yönetimi
-- Detaylı müşteri kayıtları (Ad, Soyad, Telefon, Adres, İl/İlçe).
-- Gelişmiş arama ve lokasyon bazlı filtreleme.
-- Excel üzerinden toplu müşteri içe/dışa aktarma.
+İş Takip ve Müşteri Yönetim Sistemi, özellikle küçük ve orta ölçekli işletmelerin müşteri portföylerini düzenli tutmaları ve iş akışlarını profesyonel bir standartta yönetmeleri için tasarlanmış, yüksek performanslı bir masaüstü çözümüdür. 
 
-### 💼 İş Takip Sistemi
-- Müşterilere bağlı iş süreçleri oluşturma ve yönetme.
-- İş durum takibi (Bekliyor, Devam Ediyor, Tamamlandı).
-- Başlangıç ve bitiş tarihleri ile zaman yönetimi.
-- Dinamik iş listesi arama ve filtreleme.
-
-### 📊 Modern Raporlama ve Excel Entegrasyonu
-- **QuestPDF Altyapısı:** Kurumsal logolu, modern ve şık PDF rapor çıktıları.
-- **Yüksek Performanslı Excel:** Saniyeler içinde yüzlerce kaydı işleyebilen Transaction tabanlı içe aktarma sistemi.
-- **Otomatik Rehber:** Ana panelde yer alan interaktif Excel hazırlama kılavuzu.
-
-### 🛠️ Teknik Avantajlar
-- **Performans:** SQLite veritabanı indeksleme ve toplu işlem (Transaction) desteği ile anlık tepki süresi.
-- **Düşük Donanım Uyumluluğu:** UI Virtualization (Sanallaştırma) sayesinde binlerce kayıtta bile kasmadan çalışma.
-- **Güvenlik:** Şifrelenmiş kimlik doğrulama ve "Beni Hatırla" özelliği.
-- **Güncelleme:** Velopack entegrasyonu ile tek tıkla kurulum ve otomatik güncelleme desteği.
-
-## 💻 Teknoloji Yığını
-
-- **Framework:** .NET 4.8 / WPF
-- **UI:** Material Design In XAML Toolkit
-- **Veritabanı:** SQLite & Dapper (ORM)
-- **Raporlama:** QuestPDF (PDF) & ClosedXML (Excel)
-- **Kurulum:** Velopack
-
-## 📦 Kurulum ve Yayınlama
-
-Uygulamayı bir kurulum paketi (setup) haline getirmek için:
-
-1. Uygulamayı yayınlayın:
-   ```bash
-   dotnet publish -c Release -r win-x64 --self-contained
-   ```
-2. Velopack ile paketleyin:
-   ```bash
-   vpk pack -u IsTakipWpf -v 1.0.0 -p bin\Release\net48\win-x64\publish -e IsTakipWpf.exe --icon app_icon.ico
-   ```
-
-## 📝 Kullanım Notları
-- Excel aktarımlarında ilk satırın başlık olması zorunludur.
-- Müşteri eşleştirmesi için Excel'deki isimlerin sistemdeki kayıtlarla birebir aynı olması gerekir.
-- PDF raporlarında kurumsal logonuzun görünmesi için `logo.png` dosyasının uygulama dizininde yer alması önerilir.
+Karmaşık tablolardan ve dağınık notlardan kurtulun; tüm verileriniz yerel, güvenli ve parmaklarınızın ucunda.
 
 ---
-*Bu proje modern yazılım mimarileri ve yüksek performans standartları gözetilerek geliştirilmiştir.*
+
+## ✨ Neden Bu Sistemi Seçmelisiniz?
+
+### 👥 Kusursuz Müşteri İlişkileri
+Müşterilerinizi sadece birer isim olmaktan çıkarın. İletişim bilgilerinden adres detaylarına, il ve ilçe bazlı konum verilerine kadar her şeyi tek bir merkezden yönetin. Gelişmiş arama motoru sayesinde binlerce kayıt arasından aradığınız kişiye saniyeler içinde ulaşın.
+
+### 💼 Akıllı İş Takibi
+Her müşteriniz için ayrı iş süreçleri oluşturun. "Hangi iş hangi aşamada?", "Bitiş tarihine ne kadar kaldı?" gibi soruların cevaplarını anlık olarak görün. Bekliyor, Devam Ediyor ve Tamamlandı durumlarıyla iş yükünüzü verimli bir şekilde planlayın.
+
+### 📄 Kurumsal Raporlama (PDF)
+Müşterilerinize sunduğunuz profesyonelliği raporlarınıza da yansıtın. QuestPDF altyapısıyla hazırlanan modern raporlar, kurumsal logonuzla birlikte şık bir tasarım sunar. İster tüm iş listesini, ister belirli bir müşteri geçmişini tek tıkla PDF olarak alın.
+
+### 📊 Excel ile Güçlü Entegrasyon
+Mevcut verilerinizi sisteme aktarmak dert değil! Gelişmiş Excel içe aktarma modülü sayesinde yüzlerce müşteri veya iş kaydını saniyeler içinde topluca sisteme yükleyebilirsiniz. Aynı şekilde, sistemdeki verilerinizi analiz etmek için istediğiniz zaman Excel'e aktarabilirsiniz.
+
+---
+
+## 🛠️ Teknolojik Üstünlükler
+
+Bu yazılım sadece şık değil, aynı zamanda teknik olarak en modern standartlarda inşa edildi:
+
+- **Ultra Hız:** SQLite veritabanı optimizasyonları ve toplu işlem (Transaction) desteği ile veri boyutu ne olursa olsun anlık performans.
+- **Modern Arayüz:** Material Design prensipleriyle hazırlanan, göz yormayan ve sezgisel kullanıcı deneyimi.
+- **Hafif ve Kararlı:** UI Sanallaştırma teknolojisi ile düşük donanımlı bilgisayarlarda bile akıcı çalışma.
+- **Güvenli:** Şifre korumalı giriş ve verilerinizi yerel (local) olarak saklayan güvenli mimari.
+
+---
+
+## 📦 Hemen Kullanmaya Başlayın!
+
+Uygulamanın en güncel sürümünü kullanmak için teknik bilgiye veya kurulum yapmanıza gerek yok. 
+
+1. Sayfanın sağ tarafındaki **[Releases](../../releases)** bölümüne gidin.
+2. En güncel `.exe` kurulum dosyasını indirin.
+3. Setup dosyasını çalıştırın ve saniyeler içinde işlerinizi yönetmeye başlayın!
+
+---
+
+## 💻 Kullanılan Teknolojiler
+- .NET 4.8 / WPF
+- Material Design Toolkit
+- SQLite & Dapper
+- QuestPDF & ClosedXML
+- Velopack (Otomatik Güncelleme Desteği)
+
+---
+*İşlerinizi daha akıllı yönetmek için doğru yerdesiniz.*
