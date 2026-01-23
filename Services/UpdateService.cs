@@ -8,8 +8,8 @@ namespace IsTakipWpf.Services
 {
     public class UpdateService : IUpdateService
     {
-        // TODO: Burayı GitHub Repo URL'niz ile değiştirin
-        private const string UpdateUrl = "https://github.com/YusufhanYildiz/IsTakipUygulamasi"; 
+        // GitHub Repo URL'niz (Repo linkini tam olarak buraya tanımlıyoruz)
+        private const string UpdateUrl = "https://github.com/YusufhanYildiz/istakipwpf"; 
 
         public string CurrentVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString();
 

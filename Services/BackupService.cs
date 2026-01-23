@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,50 +21,53 @@ namespace IsTakipWpf.Services
 
         public async Task<(bool Success, string Message)> CreateBackupAsync(string targetFolder)
         {
-            try
+            return await Task.Run(async () =>
             {
-                if (!Directory.Exists(targetFolder))
+                try
                 {
-                    Directory.CreateDirectory(targetFolder);
+                    if (!Directory.Exists(targetFolder))
+                    {
+                        Directory.CreateDirectory(targetFolder);
+                    }
+
+                    string fileName = $"backup_{DateTime.Now:yyyyMMdd_HHmmss}.db";
+                    string targetPath = Path.Combine(targetFolder, fileName);
+
+                    // Ensure data is flushed to disk
+                    File.Copy(DatabaseBootstrap.DbPath, targetPath, true);
+
+                    await UpdateBackupHistoryAsync(targetPath);
+
+                    return (true, "Yedekleme başarıyla tamamlandı.");
                 }
-
-                string fileName = $"backup_{DateTime.Now:yyyyMMdd_HHmmss}.db";
-                string targetPath = Path.Combine(targetFolder, fileName);
-
-                // Ensure data is flushed to disk (SQLite handles this mostly, but file copy is safer if connection is closed or idle)
-                File.Copy(DatabaseBootstrap.DbPath, targetPath, true);
-
-                await UpdateBackupHistoryAsync(targetPath);
-
-                return (true, "Yedekleme başarıyla tamamlandı.");
-            }
-            catch (Exception ex)
-            {
-                return (false, $"Yedekleme sırasında hata oluştu: {ex.Message}");
-            }
+                catch (Exception ex)
+                {
+                    return (false, $"Yedekleme sırasında hata oluştu: {ex.Message}");
+                }
+            });
         }
 
         public async Task<(bool Success, string Message)> RestoreBackupAsync(string backupPath)
         {
-            try
+            return await Task.Run(() =>
             {
-                if (!File.Exists(backupPath))
+                try
                 {
-                    return (false, "Yedek dosyası bulunamadı.");
+                    if (!File.Exists(backupPath))
+                    {
+                        return (false, "Yedek dosyası bulunamadı.");
+                    }
+
+                    // NOTE: SQLite connection might lock the file. 
+                    File.Copy(backupPath, DatabaseBootstrap.DbPath, true);
+
+                    return (true, "Geri yükleme başarılı. Uygulamayı yeniden başlatmanız önerilir.");
                 }
-
-                // In a real WPF app, we might need to notify the user to restart or close all connections.
-                // For now, we overwrite the main database file.
-                // NOTE: SQLite connection might lock the file. In a full implementation, we'd ensure connections are disposed.
-                
-                File.Copy(backupPath, DatabaseBootstrap.DbPath, true);
-
-                return (true, "Geri yükleme başarılı. Uygulamayı yeniden başlatmanız önerilir.");
-            }
-            catch (Exception ex)
-            {
-                return (false, $"Geri yükleme sırasında hata oluştu: {ex.Message}");
-            }
+                catch (Exception ex)
+                {
+                    return (false, $"Geri yükleme sırasında hata oluştu: {ex.Message}");
+                }
+            });
         }
 
         public async Task<IEnumerable<BackupInfo>> GetBackupHistoryAsync()

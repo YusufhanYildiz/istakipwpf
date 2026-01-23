@@ -105,7 +105,7 @@
                 <materialDesign:Card Padding="24">
                     <StackPanel>
                         <TextBlock Text="Hoş Geldiniz" Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
-                        <TextBlock Text="Müşteri ve İş Takip Sistemine Hoş Geldiniz. Bu uygulama ile tüm süreçlerinizi yerel ve güvenli bir şekilde yönetebilirsiniz." 
+                        <TextBlock Text="İş Takip Uygulamasına Hoş Geldiniz. Bu uygulama ile tüm süreçlerinizi yerel ve güvenli bir şekilde yönetebilirsiniz." 
                                    Margin="0,10,0,0" Style="{StaticResource MaterialDesignBody1TextBlock}"/>
                     </StackPanel>
                 </materialDesign:Card>

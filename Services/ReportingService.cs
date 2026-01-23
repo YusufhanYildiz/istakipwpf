@@ -48,187 +48,196 @@ namespace IsTakipWpf.Services
 
         public async Task<(bool Success, string Message)> GenerateCustomerHistoryPdfAsync(string filePath, Customer customer, IEnumerable<Job> jobs)
         {
-            try
+            return await Task.Run(() =>
             {
-                Document.Create(container =>
+                try
                 {
-                    container.Page(page =>
+                    Document.Create(container =>
                     {
-                        PreparePage(page, "MÜŞTERİ İŞ GEÇMİŞİ");
-
-                        page.Content().Column(col =>
+                        container.Page(page =>
                         {
-                            col.Item().PaddingBottom(20).Row(row =>
+                            PreparePage(page, "MÜŞTERİ İŞ GEÇMİŞİ");
+
+                            page.Content().Column(col =>
                             {
-                                row.RelativeItem().Column(c =>
+                                col.Item().PaddingBottom(20).Row(row =>
                                 {
-                                    c.Item().Text("Müşteri Detayları").FontSize(10).FontColor(Colors.Grey.Medium);
-                                    c.Item().Text(customer.FullName).FontSize(18).SemiBold().FontColor(_accentColor);
-                                    if (!string.IsNullOrEmpty(customer.PhoneNumber))
-                                        c.Item().Text(customer.PhoneNumber).FontSize(10).FontColor(Colors.Grey.Darken2);
+                                    row.RelativeItem().Column(c =>
+                                    {
+                                        c.Item().Text("Müşteri Detayları").FontSize(10).FontColor(Colors.Grey.Medium);
+                                        c.Item().Text(customer.FullName).FontSize(18).SemiBold().FontColor(_accentColor);
+                                        if (!string.IsNullOrEmpty(customer.PhoneNumber))
+                                            c.Item().Text(customer.PhoneNumber).FontSize(10).FontColor(Colors.Grey.Darken2);
+                                    });
+                                });
+                                
+                                col.Item().Table(table =>
+                                {
+                                    table.ColumnsDefinition(columns =>
+                                    {
+                                        columns.RelativeColumn(2);
+                                        columns.RelativeColumn(3);
+                                        columns.RelativeColumn(4);
+                                        columns.RelativeColumn(2);
+                                        columns.RelativeColumn(2);
+                                    });
+
+                                    table.Header(header =>
+                                    {
+                                        header.Cell().Element(HeaderStyle).Text("TARİH");
+                                        header.Cell().Element(HeaderStyle).Text("İŞ BAŞLIĞI");
+                                        header.Cell().Element(HeaderStyle).Text("AÇIKLAMA");
+                                        header.Cell().Element(HeaderStyle).Text("DURUM");
+                                        header.Cell().Element(HeaderStyle).Text("BİTİŞ");
+                                    });
+
+                                    bool isOdd = false;
+                                    foreach (var job in jobs)
+                                    {
+                                        bool currentIsOdd = isOdd;
+                                        table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(job.CreatedDate.ToString("dd.MM.yyyy"));
+                                        table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(job.JobTitle);
+                                        table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(job.Description);
+                                        table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(GetEnumDescription(job.Status));
+                                        table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(job.EndDate?.ToString("dd.MM.yyyy") ?? "-");
+                                        isOdd = !isOdd;
+                                    }
                                 });
                             });
-                            
-                            col.Item().Table(table =>
+                        });
+                    }).GeneratePdf(filePath);
+
+                    return (true, "PDF raporu başarıyla oluşturuldu.");
+                }
+                catch (Exception ex)
+                {
+                    return (false, "PDF oluşturma hatası: " + ex.Message);
+                }
+            });
+        }
+
+        public async Task<(bool Success, string Message)> ExportCustomersToPdfAsync(string filePath, IEnumerable<Customer> customers)
+        {
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    Document.Create(container =>
+                    {
+                        container.Page(page =>
+                        {
+                            PreparePage(page, "MÜŞTERİ LİSTESİ", true);
+
+                            page.Content().Table(table =>
                             {
                                 table.ColumnsDefinition(columns =>
                                 {
                                     columns.RelativeColumn(2);
+                                    columns.RelativeColumn(2);
+                                    columns.RelativeColumn(2.5f);
+                                    columns.RelativeColumn(2);
+                                    columns.RelativeColumn(2);
+                                    columns.RelativeColumn(4);
+                                });
+
+                                table.Header(header =>
+                                {
+                                    header.Cell().Element(HeaderStyle).Text("AD");
+                                    header.Cell().Element(HeaderStyle).Text("SOYAD");
+                                    header.Cell().Element(HeaderStyle).Text("TELEFON");
+                                    header.Cell().Element(HeaderStyle).Text("İL");
+                                    header.Cell().Element(HeaderStyle).Text("İLÇE");
+                                    header.Cell().Element(HeaderStyle).Text("ADRES");
+                                });
+
+                                bool isOdd = false;
+                                foreach (var c in customers)
+                                {
+                                    bool currentIsOdd = isOdd;
+                                    table.Cell().Element(c1 => RowStyle(c1, currentIsOdd)).Text(c.FirstName ?? "");
+                                    table.Cell().Element(c1 => RowStyle(c1, currentIsOdd)).Text(c.LastName ?? "");
+                                    table.Cell().Element(c1 => RowStyle(c1, currentIsOdd)).Text(c.PhoneNumber ?? "");
+                                    table.Cell().Element(c1 => RowStyle(c1, currentIsOdd)).Text(c.City ?? "");
+                                    table.Cell().Element(c1 => RowStyle(c1, currentIsOdd)).Text(c.District ?? "");
+                                    table.Cell().Element(c1 => RowStyle(c1, currentIsOdd)).Text(c.Address ?? "");
+                                    isOdd = !isOdd;
+                                }
+                            });
+                        });
+                    }).GeneratePdf(filePath);
+
+                    return (true, "Müşteri listesi PDF olarak dışa aktarıldı.");
+                }
+                catch (Exception ex)
+                {
+                    return (false, "PDF oluşturma hatası: " + ex.Message);
+                }
+            });
+        }
+
+        public async Task<(bool Success, string Message)> ExportJobsToPdfAsync(string filePath, IEnumerable<Job> jobs)
+        {
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    Document.Create(container =>
+                    {
+                        container.Page(page =>
+                        {
+                            PreparePage(page, "GENEL İŞ LİSTESİ", true);
+
+                            page.Content().Table(table =>
+                            {
+                                table.ColumnsDefinition(columns =>
+                                {
+                                    columns.RelativeColumn(3);
+                                    columns.RelativeColumn(1.5f);
+                                    columns.RelativeColumn(1.5f);
                                     columns.RelativeColumn(3);
                                     columns.RelativeColumn(4);
+                                    columns.RelativeColumn(2);
                                     columns.RelativeColumn(2);
                                     columns.RelativeColumn(2);
                                 });
 
                                 table.Header(header =>
                                 {
-                                    header.Cell().Element(HeaderStyle).Text("TARİH");
+                                    header.Cell().Element(HeaderStyle).Text("MÜŞTERİ");
+                                    header.Cell().Element(HeaderStyle).Text("İL");
+                                    header.Cell().Element(HeaderStyle).Text("İLÇE");
                                     header.Cell().Element(HeaderStyle).Text("İŞ BAŞLIĞI");
                                     header.Cell().Element(HeaderStyle).Text("AÇIKLAMA");
                                     header.Cell().Element(HeaderStyle).Text("DURUM");
+                                    header.Cell().Element(HeaderStyle).Text("BAŞLANGIÇ");
                                     header.Cell().Element(HeaderStyle).Text("BİTİŞ");
                                 });
 
                                 bool isOdd = false;
-                                foreach (var job in jobs)
+                                foreach (var j in jobs)
                                 {
                                     bool currentIsOdd = isOdd;
-                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(job.CreatedDate.ToString("dd.MM.yyyy"));
-                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(job.JobTitle);
-                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(job.Description);
-                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(GetEnumDescription(job.Status));
-                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(job.EndDate?.ToString("dd.MM.yyyy") ?? "-");
+                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.CustomerFullName ?? "");
+                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.CustomerCity ?? "");
+                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.CustomerDistrict ?? "");
+                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.JobTitle ?? "");
+                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.Description ?? "");
+                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(GetEnumDescription(j.Status));
+                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.StartDate?.ToString("dd.MM.yyyy") ?? "-");
+                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.EndDate?.ToString("dd.MM.yyyy") ?? "-");
                                     isOdd = !isOdd;
                                 }
                             });
                         });
-                    });
-                }).GeneratePdf(filePath);
+                    }).GeneratePdf(filePath);
 
-                return (true, "PDF raporu başarıyla oluşturuldu.");
-            }
-            catch (Exception ex)
-            {
-                return (false, "PDF oluşturma hatası: " + ex.Message);
-            }
-        }
-
-        public async Task<(bool Success, string Message)> ExportCustomersToPdfAsync(string filePath, IEnumerable<Customer> customers)
-        {
-            try
-            {
-                Document.Create(container =>
+                    return (true, "İş listesi PDF olarak dışa aktarıldı.");
+                }
+                catch (Exception ex)
                 {
-                    container.Page(page =>
-                    {
-                        PreparePage(page, "MÜŞTERİ LİSTESİ", true);
-
-                        page.Content().Table(table =>
-                        {
-                            table.ColumnsDefinition(columns =>
-                            {
-                                columns.RelativeColumn(2);
-                                columns.RelativeColumn(2);
-                                columns.RelativeColumn(2.5f);
-                                columns.RelativeColumn(2);
-                                columns.RelativeColumn(2);
-                                columns.RelativeColumn(4);
-                            });
-
-                            table.Header(header =>
-                            {
-                                header.Cell().Element(HeaderStyle).Text("AD");
-                                header.Cell().Element(HeaderStyle).Text("SOYAD");
-                                header.Cell().Element(HeaderStyle).Text("TELEFON");
-                                header.Cell().Element(HeaderStyle).Text("İL");
-                                header.Cell().Element(HeaderStyle).Text("İLÇE");
-                                header.Cell().Element(HeaderStyle).Text("ADRES");
-                            });
-
-                            bool isOdd = false;
-                            foreach (var c in customers)
-                            {
-                                bool currentIsOdd = isOdd;
-                                table.Cell().Element(c1 => RowStyle(c1, currentIsOdd)).Text(c.FirstName ?? "");
-                                table.Cell().Element(c1 => RowStyle(c1, currentIsOdd)).Text(c.LastName ?? "");
-                                table.Cell().Element(c1 => RowStyle(c1, currentIsOdd)).Text(c.PhoneNumber ?? "");
-                                table.Cell().Element(c1 => RowStyle(c1, currentIsOdd)).Text(c.City ?? "");
-                                table.Cell().Element(c1 => RowStyle(c1, currentIsOdd)).Text(c.District ?? "");
-                                table.Cell().Element(c1 => RowStyle(c1, currentIsOdd)).Text(c.Address ?? "");
-                                isOdd = !isOdd;
-                            }
-                        });
-                    });
-                }).GeneratePdf(filePath);
-
-                return (true, "Müşteri listesi PDF olarak dışa aktarıldı.");
-            }
-            catch (Exception ex)
-            {
-                return (false, "PDF oluşturma hatası: " + ex.Message);
-            }
-        }
-
-        public async Task<(bool Success, string Message)> ExportJobsToPdfAsync(string filePath, IEnumerable<Job> jobs)
-        {
-            try
-            {
-                Document.Create(container =>
-                {
-                    container.Page(page =>
-                    {
-                        PreparePage(page, "GENEL İŞ LİSTESİ", true);
-
-                        page.Content().Table(table =>
-                        {
-                            table.ColumnsDefinition(columns =>
-                            {
-                                columns.RelativeColumn(3);
-                                columns.RelativeColumn(1.5f);
-                                columns.RelativeColumn(1.5f);
-                                columns.RelativeColumn(3);
-                                columns.RelativeColumn(4);
-                                columns.RelativeColumn(2);
-                                columns.RelativeColumn(2);
-                                columns.RelativeColumn(2);
-                            });
-
-                            table.Header(header =>
-                            {
-                                header.Cell().Element(HeaderStyle).Text("MÜŞTERİ");
-                                header.Cell().Element(HeaderStyle).Text("İL");
-                                header.Cell().Element(HeaderStyle).Text("İLÇE");
-                                header.Cell().Element(HeaderStyle).Text("İŞ BAŞLIĞI");
-                                header.Cell().Element(HeaderStyle).Text("AÇIKLAMA");
-                                header.Cell().Element(HeaderStyle).Text("DURUM");
-                                header.Cell().Element(HeaderStyle).Text("BAŞLANGIÇ");
-                                header.Cell().Element(HeaderStyle).Text("BİTİŞ");
-                            });
-
-                            bool isOdd = false;
-                            foreach (var j in jobs)
-                            {
-                                bool currentIsOdd = isOdd;
-                                table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.CustomerFullName ?? "");
-                                table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.CustomerCity ?? "");
-                                table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.CustomerDistrict ?? "");
-                                table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.JobTitle ?? "");
-                                table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.Description ?? "");
-                                table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(GetEnumDescription(j.Status));
-                                table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.StartDate?.ToString("dd.MM.yyyy") ?? "-");
-                                table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.EndDate?.ToString("dd.MM.yyyy") ?? "-");
-                                isOdd = !isOdd;
-                            }
-                        });
-                    });
-                }).GeneratePdf(filePath);
-
-                return (true, "İş listesi PDF olarak dışa aktarıldı.");
-            }
-            catch (Exception ex)
-            {
-                return (false, "PDF oluşturma hatası: " + ex.Message);
-            }
+                    return (false, "PDF oluşturma hatası: " + ex.Message);
+                }
+            });
         }
 
         private void PreparePage(PageDescriptor page, string title, bool isLandscape = false)
@@ -256,7 +265,7 @@ namespace IsTakipWpf.Services
 
             page.Footer().PaddingTop(10).BorderTop(0.5f).BorderColor(Colors.Grey.Lighten2).Row(row =>
             {
-                row.RelativeItem().Text("İş Takip Sistemi v1.0 | Profesyonel Raporlama").FontSize(8).FontColor(Colors.Grey.Medium);
+                row.RelativeItem().Text("İş Takip Uygulaması v1.0 | Profesyonel Raporlama").FontSize(8).FontColor(Colors.Grey.Medium);
                 row.RelativeItem().AlignRight().Text(x =>
                 {
                     x.Span("SAYFA ").FontSize(8).FontColor(Colors.Grey.Medium);

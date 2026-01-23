@@ -2,11 +2,11 @@
   <img src="logo.png" width="128" height="128" alt="İş Takip Sistemi Logo">
 </p>
 
-# İş Takip ve Müşteri Yönetim Sistemi
+# İş Takip Uygulaması
 
 **İşletmenizi Dijitalleştirin, Süreçlerinizi Modernleştirin.**
 
-İş Takip ve Müşteri Yönetim Sistemi, özellikle küçük ve orta ölçekli işletmelerin müşteri portföylerini düzenli tutmaları ve iş akışlarını profesyonel bir standartta yönetmeleri için tasarlanmış, yüksek performanslı bir masaüstü çözümüdür. 
+İş Takip Uygulaması, özellikle küçük ve orta ölçekli işletmelerin müşteri portföylerini düzenli tutmaları ve iş akışlarını profesyonel bir standartta yönetmeleri için tasarlanmış, yüksek performanslı bir masaüstü çözümüdür. 
 
 Karmaşık tablolardan ve dağınık notlardan kurtulun; tüm verileriniz yerel, güvenli ve parmaklarınızın ucunda.
 

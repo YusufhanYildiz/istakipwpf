@@ -6,7 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:IsTakipWpf"
         mc:Ignorable="d"
-        Title="İş Takip Sistemi" Height="700" Width="1100"
+        Title="İş Takip Uygulaması" Height="700" Width="1100"
         Icon="/app_icon.ico"
         WindowStartupLocation="CenterScreen"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -68,7 +68,7 @@
                                 <ToggleButton x:Name="MenuToggleButton" Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
                                               IsChecked="False"
                                               AutomationProperties.Name="HamburgerToggleButton" Checked="MenuToggleButton_Checked"/>
-                                <TextBlock VerticalAlignment="Center" Margin="16 0 0 0" FontSize="20" Text="İş Takip Sistemi"/>
+                                <TextBlock VerticalAlignment="Center" Margin="16 0 0 0" FontSize="20" Text="İş Takip Uygulaması"/>
                             </StackPanel>
                         </DockPanel>
                     </materialDesign:ColorZone>
