@@ -94,7 +94,7 @@ namespace IsTakipWpf.Infrastructure
                         // Initial password setup
                         // Önemli: GitHub'a atmadan önce buradaki şifreyi placeholder ile değiştirdik.
                         // İlk kurulumda kullanılacak varsayılan şifre buraya yazılmalıdır.
-                        string defaultPassword = "IsTakipAdmin123!"; 
+                        string defaultPassword = "*"; 
                         string salt = Guid.NewGuid().ToString("N");
                         string hashed = HashPassword(defaultPassword, salt);
                         
