@@ -8,6 +8,7 @@
 # Assets and Docs
 *.png
 *.md
+!README.md
 *.ico
 
 # User-specific files
