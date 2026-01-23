@@ -46,6 +46,8 @@ Uygulamanın en güncel sürümünü kullanmak için teknik bilgiye veya kurulum
 1. Sayfanın sağ tarafındaki **[Releases](../../releases)** bölümüne gidin.
 2. En güncel `.exe` kurulum dosyasını indirin.
 3. Setup dosyasını çalıştırın ve saniyeler içinde işlerinizi yönetmeye başlayın!
+4. Portable olarak çalıştırmak isterseniz Portable'ı indirin
+5. Zipten çıkarın ve uygulamayı çalıştırın.
 
 ---
 
