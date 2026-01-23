@@ -1,10 +1,22 @@
+# Build and Release Folders
 [Bb]in/
 [Oo]bj/
+[Pp]ublish/
+[Rr]eleases/
+.vs/
+
+# Assets and Docs
+*.png
+*.md
+*.ico
+
+# User-specific files
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
-.vs/
-/publish/
-/releases/
 /*.nupkg
+
+# Database
+Data/
+*.db

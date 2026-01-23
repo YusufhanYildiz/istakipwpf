@@ -10,6 +10,12 @@ namespace IsTakipWpf.Views
         {
             InitializeComponent();
             DataContext = viewModel;
+
+            // İlk açılışta eğer şifre yüklendiyse PasswordBox'a aktar
+            if (!string.IsNullOrEmpty(viewModel.Password))
+            {
+                PasswordBox.Password = viewModel.Password;
+            }
             
             viewModel.PropertyChanged += (s, e) =>
             {

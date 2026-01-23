@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:IsTakipWpf.Views"
         xmlns:infra="clr-namespace:IsTakipWpf.Infrastructure"
         mc:Ignorable="d"
-        Title="İş Takip - Giriş" Height="450" Width="400"
+        Title="İş Takip - Giriş" Height="520" Width="400"
         Icon="/app_icon.ico"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -39,17 +39,17 @@
 
             <StackPanel Grid.Row="1" Margin="40,0,40,40" VerticalAlignment="Center">
                 <!-- Logo -->
-                <Image Source="/logo.png" 
-                       Width="100" Height="100" 
+                <Image Source="logo.png"
+                       Width="80" Height="80" 
                        HorizontalAlignment="Center"
-                       Margin="0,0,0,20"/>
+                       Margin="0,0,0,15"/>
                 
                 <TextBlock Text="İŞ TAKİP SİSTEMİ" 
                            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
                            HorizontalAlignment="Center"
                            FontWeight="Bold"
                            Foreground="{DynamicResource PrimaryHueMidBrush}"
-                           Margin="0,0,0,30"/>
+                           Margin="0,0,0,20"/>
 
                 <!-- Username -->
                 <TextBox materialDesign:HintAssist.Hint="Kullanıcı Adı"

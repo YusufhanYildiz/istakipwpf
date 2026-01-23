@@ -13,5 +13,6 @@ namespace IsTakipWpf.Repositories
         Task<bool> UpdateAsync(Job job);
         Task<bool> SoftDeleteAsync(int id);
         Task<IEnumerable<Job>> SearchAsync(string searchTerm, int? customerId = null, JobStatus? status = null, string city = null, string district = null);
+        Task<int> AddMultipleAsync(IEnumerable<Job> jobs);
     }
 }

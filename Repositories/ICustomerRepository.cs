@@ -12,5 +12,6 @@ namespace IsTakipWpf.Repositories
         Task<bool> UpdateAsync(Customer customer);
         Task<bool> SoftDeleteAsync(int id);
         Task<IEnumerable<Customer>> SearchAsync(string searchTerm, string city = null, string district = null);
+        Task<int> AddMultipleAsync(IEnumerable<Customer> customers);
     }
 }

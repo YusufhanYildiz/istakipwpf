@@ -82,6 +82,11 @@ namespace IsTakipWpf.Services
             return await _repository.UpdateAsync(job);
         }
 
+        public async Task<int> AddMultipleAsync(IEnumerable<Job> jobs)
+        {
+            return await _repository.AddMultipleAsync(jobs);
+        }
+
         private (bool IsValid, string Message) ValidateJob(Job job)
         {
             if (job.CustomerId <= 0)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -120,6 +121,31 @@ namespace IsTakipWpf.Repositories
             {
                 var affectedRows = await connection.ExecuteAsync(sql, new { Id = id, UpdatedDate = DateTime.Now });
                 return affectedRows > 0;
+            }
+        }
+
+        public async Task<int> AddMultipleAsync(IEnumerable<Job> jobs)
+        {
+            const string sql = @"
+                INSERT INTO Jobs (CustomerId, JobTitle, Description, Status, StartDate, EndDate, CreatedDate, UpdatedDate, IsDeleted)
+                VALUES (@CustomerId, @JobTitle, @Description, @Status, @StartDate, @EndDate, @CreatedDate, @UpdatedDate, @IsDeleted);";
+
+            using (var connection = CreateConnection())
+            {
+                if (connection.State != ConnectionState.Open) connection.Open();
+                using (var transaction = connection.BeginTransaction())
+                {
+                    int count = 0;
+                    foreach (var job in jobs)
+                    {
+                        job.CreatedDate = DateTime.Now;
+                        job.UpdatedDate = DateTime.Now;
+                        job.IsDeleted = false;
+                        count += await connection.ExecuteAsync(sql, job, transaction);
+                    }
+                    transaction.Commit();
+                    return count;
+                }
             }
         }
 

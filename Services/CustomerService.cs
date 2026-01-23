@@ -77,6 +77,11 @@ namespace IsTakipWpf.Services
             }
         }
 
+        public async Task<int> AddMultipleAsync(IEnumerable<Customer> customers)
+        {
+            return await _repository.AddMultipleAsync(customers);
+        }
+
         private (bool IsValid, string Message) ValidateCustomer(Customer customer)
         {
             if (string.IsNullOrWhiteSpace(customer.FirstName))

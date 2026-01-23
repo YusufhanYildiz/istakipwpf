@@ -75,7 +75,6 @@ namespace IsTakipWpf.ViewModels
                 }
             }
             
-            // Default to admin if nothing loaded
             if (string.IsNullOrEmpty(Username))
             {
                 Username = "admin";

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -58,7 +59,7 @@ namespace IsTakipWpf.Repositories
             
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                sql += " AND (FirstName LIKE @Search OR LastName LIKE @Search OR PhoneNumber LIKE @Search OR Address LIKE @Search)";
+                sql += " AND (FirstName LIKE @Search OR LastName LIKE @Search OR (FirstName || ' ' || LastName) LIKE @Search OR PhoneNumber LIKE @Search OR Address LIKE @Search)";
                 parameters.Add("Search", $"%{searchTerm}%");
             }
             
@@ -88,6 +89,31 @@ namespace IsTakipWpf.Repositories
             {
                 var affectedRows = await connection.ExecuteAsync(sql, new { Id = id, UpdatedDate = DateTime.Now });
                 return affectedRows > 0;
+            }
+        }
+
+        public async Task<int> AddMultipleAsync(IEnumerable<Customer> customers)
+        {
+            const string sql = @"
+                INSERT INTO Customers (FirstName, LastName, PhoneNumber, City, District, Address, CreatedDate, UpdatedDate, IsDeleted)
+                VALUES (@FirstName, @LastName, @PhoneNumber, @City, @District, @Address, @CreatedDate, @UpdatedDate, @IsDeleted);";
+
+            using (var connection = CreateConnection())
+            {
+                if (connection.State != ConnectionState.Open) connection.Open();
+                using (var transaction = connection.BeginTransaction())
+                {
+                    int count = 0;
+                    foreach (var customer in customers)
+                    {
+                        customer.CreatedDate = DateTime.Now;
+                        customer.UpdatedDate = DateTime.Now;
+                        customer.IsDeleted = false;
+                        count += await connection.ExecuteAsync(sql, customer, transaction);
+                    }
+                    transaction.Commit();
+                    return count;
+                }
             }
         }
 

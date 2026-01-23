@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -187,8 +188,41 @@ namespace IsTakipWpf.ViewModels
             if (openFileDialog.ShowDialog() == true)
             {
                 var result = await _excelService.ImportJobsAsync(openFileDialog.FileName);
-                _messageQueue.Enqueue(result.Message);
-                if (result.Success) await FilterAsync();
+                if (result.Success)
+                {
+                    var allCustomers = await _customerService.GetActiveCustomersAsync();
+                    var jobsToInsert = new List<Job>();
+
+                    foreach (var job in result.Data)
+                    {
+                        if (string.IsNullOrWhiteSpace(job.CustomerFullName)) continue;
+
+                        var customer = allCustomers.FirstOrDefault(c => 
+                            c.FullName.Trim().Equals(job.CustomerFullName.Trim(), StringComparison.OrdinalIgnoreCase));
+
+                        if (customer != null)
+                        {
+                            job.CustomerId = customer.Id;
+                            jobsToInsert.Add(job);
+                        }
+                    }
+
+                    if (jobsToInsert.Any())
+                    {
+                        int importedCount = await _jobService.AddMultipleAsync(jobsToInsert);
+                        int skippedCount = result.Data.Count - importedCount;
+                        await FilterAsync();
+                        _messageQueue.Enqueue($"{importedCount} iş başarıyla aktarıldı. {skippedCount} iş eşleşmediği veya hata oluştuğu için atlandı.");
+                    }
+                    else
+                    {
+                        _messageQueue.Enqueue("Aktarılacak uygun iş bulunamadı (Müşteri isimleri eşleşmiyor).");
+                    }
+                }
+                else
+                {
+                    _messageQueue.Enqueue(result.Message);
+                }
             }
         }
 

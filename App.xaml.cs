@@ -22,9 +22,6 @@ namespace IsTakipWpf
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            // Velopack: Handle install/uninstall/update events early
-            VelopackApp.Build().Run();
-
             base.OnStartup(e);
 
             // Prevent app from closing when LoginWindow (the only open window) closes

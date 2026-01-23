@@ -13,5 +13,6 @@ namespace IsTakipWpf.Services
         Task<bool> DeleteJobAsync(int id);
         Task<IEnumerable<Job>> SearchJobsAsync(string searchTerm, int? customerId = null, JobStatus? status = null, string city = null, string district = null);
         Task<bool> UpdateJobStatusAsync(int id, JobStatus status);
+        Task<int> AddMultipleAsync(IEnumerable<Job> jobs);
     }
 }

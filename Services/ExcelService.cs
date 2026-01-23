@@ -37,7 +37,9 @@ namespace IsTakipWpf.Services
                             FirstName = row.Cell(1).GetValue<string>(),
                             LastName = row.Cell(2).GetValue<string>(),
                             PhoneNumber = row.Cell(3).GetValue<string>(),
-                            Address = row.Cell(4).GetValue<string>()
+                            Address = row.Cell(4).GetValue<string>(),
+                            City = row.Cell(5).GetValue<string>(),
+                            District = row.Cell(6).GetValue<string>()
                         });
                     }
                 }
@@ -60,6 +62,8 @@ namespace IsTakipWpf.Services
                     worksheet.Cell(1, 2).Value = "Soyad";
                     worksheet.Cell(1, 3).Value = "Telefon";
                     worksheet.Cell(1, 4).Value = "Adres";
+                    worksheet.Cell(1, 5).Value = "İl";
+                    worksheet.Cell(1, 6).Value = "İlçe";
 
                     int row = 2;
                     foreach (var c in customers)
@@ -68,8 +72,11 @@ namespace IsTakipWpf.Services
                         worksheet.Cell(row, 2).Value = c.LastName;
                         worksheet.Cell(row, 3).Value = c.PhoneNumber;
                         worksheet.Cell(row, 4).Value = c.Address;
+                        worksheet.Cell(row, 5).Value = c.City;
+                        worksheet.Cell(row, 6).Value = c.District;
                         row++;
                     }
+                    worksheet.Columns().AdjustToContents();
                     workbook.SaveAs(filePath);
                 }
                 return (true, "Dışa aktarma başarılı.");
@@ -82,7 +89,53 @@ namespace IsTakipWpf.Services
 
         public async Task<(bool Success, string Message, List<Job> Data)> ImportJobsAsync(string filePath)
         {
-            return (true, "İş içe aktarma henüz tam hazır değil.", new List<Job>());
+            try
+            {
+                var jobs = new List<Job>();
+                using (var workbook = new XLWorkbook(filePath))
+                {
+                    var worksheet = workbook.Worksheet(1);
+                    var rows = worksheet.RangeUsed().RowsUsed().Skip(1);
+
+                    foreach (var row in rows)
+                    {
+                        var job = new Job
+                        {
+                            CustomerFullName = row.Cell(1).GetValue<string>(),
+                            JobTitle = row.Cell(4).GetValue<string>(),
+                            Description = row.Cell(5).GetValue<string>(),
+                            Status = JobStatus.Bekliyor
+                        };
+
+                        // Başlangıç Tarihi Oku
+                        var startCell = row.Cell(7);
+                        if (!startCell.IsEmpty())
+                        {
+                            if (startCell.DataType == XLDataType.DateTime)
+                                job.StartDate = startCell.GetDateTime();
+                            else if (DateTime.TryParse(startCell.GetValue<string>(), out DateTime dt))
+                                job.StartDate = dt;
+                        }
+
+                        // Bitiş Tarihi Oku
+                        var endCell = row.Cell(8);
+                        if (!endCell.IsEmpty())
+                        {
+                            if (endCell.DataType == XLDataType.DateTime)
+                                job.EndDate = endCell.GetDateTime();
+                            else if (DateTime.TryParse(endCell.GetValue<string>(), out DateTime dt))
+                                job.EndDate = dt;
+                        }
+
+                        jobs.Add(job);
+                    }
+                }
+                return (true, jobs.Count + " iş başarıyla okundu.", jobs);
+            }
+            catch (Exception ex)
+            {
+                return (false, "Excel okuma hatası: " + ex.Message, null);
+            }
         }
 
         public async Task<(bool Success, string Message)> ExportJobsAsync(string filePath, IEnumerable<Job> jobs)
@@ -93,21 +146,35 @@ namespace IsTakipWpf.Services
                 {
                     var worksheet = workbook.Worksheets.Add("İşler");
                     worksheet.Cell(1, 1).Value = "Müşteri";
-                    worksheet.Cell(1, 2).Value = "İş Başlığı";
-                    worksheet.Cell(1, 3).Value = "Açıklama";
-                    worksheet.Cell(1, 4).Value = "Durum";
-                    worksheet.Cell(1, 5).Value = "Başlangıç";
-                    worksheet.Cell(1, 6).Value = "Bitiş";
+                    worksheet.Cell(1, 2).Value = "İl";
+                    worksheet.Cell(1, 3).Value = "İlçe";
+                    worksheet.Cell(1, 4).Value = "İş Başlığı";
+                    worksheet.Cell(1, 5).Value = "Açıklama";
+                    worksheet.Cell(1, 6).Value = "Durum";
+                    worksheet.Cell(1, 7).Value = "Başlangıç";
+                    worksheet.Cell(1, 8).Value = "Bitiş";
 
                     int row = 2;
                     foreach (var j in jobs)
                     {
                         worksheet.Cell(row, 1).Value = j.CustomerFullName;
-                        worksheet.Cell(row, 2).Value = j.JobTitle;
-                        worksheet.Cell(row, 3).Value = j.Description;
-                        worksheet.Cell(row, 4).Value = GetEnumDescription(j.Status);
-                        worksheet.Cell(row, 5).Value = j.StartDate.HasValue ? j.StartDate.Value.ToString("dd.MM.yyyy") : "-";
-                        worksheet.Cell(row, 6).Value = j.EndDate.HasValue ? j.EndDate.Value.ToString("dd.MM.yyyy") : "-";
+                        worksheet.Cell(row, 2).Value = j.CustomerCity;
+                        worksheet.Cell(row, 3).Value = j.CustomerDistrict;
+                        worksheet.Cell(row, 4).Value = j.JobTitle;
+                        worksheet.Cell(row, 5).Value = j.Description;
+                        worksheet.Cell(row, 6).Value = GetEnumDescription(j.Status);
+
+                        if (j.StartDate.HasValue)
+                        {
+                            worksheet.Cell(row, 7).Value = j.StartDate.Value;
+                            worksheet.Cell(row, 7).Style.DateFormat.Format = "dd.MM.yyyy";
+                        }
+                        
+                        if (j.EndDate.HasValue)
+                        {
+                            worksheet.Cell(row, 8).Value = j.EndDate.Value;
+                            worksheet.Cell(row, 8).Style.DateFormat.Format = "dd.MM.yyyy";
+                        }
                         row++;
                     }
                     worksheet.Columns().AdjustToContents();

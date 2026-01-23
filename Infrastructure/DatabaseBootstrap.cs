@@ -1,6 +1,8 @@
 using System;
 using System.Data.SQLite;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace IsTakipWpf.Infrastructure
 {
@@ -89,15 +91,19 @@ namespace IsTakipWpf.Infrastructure
                     long count = (long)command.ExecuteScalar();
                     if (count == 0)
                     {
-                        // Initial password is "admin"
-                        // We also need a salt
+                        // Initial password setup
+                        // Önemli: GitHub'a atmadan önce buradaki şifreyi placeholder ile değiştirdik.
+                        // İlk kurulumda kullanılacak varsayılan şifre buraya yazılmalıdır.
+                        string defaultPassword = "IsTakipAdmin123!"; 
                         string salt = Guid.NewGuid().ToString("N");
+                        string hashed = HashPassword(defaultPassword, salt);
                         
-                        string insertHash = "INSERT OR IGNORE INTO Settings (Key, Value) VALUES ('AdminPasswordHash', 'admin');";
+                        string insertHash = "INSERT OR IGNORE INTO Settings (Key, Value) VALUES ('AdminPasswordHash', @hash);";
                         string insertSalt = "INSERT OR IGNORE INTO Settings (Key, Value) VALUES ('AdminPasswordSalt', @salt);";
                         
                         using (var insertCmd = new SQLiteCommand(insertHash, connection))
                         {
+                            insertCmd.Parameters.AddWithValue("@hash", hashed);
                             insertCmd.ExecuteNonQuery();
                         }
                         
@@ -112,6 +118,35 @@ namespace IsTakipWpf.Infrastructure
                 // Migrations
                 AddColumnIfNotExists(connection, "Customers", "City", "TEXT");
                 AddColumnIfNotExists(connection, "Customers", "District", "TEXT");
+
+                // Performance Indexes
+                ExecuteNonQuery(connection, "CREATE INDEX IF NOT EXISTS idx_customers_names ON Customers (FirstName, LastName);");
+                ExecuteNonQuery(connection, "CREATE INDEX IF NOT EXISTS idx_customers_city ON Customers (City);");
+                ExecuteNonQuery(connection, "CREATE INDEX IF NOT EXISTS idx_jobs_title ON Jobs (JobTitle);");
+                ExecuteNonQuery(connection, "CREATE INDEX IF NOT EXISTS idx_jobs_customer ON Jobs (CustomerId);");
+            }
+        }
+
+        private static void ExecuteNonQuery(SQLiteConnection connection, string sql)
+        {
+            using (var command = new SQLiteCommand(sql, connection))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private static string HashPassword(string password, string salt)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                var combined = password + salt;
+                var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(combined));
+                var builder = new StringBuilder();
+                foreach (var b in bytes)
+                {
+                    builder.Append(b.ToString("x2"));
+                }
+                return builder.ToString();
             }
         }
 

@@ -169,12 +169,16 @@ namespace IsTakipWpf.ViewModels
             if (openFileDialog.ShowDialog() == true)
             {
                 var result = await _excelService.ImportCustomersAsync(openFileDialog.FileName);
-                if (result.Success)
+                if (result.Success && result.Data != null && result.Data.Any())
                 {
-                    foreach (var c in result.Data) await _customerService.CreateCustomerAsync(c);
+                    var count = await _customerService.AddMultipleAsync(result.Data);
                     await LoadCustomersAsync();
+                    _messageQueue.Enqueue($"{count} müşteri başarıyla aktarıldı.");
                 }
-                _messageQueue.Enqueue(result.Message);
+                else
+                {
+                    _messageQueue.Enqueue(result.Message);
+                }
             }
         }
 
