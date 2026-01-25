@@ -22,3 +22,6 @@
 # Database
 Data/
 *.db
+
+# Ignored Folders
+dosyalar/

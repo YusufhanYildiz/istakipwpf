@@ -49,6 +49,11 @@ Uygulamanın en güncel sürümünü kullanmak için teknik bilgiye veya kurulum
 4. Portable olarak çalıştırmak isterseniz Portable'ı indirin
 5. Zipten çıkarın ve uygulamayı çalıştırın.
 
+### 🔑 Giriş Bilgileri
+Uygulamaya ilk giriş için aşağıdaki varsayılan bilgileri kullanabilirsiniz:
+- **Kullanıcı Adı:** `admin`
+- **Şifre:** `123`
+
 ---
 
 ## 💻 Kullanılan Teknolojiler
