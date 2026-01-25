@@ -39,11 +39,11 @@ namespace IsTakipWpf.ViewModels
                 case "Jobs":
                     view = _serviceProvider.GetRequiredService<JobListView>();
                     break;
+                case "Notes":
+                    view = _serviceProvider.GetRequiredService<NotesView>();
+                    break;
                 case "Settings":
                     view = _serviceProvider.GetRequiredService<SettingsView>();
-                    break;
-                case "Security":
-                    view = _serviceProvider.GetRequiredService<PasswordChangeView>();
                     break;
             }
 

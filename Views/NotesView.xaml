@@ -1,0 +1,160 @@
+<UserControl x:Class="IsTakipWpf.Views.NotesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:IsTakipWpf.Infrastructure"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+        <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Margin="16,16,16,8" CornerRadius="8" Background="{DynamicResource MaterialDesignPaper}">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="5" Direction="270" RenderingBias="Quality" ShadowDepth="1" Opacity="0.1"/>
+            </Border.Effect>
+            <DockPanel Margin="16,12">
+                <TextBlock Text="Notlarım" Style="{StaticResource MaterialDesignHeadline5TextBlock}" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding Notes.Count, StringFormat='({0} Not)'}" 
+                           Margin="8,0,0,0" VerticalAlignment="Bottom" Opacity="0.6" Style="{StaticResource MaterialDesignCaptionTextBlock}"/>
+            </DockPanel>
+        </Border>
+
+        <!-- Notes Area -->
+        <Grid Grid.Row="1">
+            <!-- Empty State -->
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" 
+                        Visibility="{Binding Notes.Count, Converter={StaticResource CountToVisibilityConverter}, ConverterParameter=Invert}">
+                <materialDesign:PackIcon Kind="NotePlusOutline" Width="80" Height="80" HorizontalAlignment="Center" Opacity="0.2"/>
+                <TextBlock Text="Henüz hiç not eklememişsiniz." Style="{StaticResource MaterialDesignHeadline6TextBlock}" Opacity="0.4" Margin="0,16,0,0"/>
+                <TextBlock Text="Yeni bir not eklemek için sağ alttaki butona tıklayın." HorizontalAlignment="Center" Opacity="0.4"/>
+            </StackPanel>
+
+            <!-- Notes List -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Notes}" Margin="8">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <materialDesign:Card Margin="8" Width="250" MinHeight="150" UniformCornerRadius="8" materialDesign:ElevationAssist.Elevation="Dp0">
+                                <materialDesign:Card.Effect>
+                                    <DropShadowEffect BlurRadius="8" Direction="270" RenderingBias="Quality" ShadowDepth="1.5" Opacity="0.15"/>
+                                </materialDesign:Card.Effect>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Card Header -->
+                                    <Border Background="{DynamicResource PrimaryHueMidBrush}" 
+                                            CornerRadius="8,8,0,0" 
+                                            Padding="12,8">
+                                        <DockPanel>
+                                            <ToggleButton Style="{StaticResource MaterialDesignActionToggleButton}"
+                                                          Command="{Binding DataContext.PinNoteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                          CommandParameter="{Binding}"
+                                                          IsChecked="{Binding IsPinned}"
+                                                          Width="24" Height="24"
+                                                          DockPanel.Dock="Right"
+                                                          ToolTip="Sabitle">
+                                                <materialDesign:PackIcon Kind="Pin" Width="16" Height="16"/>
+                                            </ToggleButton>
+                                            <TextBlock Text="{Binding Title}" 
+                                                       Style="{StaticResource MaterialDesignSubtitle2TextBlock}" 
+                                                       Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                        </DockPanel>
+                                    </Border>
+
+                                    <!-- Content -->
+                                    <TextBlock Grid.Row="1" 
+                                               Text="{Binding Content}" 
+                                               TextWrapping="Wrap" 
+                                               Margin="12"
+                                               Foreground="{DynamicResource MaterialDesignBody}"/>
+
+                                    <!-- Footer -->
+                                    <Border Grid.Row="2" Padding="8" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource MaterialDesignDivider}">
+                                        <DockPanel LastChildFill="False">
+                                            <TextBlock Text="{Binding UpdatedDate, StringFormat=dd.MM.yyyy}" 
+                                                       Style="{StaticResource MaterialDesignCaptionTextBlock}" 
+                                                       VerticalAlignment="Center"
+                                                       Foreground="{DynamicResource MaterialDesignBodyLight}"/>
+                                            
+                                            <Button DockPanel.Dock="Right"
+                                                    Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                                    Command="{Binding DataContext.DataContext.DeleteNoteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding Id}"
+                                                    Width="24" Height="24"
+                                                    ToolTip="Sil">
+                                                <materialDesign:PackIcon Kind="Delete" Width="16" Height="16" Foreground="Red"/>
+                                            </Button>
+                                        </DockPanel>
+                                    </Border>
+                                </Grid>
+                            </materialDesign:Card>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- Add Note Overlay -->
+            <Border Background="#AA000000" Visibility="{Binding IsAdding, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <materialDesign:Card Width="400" VerticalAlignment="Center" Padding="16" UniformCornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="Yeni Not Ekle" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,16"/>
+                        
+                        <TextBox Text="{Binding NewNoteTitle, UpdateSourceTrigger=PropertyChanged}"
+                                 materialDesign:HintAssist.Hint="Başlık (Opsiyonel)"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Margin="0,0,0,16"/>
+                        
+                        <TextBox Text="{Binding NewNoteContent, UpdateSourceTrigger=PropertyChanged}"
+                                 materialDesign:HintAssist.Hint="Notunuzu buraya yazın..."
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 MinHeight="120"
+                                 Margin="0,0,0,24"/>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Command="{Binding CancelAddCommand}" 
+                                    Style="{StaticResource MaterialDesignFlatButton}" 
+                                    Content="İPTAL" Margin="0,0,8,0"/>
+                            <Button Command="{Binding SaveNoteCommand}" 
+                                    Style="{StaticResource MaterialDesignRaisedButton}" 
+                                    Content="KAYDET"/>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:Card>
+            </Border>
+
+            <!-- FAB (Floating Action Button) -->
+            <Button Style="{StaticResource MaterialDesignFloatingActionSecondaryButton}"
+                    Command="{Binding ToggleAddModeCommand}"
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                    Margin="0,0,32,32"
+                    ToolTip="Yeni Not Ekle"
+                    Visibility="{Binding IsAdding, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                <materialDesign:PackIcon Kind="Plus" Width="24" Height="24" />
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

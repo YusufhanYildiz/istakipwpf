@@ -84,6 +84,7 @@ namespace IsTakipWpf
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ISettingsRepository, SettingsRepository>();
             services.AddScoped<IJobRepository, JobRepository>();
+            services.AddScoped<INoteRepository, NoteRepository>();
 
             // Services
             services.AddScoped<ICustomerService, CustomerService>();
@@ -92,6 +93,7 @@ namespace IsTakipWpf
             services.AddScoped<IExcelService, ExcelService>();
             services.AddScoped<IReportingService, ReportingService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<INoteService, NoteService>();
             services.AddSingleton<IThemeService, ThemeService>();
             services.AddSingleton<ILocationService, LocationService>();
             services.AddSingleton<IUpdateService, UpdateService>();
@@ -104,14 +106,14 @@ namespace IsTakipWpf
             services.AddSingleton<CustomerListViewModel>();
             services.AddSingleton<JobListViewModel>();
             services.AddSingleton<SettingsViewModel>();
-            services.AddSingleton<PasswordChangeViewModel>();
+            services.AddSingleton<NotesViewModel>();
 
             // Views
             services.AddSingleton<DashboardView>();
             services.AddSingleton<CustomerListView>();
             services.AddSingleton<JobListView>();
             services.AddSingleton<SettingsView>();
-            services.AddSingleton<PasswordChangeView>();
+            services.AddSingleton<NotesView>();
         }
     }
 }

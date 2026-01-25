@@ -128,6 +128,22 @@ namespace IsTakipWpf.Infrastructure
                     command.ExecuteNonQuery();
                 }
 
+                string createNotesTable = @"
+                    CREATE TABLE IF NOT EXISTS Notes (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Title TEXT,
+                        Content TEXT,
+                        Color TEXT DEFAULT '#FFFFFF',
+                        IsPinned INTEGER DEFAULT 0,
+                        CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP
+                    );";
+
+                using (var command = new SQLiteCommand(createNotesTable, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+
                 // Initialize default admin password if not exists
                 string checkAdminPassword = "SELECT COUNT(*) FROM Settings WHERE Key = 'AdminPasswordHash';";
                 using (var command = new SQLiteCommand(checkAdminPassword, connection))

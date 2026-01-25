@@ -45,16 +45,16 @@
                                     <TextBlock Text="İş Takibi" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </ListBoxItem>
+                            <ListBoxItem Tag="Notes">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="NoteText" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Notlarım" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </ListBoxItem>
                             <ListBoxItem Tag="Settings">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Settings" Margin="0,0,10,0" VerticalAlignment="Center"/>
                                     <TextBlock Text="Ayarlar &amp; Yedekleme" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </ListBoxItem>
-                            <ListBoxItem Tag="Security">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="ShieldLock" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Şifre Değiştir" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </ListBoxItem>
                         </ListBox>

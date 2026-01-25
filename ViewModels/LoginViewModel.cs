@@ -85,22 +85,21 @@ namespace IsTakipWpf.ViewModels
         {
             ErrorMessage = string.Empty;
 
+            if (string.IsNullOrEmpty(Username))
+            {
+                ErrorMessage = "Lütfen kullanıcı adınızı girin.";
+                return;
+            }
+
             if (string.IsNullOrEmpty(Password))
             {
                 ErrorMessage = "Lütfen şifrenizi girin.";
                 return;
             }
 
-            // Simple validation for demo/admin only
-            if (Username?.ToLower() != "admin")
-            {
-                ErrorMessage = "Geçersiz kullanıcı adı.";
-                return;
-            }
-
             try 
             {
-                bool isAuthenticated = await _authService.AuthenticateAsync(Password);
+                bool isAuthenticated = await _authService.AuthenticateAsync(Username, Password);
                 
                 if (isAuthenticated)
                 {
@@ -113,7 +112,7 @@ namespace IsTakipWpf.ViewModels
                 }
                 else
                 {
-                    ErrorMessage = "Hatalı şifre!";
+                    ErrorMessage = "Kullanıcı adı veya şifre hatalı!";
                     LoginResult = false;
                 }
             }

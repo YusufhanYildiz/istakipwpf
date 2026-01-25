@@ -11,6 +11,7 @@ namespace IsTakipWpf.Services
         private readonly ISettingsRepository _settingsRepository;
         private const string PasswordKey = "AdminPasswordHash";
         private const string SaltKey = "AdminPasswordSalt";
+        private const string UsernameKey = "AdminUsername";
         private const string RememberMeKey = "RememberMe";
 
         public AuthService(ISettingsRepository settingsRepository)
@@ -18,9 +19,24 @@ namespace IsTakipWpf.Services
             _settingsRepository = settingsRepository;
         }
 
-        public async Task<bool> AuthenticateAsync(string password)
+        public async Task<bool> AuthenticateAsync(string username, string password)
         {
-            if (string.IsNullOrEmpty(password)) return false;
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) return false;
+
+            // Check username first
+            var storedUsername = await GetUsernameAsync();
+            if (!string.Equals(storedUsername, username, StringComparison.OrdinalIgnoreCase))
+            {
+                // Fallback for initial migration if no username stored yet but default is admin
+                if (storedUsername == "admin" && username.ToLower() == "admin")
+                {
+                    // Proceed to password check
+                }
+                else
+                {
+                    return false;
+                }
+            }
 
             var storedHash = await _settingsRepository.GetValueAsync(PasswordKey);
             var storedSalt = await _settingsRepository.GetValueAsync(SaltKey);
@@ -34,6 +50,7 @@ namespace IsTakipWpf.Services
                     var newHash = HashPassword("admin", newSalt);
                     await _settingsRepository.SetValueAsync(PasswordKey, newHash);
                     await _settingsRepository.SetValueAsync(SaltKey, newSalt);
+                    await _settingsRepository.SetValueAsync(UsernameKey, "admin");
                     return true;
                 }
                 return false;
@@ -45,9 +62,24 @@ namespace IsTakipWpf.Services
             return storedHash == inputHash;
         }
 
+        public async Task<string> GetUsernameAsync()
+        {
+            var val = await _settingsRepository.GetValueAsync(UsernameKey);
+            return string.IsNullOrEmpty(val) ? "admin" : val;
+        }
+
+        public async Task<bool> ChangeUsernameAsync(string newUsername)
+        {
+            if (string.IsNullOrWhiteSpace(newUsername)) return false;
+            return await _settingsRepository.SetValueAsync(UsernameKey, newUsername.Trim());
+        }
+
         public async Task<bool> ChangePasswordAsync(string currentPassword, string newPassword)
         {
-            if (await AuthenticateAsync(currentPassword))
+            // We need the current username to authenticate. 
+            // Since this method is usually called when logged in, we can get it from storage.
+            var currentUsername = await GetUsernameAsync();
+            if (await AuthenticateAsync(currentUsername, currentPassword))
             {
                 var newSalt = Guid.NewGuid().ToString("N");
                 var newHash = HashPassword(newPassword, newSalt);

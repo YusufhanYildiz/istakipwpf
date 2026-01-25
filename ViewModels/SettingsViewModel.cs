@@ -15,6 +15,7 @@ namespace IsTakipWpf.ViewModels
         private readonly IThemeService _themeService;
         private readonly IUpdateService _updateService;
         private readonly ILicenseService _licenseService;
+        private readonly IAuthService _authService;
         private readonly MaterialDesignThemes.Wpf.ISnackbarMessageQueue _messageQueue;
         
         private string _backupFolder;
@@ -32,7 +33,44 @@ namespace IsTakipWpf.ViewModels
         private string _licenseStatus;
         private int _remainingTrialDays;
 
+        private string _currentUsername;
+        private string _newUsername;
+
+        private string _currentPassword;
+        private string _newPassword;
+        private string _confirmPassword;
+
         public string CurrentVersion => _updateService.CurrentVersion;
+
+        public string CurrentUsername
+        {
+            get => _currentUsername;
+            set => SetProperty(ref _currentUsername, value);
+        }
+
+        public string NewUsername
+        {
+            get => _newUsername;
+            set => SetProperty(ref _newUsername, value);
+        }
+
+        public string CurrentPassword
+        {
+            get => _currentPassword;
+            set => SetProperty(ref _currentPassword, value);
+        }
+
+        public string NewPasswordProp
+        {
+            get => _newPassword;
+            set => SetProperty(ref _newPassword, value);
+        }
+
+        public string ConfirmPassword
+        {
+            get => _confirmPassword;
+            set => SetProperty(ref _confirmPassword, value);
+        }
 
         public string UpdateStatus
         {
@@ -127,14 +165,17 @@ namespace IsTakipWpf.ViewModels
         public ICommand DownloadUpdateCommand { get; }
         public ICommand ApplyUpdateCommand { get; }
         public ICommand ActivateLicenseCommand { get; }
+        public ICommand ChangeUsernameCommand { get; }
+        public ICommand ChangePasswordCommand { get; }
 
-        public SettingsViewModel(IBackupService backupService, ISettingsRepository settingsRepository, IThemeService themeService, IUpdateService updateService, ILicenseService licenseService, MaterialDesignThemes.Wpf.ISnackbarMessageQueue messageQueue)
+        public SettingsViewModel(IBackupService backupService, ISettingsRepository settingsRepository, IThemeService themeService, IUpdateService updateService, ILicenseService licenseService, IAuthService authService, MaterialDesignThemes.Wpf.ISnackbarMessageQueue messageQueue)
         {
             _backupService = backupService;
             _settingsRepository = settingsRepository;
             _themeService = themeService;
             _updateService = updateService;
             _licenseService = licenseService;
+            _authService = authService;
             _messageQueue = messageQueue;
 
             SelectFolderCommand = new RelayCommand(_ => SelectFolder());
@@ -145,8 +186,65 @@ namespace IsTakipWpf.ViewModels
             DownloadUpdateCommand = new RelayCommand(async _ => await DownloadUpdateAsync());
             ApplyUpdateCommand = new RelayCommand(_ => ApplyUpdate());
             ActivateLicenseCommand = new RelayCommand(async _ => await ActivateLicenseAsync());
+            ChangeUsernameCommand = new RelayCommand(async _ => await ChangeUsernameAsync());
+            ChangePasswordCommand = new RelayCommand(async _ => await ExecuteChangePassword());
 
             _ = InitializeAsync();
+        }
+
+        private async Task ExecuteChangePassword()
+        {
+            if (string.IsNullOrEmpty(CurrentPassword) || string.IsNullOrEmpty(NewPasswordProp) || string.IsNullOrEmpty(ConfirmPassword))
+            {
+                _messageQueue.Enqueue("Lütfen tüm şifre alanlarını doldurun.");
+                return;
+            }
+
+            if (NewPasswordProp != ConfirmPassword)
+            {
+                _messageQueue.Enqueue("Yeni şifreler eşleşmiyor.");
+                return;
+            }
+
+            bool result = await _authService.ChangePasswordAsync(CurrentPassword, NewPasswordProp);
+            if (result)
+            {
+                CurrentPassword = string.Empty;
+                NewPasswordProp = string.Empty;
+                ConfirmPassword = string.Empty;
+                _messageQueue.Enqueue("Şifre başarıyla güncellendi.");
+            }
+            else
+            {
+                _messageQueue.Enqueue("Mevcut şifre hatalı!");
+            }
+        }
+
+        private async Task ChangeUsernameAsync()
+        {
+            if (string.IsNullOrWhiteSpace(NewUsername))
+            {
+                _messageQueue.Enqueue("Yeni kullanıcı adı boş olamaz.");
+                return;
+            }
+
+            if (NewUsername == CurrentUsername)
+            {
+                _messageQueue.Enqueue("Yeni kullanıcı adı mevcut ile aynı olamaz.");
+                return;
+            }
+
+            var success = await _authService.ChangeUsernameAsync(NewUsername);
+            if (success)
+            {
+                CurrentUsername = NewUsername;
+                NewUsername = string.Empty;
+                _messageQueue.Enqueue("Kullanıcı adı başarıyla değiştirildi.");
+            }
+            else
+            {
+                _messageQueue.Enqueue("Kullanıcı adı değiştirilemedi.");
+            }
         }
 
         private async Task DownloadUpdateAsync()
@@ -259,6 +357,9 @@ namespace IsTakipWpf.ViewModels
 
         private async Task InitializeAsync()
         {
+            // Load Username
+            CurrentUsername = await _authService.GetUsernameAsync();
+
             // Load Theme
             SelectedTheme = _themeService.GetCurrentTheme();
 

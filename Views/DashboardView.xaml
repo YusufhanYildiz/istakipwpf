@@ -13,7 +13,10 @@
                 
                 <UniformGrid Columns="4" Margin="0,0,0,24">
                     <!-- Toplam Müşteri -->
-                    <materialDesign:Card Margin="0,0,12,0" UniformCornerRadius="12" materialDesign:ElevationAssist.Elevation="Dp3">
+                    <materialDesign:Card Margin="0,0,12,0" UniformCornerRadius="12" materialDesign:ElevationAssist.Elevation="Dp0">
+                        <materialDesign:Card.Effect>
+                            <DropShadowEffect BlurRadius="15" Direction="270" RenderingBias="Quality" ShadowDepth="2" Opacity="0.2"/>
+                        </materialDesign:Card.Effect>
                         <Border CornerRadius="12">
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -32,7 +35,10 @@
                     </materialDesign:Card>
 
                     <!-- Devam Eden İşler -->
-                    <materialDesign:Card Margin="0,0,12,0" UniformCornerRadius="12" materialDesign:ElevationAssist.Elevation="Dp3">
+                    <materialDesign:Card Margin="0,0,12,0" UniformCornerRadius="12" materialDesign:ElevationAssist.Elevation="Dp0">
+                        <materialDesign:Card.Effect>
+                            <DropShadowEffect BlurRadius="15" Direction="270" RenderingBias="Quality" ShadowDepth="2" Opacity="0.2"/>
+                        </materialDesign:Card.Effect>
                         <Border CornerRadius="12">
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -51,7 +57,10 @@
                     </materialDesign:Card>
 
                     <!-- Bekleyen İşler -->
-                    <materialDesign:Card Margin="0,0,12,0" UniformCornerRadius="12" materialDesign:ElevationAssist.Elevation="Dp3">
+                    <materialDesign:Card Margin="0,0,12,0" UniformCornerRadius="12" materialDesign:ElevationAssist.Elevation="Dp0">
+                        <materialDesign:Card.Effect>
+                            <DropShadowEffect BlurRadius="15" Direction="270" RenderingBias="Quality" ShadowDepth="2" Opacity="0.2"/>
+                        </materialDesign:Card.Effect>
                         <Border CornerRadius="12">
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -70,7 +79,10 @@
                     </materialDesign:Card>
 
                     <!-- Toplam Kalan Bakiye -->
-                    <materialDesign:Card UniformCornerRadius="12" materialDesign:ElevationAssist.Elevation="Dp3">
+                    <materialDesign:Card UniformCornerRadius="12" materialDesign:ElevationAssist.Elevation="Dp0">
+                        <materialDesign:Card.Effect>
+                            <DropShadowEffect BlurRadius="15" Direction="270" RenderingBias="Quality" ShadowDepth="2" Opacity="0.2"/>
+                        </materialDesign:Card.Effect>
                         <Border CornerRadius="12">
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">

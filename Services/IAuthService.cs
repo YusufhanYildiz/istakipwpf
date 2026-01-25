@@ -5,9 +5,19 @@ namespace IsTakipWpf.Services
     public interface IAuthService
     {
         /// <summary>
-        /// Authenticates the user with the provided password.
+        /// Authenticates the user with the provided username and password.
         /// </summary>
-        Task<bool> AuthenticateAsync(string password);
+        Task<bool> AuthenticateAsync(string username, string password);
+
+        /// <summary>
+        /// Changes the current admin username.
+        /// </summary>
+        Task<bool> ChangeUsernameAsync(string newUsername);
+
+        /// <summary>
+        /// Gets the current admin username.
+        /// </summary>
+        Task<string> GetUsernameAsync();
 
         /// <summary>
         /// Changes the current admin password.
