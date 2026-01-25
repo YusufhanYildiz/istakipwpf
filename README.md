@@ -54,6 +54,12 @@ Uygulamaya ilk giriş için aşağıdaki varsayılan bilgileri kullanabilirsiniz
 - **Kullanıcı Adı:** `admin`
 - **Şifre:** `123`
 
+## 🚀 Son Sürümdeki Yenilikler (v1.0.4)
+
+*   **Dashboard Hızlı Notlar:** Ana panele "Hızlı Not Ekle" widget'ı eklendi. Artık uygulama açılır açılmaz hızlıca not alabilir ve son 5 notunuzu anlık olarak görebilirsiniz.
+*   **Global Türkçe Desteği:** Windows sistem diliniz İngilizce olsa bile uygulama artık her zaman Türkçe (`tr-TR`) kültür ayarlarıyla (para birimi, tarih vb.) çalışır.
+*   **Velopack Entegrasyonu:** Uygulama artık otomatik güncelleme desteğine (`vpk`) tam uyumlu ve GitHub Actions ile her yeni etikette otomatik olarak paketleniyor.
+
 ---
 
 ## 💻 Kullanılan Teknolojiler
