@@ -1,0 +1,56 @@
+name: Velopack Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x' # vpk tool requires modern .NET runtimes
+
+      - name: Set Console to UTF-8
+        run: chcp 65001
+        shell: pwsh
+
+      - name: Install Velopack CLI
+        run: dotnet tool install -g vpk
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Publish Application
+        run: dotnet publish IsTakipWpf.csproj -c Release -r win-x64 --self-contained false -o ./publish
+        # Note: We use -r win-x64 because Velopack works best with RID-specific builds
+
+      - name: Pack with Velopack
+        run: |
+          $version = "${{ github.ref_name }}".TrimStart('v')
+          vpk pack -u IsTakipWpf -v $version -p ./publish -e "İş Takip Uygulaması.exe" --icon app_icon.ico
+        shell: pwsh
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            Releases/*.exe
+            Releases/*.msi
+            Releases/RELEASES
+            Releases/*.nupkg
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

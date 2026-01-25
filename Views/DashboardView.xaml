@@ -179,6 +179,52 @@
                                    Margin="0,10,0,0" Style="{StaticResource MaterialDesignBody1TextBlock}"/>
                     </StackPanel>
                 </materialDesign:Card>
+
+                <Grid Margin="0,16,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Hızlı Not Ekle -->
+                    <materialDesign:Card Grid.Column="0" Padding="16" Margin="0,0,8,0">
+                        <StackPanel>
+                            <TextBlock Text="Hızlı Not Ekle" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,16"/>
+                            <TextBox materialDesign:HintAssist.Hint="Başlık" 
+                                     Text="{Binding QuickNoteTitle, UpdateSourceTrigger=PropertyChanged}" 
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     Margin="0,0,0,8"/>
+                            <TextBox materialDesign:HintAssist.Hint="Not içeriği..." 
+                                     Text="{Binding QuickNoteContent, UpdateSourceTrigger=PropertyChanged}" 
+                                     TextWrapping="Wrap" AcceptsReturn="True" Height="80"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Margin="0,0,0,16"/>
+                            <Button Content="Kaydet" Command="{Binding AddQuickNoteCommand}" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </materialDesign:Card>
+
+                    <!-- Son Notlar -->
+                    <materialDesign:Card Grid.Column="1" Padding="16" Margin="8,0,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Son Notlar" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,16"/>
+                            <ItemsControl ItemsSource="{Binding LatestNotes}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource MaterialDesignDivider}" Padding="0,4">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding CreatedDate, StringFormat='dd.MM.yyyy HH:mm'}" Style="{StaticResource MaterialDesignCaptionTextBlock}" Opacity="0.6"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock Text="Henüz not bulunmuyor." 
+                                       Visibility="{Binding LatestNotes.Count, Converter={StaticResource CountToVisibilityConverter}, ConverterParameter=Invert}" 
+                                       HorizontalAlignment="Center" Margin="0,16,0,0" Opacity="0.6"/>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </Grid>
             </StackPanel>
         </Grid>
     </ScrollViewer>
