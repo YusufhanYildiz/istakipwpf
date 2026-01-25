@@ -9,14 +9,21 @@ namespace IsTakipWpf.Services
     public class JobService : IJobService
     {
         private readonly IJobRepository _repository;
+        private readonly ILicenseService _licenseService;
 
-        public JobService(IJobRepository repository)
+        public JobService(IJobRepository repository, ILicenseService licenseService)
         {
             _repository = repository;
+            _licenseService = licenseService;
         }
 
         public async Task<(bool Success, string Message, int JobId)> CreateJobAsync(Job job)
         {
+            if (!await _licenseService.IsTrialActiveAsync())
+            {
+                return (false, "Deneme süreniz dolmuştur. Lütfen devam etmek için lisans satın alınız.", 0);
+            }
+
             var (isValid, message) = ValidateJob(job);
             if (!isValid)
             {
@@ -56,6 +63,11 @@ namespace IsTakipWpf.Services
 
         public async Task<(bool Success, string Message)> UpdateJobAsync(Job job)
         {
+            if (!await _licenseService.IsTrialActiveAsync())
+            {
+                return (false, "Deneme süreniz dolmuştur. Lütfen devam etmek için lisans satın alınız.");
+            }
+
             var (isValid, message) = ValidateJob(job);
             if (!isValid)
             {

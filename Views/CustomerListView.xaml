@@ -53,7 +53,9 @@
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Button Command="{Binding ImportExcelCommand}" 
-                                        Style="{StaticResource MaterialDesignOutlinedButton}" 
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        Background="#1B5E20" BorderBrush="#1B5E20"
+                                        materialDesign:ButtonAssist.CornerRadius="10"
                                         Margin="0,0,8,0">
                                     <Button.ToolTip>
                                         <StackPanel>
@@ -68,18 +70,22 @@
                                     </StackPanel>
                                 </Button>
                                 <Button Command="{Binding ExportExcelCommand}" 
-                                        Style="{StaticResource MaterialDesignOutlinedButton}" 
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        Background="#2E7D32" BorderBrush="#2E7D32"
+                                        materialDesign:ButtonAssist.CornerRadius="10"
                                         Margin="0,0,8,0">
                                     <Button.ToolTip>
                                         <TextBlock Text="Tüm müşteri listesini Excel (.xlsx) olarak dışa aktarır."/>
                                     </Button.ToolTip>
                                     <StackPanel Orientation="Horizontal">
                                         <materialDesign:PackIcon Kind="FileExport" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                                        <TextBlock Text="EXCEL" VerticalAlignment="Center"/>
+                                        <TextBlock Text="EXCEL DIŞA AKTAR" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                                 <Button Command="{Binding ExportPdfCommand}" 
-                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                        Background="#B71C1C" BorderBrush="#B71C1C"
+                                        materialDesign:ButtonAssist.CornerRadius="10"
                                         ToolTip="PDF Raporu">
                                     <StackPanel Orientation="Horizontal">
                                         <materialDesign:PackIcon Kind="FilePdfBox" Margin="0,0,8,0" VerticalAlignment="Center"/>
@@ -183,7 +189,11 @@
         
 
         <materialDesign:Card Grid.Row="2" materialDesign:ElevationAssist.Elevation="Dp2">
-            <DataGrid ItemsSource="{Binding Customers}"
+            <DataGrid x:Name="CustomersGrid"
+                      ItemsSource="{Binding Customers}"
+                      SelectedItem="{Binding SelectedCustomer}"
+                      PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown"
+                      SelectionChanged="DataGrid_SelectionChanged"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       HeadersVisibility="All"
@@ -192,21 +202,82 @@
                       VerticalScrollBarVisibility="Auto"
                       ScrollViewer.CanContentScroll="True"
                       VirtualizingStackPanel.IsVirtualizing="True"
-                      VirtualizingStackPanel.VirtualizationMode="Recycling">
+                      VirtualizingStackPanel.VirtualizationMode="Recycling"
+                      materialDesign:DataGridAssist.ColumnHeaderPadding="8"
+                      RowDetailsVisibilityMode="VisibleWhenSelected">
+
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="ToolTip" Value="Detayları görmek/kapatmak için tıklayın"/>
+                    </Style>
+                </DataGrid.RowStyle>
+
+                <DataGrid.RowDetailsTemplate>
+                    <!-- Mevcut template içeriği aynı kalacak -->
+                    <DataTemplate>
+                        <Border BorderThickness="0" Background="{DynamicResource MaterialDesignPaper}" Padding="20" Margin="10">
+                            <materialDesign:Card UniformCornerRadius="8" Padding="16" materialDesign:ElevationAssist.Elevation="Dp2">
+                                <StackPanel>
+                                    <TextBlock Text="MÜŞTERİ DETAYLARI" Style="{StaticResource MaterialDesignOverlineTextBlock}" Foreground="{DynamicResource PrimaryHueMidBrush}" Margin="0,0,0,8"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0" Margin="0,0,16,0">
+                                            <TextBlock Text="Tam Adres:" FontWeight="Bold" Margin="0,0,0,4" Opacity="0.7"/>
+                                            <TextBlock Text="{Binding Address}" TextWrapping="Wrap" LineHeight="20"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="İletişim Bilgileri:" FontWeight="Bold" Margin="0,0,0,4" Opacity="0.7"/>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                                <materialDesign:PackIcon Kind="Phone" Margin="0,0,8,0" VerticalAlignment="Center" Opacity="0.6"/>
+                                                <TextBlock Text="{Binding PhoneNumber, TargetNullValue='Telefon Girilmemiş'}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="MapMarker" Margin="0,0,8,0" VerticalAlignment="Center" Opacity="0.6"/>
+                                                <TextBlock Text="{Binding City}"/>
+                                                <TextBlock Text=" / "/>
+                                                <TextBlock Text="{Binding District}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </materialDesign:Card>
+                        </Border>
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
+
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Ad" Binding="{Binding FirstName}" Width="Auto"/>
-                    <DataGridTextColumn Header="Soyad" Binding="{Binding LastName}" Width="Auto"/>
-                    <DataGridTextColumn Header="İl" Binding="{Binding City}" Width="Auto"/>
-                    <DataGridTextColumn Header="İlçe" Binding="{Binding District}" Width="Auto"/>
-                    <DataGridTextColumn Header="Telefon" Binding="{Binding PhoneNumber}" Width="Auto"/>
-                    <DataGridTextColumn Header="Adres" Binding="{Binding Address}" Width="*">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="TextWrapping" Value="Wrap"/>
-                                <Setter Property="MaxHeight" Value="40"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                    <!-- Yeni Gösterge Sütunu -->
+                    <DataGridTemplateColumn Width="35">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PackIcon Kind="ChevronRight" Opacity="0.5">
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=DataGridRow}}" Value="True">
+                                                    <Setter Property="Kind" Value="ChevronDown"/>
+                                                    <Setter Property="Opacity" Value="1"/>
+                                                    <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                </materialDesign:PackIcon>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Header="Ad" Binding="{Binding FirstName}" Width="*"/>
+                    <DataGridTextColumn Header="Soyad" Binding="{Binding LastName}" Width="*"/>
+                    <DataGridTextColumn Header="İl" Binding="{Binding City}" Width="0.8*"/>
+                    <DataGridTextColumn Header="İlçe" Binding="{Binding District}" Width="0.8*"/>
+                    <DataGridTextColumn Header="Telefon" Binding="{Binding PhoneNumber}" Width="1.2*"/>
                     <DataGridTemplateColumn Header="İşlemler" Width="110">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

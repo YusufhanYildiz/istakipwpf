@@ -20,12 +20,16 @@ namespace IsTakipWpf.ViewModels
         private DateTime? _endDate;
         private string _errorMessage;
         private Customer _selectedCustomer;
+        private decimal _price;
+        private decimal _paidAmount;
 
         public string JobTitle { get => _jobTitle; set => SetProperty(ref _jobTitle, value); }
         public string Description { get => _description; set => SetProperty(ref _description, value); }
         public JobStatus Status { get => _status; set => SetProperty(ref _status, value); }
         public DateTime? StartDate { get => _startDate; set => SetProperty(ref _startDate, value); }
         public DateTime? EndDate { get => _endDate; set => SetProperty(ref _endDate, value); }
+        public decimal Price { get => _price; set => SetProperty(ref _price, value); }
+        public decimal PaidAmount { get => _paidAmount; set => SetProperty(ref _paidAmount, value); }
         public string ErrorMessage { get => _errorMessage; set => SetProperty(ref _errorMessage, value); }
         public Customer SelectedCustomer 
         { 
@@ -67,6 +71,8 @@ namespace IsTakipWpf.ViewModels
                 Status = job.Status;
                 StartDate = job.StartDate;
                 EndDate = job.EndDate;
+                Price = job.Price;
+                PaidAmount = job.PaidAmount;
             }
         }
 
@@ -80,7 +86,9 @@ namespace IsTakipWpf.ViewModels
                 Description = Description,
                 Status = Status,
                 StartDate = StartDate,
-                EndDate = EndDate
+                EndDate = EndDate,
+                Price = Price,
+                PaidAmount = PaidAmount
             };
 
             var result = IsEditMode 

@@ -24,12 +24,39 @@ namespace IsTakipWpf.ViewModels
         private bool _isLoading;
         private City _selectedCityFilter;
         private string _selectedDistrictFilter;
+        private Job _selectedJob;
+        private decimal _totalBalance;
+        private decimal _selectedJobBalance;
 
         public ObservableCollection<Job> Jobs { get; } = new ObservableCollection<Job>();
         public ObservableCollection<Customer> Customers { get; } = new ObservableCollection<Customer>();
         public ObservableCollection<City> Cities { get; } = new ObservableCollection<City>();
         public ObservableCollection<string> Districts { get; } = new ObservableCollection<string>();
         public Array Statuses => Enum.GetValues(typeof(JobStatus));
+
+        public Job SelectedJob
+        {
+            get => _selectedJob;
+            set
+            {
+                if (SetProperty(ref _selectedJob, value))
+                {
+                    SelectedJobBalance = value?.Balance ?? 0;
+                }
+            }
+        }
+
+        public decimal TotalBalance
+        {
+            get => _totalBalance;
+            set => SetProperty(ref _totalBalance, value);
+        }
+
+        public decimal SelectedJobBalance
+        {
+            get => _selectedJobBalance;
+            set => SetProperty(ref _selectedJobBalance, value);
+        }
 
         public string SearchTerm
         {
@@ -134,6 +161,7 @@ namespace IsTakipWpf.ViewModels
             var results = await _jobService.SearchJobsAsync(SearchTerm, SelectedCustomer?.Id, SelectedStatus, SelectedCityFilter?.Name, SelectedDistrictFilter);
             Jobs.Clear();
             foreach (var job in results) Jobs.Add(job);
+            TotalBalance = Jobs.Sum(j => j.Balance);
         }
 
         private async Task LoadFilterDistrictsAsync()
@@ -184,7 +212,10 @@ namespace IsTakipWpf.ViewModels
 
         private async Task ImportExcelAsync()
         {
-            var openFileDialog = new OpenFileDialog { Filter = "Excel Dosyası (*.xlsx)|*.xlsx" };
+            var openFileDialog = new OpenFileDialog 
+            { 
+                Filter = "Tüm Desteklenen Formatlar (*.xlsx, *.xls, *.csv)|*.xlsx;*.xls;*.csv|Yeni Nesil Excel (*.xlsx)|*.xlsx|Eski Nesil Excel (*.xls)|*.xls|CSV Dosyası (*.csv)|*.csv" 
+            };
             if (openFileDialog.ShowDialog() == true)
             {
                 var result = await _excelService.ImportJobsAsync(openFileDialog.FileName);
@@ -228,7 +259,11 @@ namespace IsTakipWpf.ViewModels
 
         private async Task ExportExcelAsync()
         {
-            var saveFileDialog = new SaveFileDialog { Filter = "Excel Dosyası (*.xlsx)|*.xlsx", FileName = "Isler.xlsx" };
+            var saveFileDialog = new SaveFileDialog 
+            { 
+                Filter = "Yeni Nesil Excel (*.xlsx)|*.xlsx|Eski Nesil Excel (*.xls)|*.xls|CSV Dosyası (*.csv)|*.csv", 
+                FileName = "Isler.xlsx" 
+            };
             if (saveFileDialog.ShowDialog() == true)
             {
                 var result = await _excelService.ExportJobsAsync(saveFileDialog.FileName, Jobs);

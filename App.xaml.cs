@@ -6,7 +6,6 @@ using IsTakipWpf.Repositories;
 using IsTakipWpf.Services;
 using IsTakipWpf.ViewModels;
 using IsTakipWpf.Views;
-using Velopack;
 
 namespace IsTakipWpf
 {
@@ -22,6 +21,14 @@ namespace IsTakipWpf
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            // Set global culture to Turkish for proper Currency and Date formatting
+            var culture = new System.Globalization.CultureInfo("tr-TR");
+            System.Threading.Thread.CurrentThread.CurrentCulture = culture;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
+            FrameworkElement.LanguageProperty.OverrideMetadata(
+                typeof(FrameworkElement),
+                new FrameworkPropertyMetadata(System.Windows.Markup.XmlLanguage.GetLanguage(culture.IetfLanguageTag)));
+
             base.OnStartup(e);
 
             // Prevent app from closing when LoginWindow (the only open window) closes
@@ -88,6 +95,7 @@ namespace IsTakipWpf
             services.AddSingleton<IThemeService, ThemeService>();
             services.AddSingleton<ILocationService, LocationService>();
             services.AddSingleton<IUpdateService, UpdateService>();
+            services.AddSingleton<ILicenseService, LicenseService>();
 
             // ViewModels
             services.AddSingleton<MainWindowViewModel>();

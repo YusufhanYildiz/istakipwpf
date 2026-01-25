@@ -199,6 +199,9 @@ namespace IsTakipWpf.Services
                                     columns.RelativeColumn(2);
                                     columns.RelativeColumn(2);
                                     columns.RelativeColumn(2);
+                                    columns.RelativeColumn(2);
+                                    columns.RelativeColumn(2);
+                                    columns.RelativeColumn(2);
                                 });
 
                                 table.Header(header =>
@@ -211,6 +214,9 @@ namespace IsTakipWpf.Services
                                     header.Cell().Element(HeaderStyle).Text("DURUM");
                                     header.Cell().Element(HeaderStyle).Text("BAŞLANGIÇ");
                                     header.Cell().Element(HeaderStyle).Text("BİTİŞ");
+                                    header.Cell().Element(HeaderStyle).Text("İŞ TUTARI");
+                                    header.Cell().Element(HeaderStyle).Text("ALINAN ÖDEME");
+                                    header.Cell().Element(HeaderStyle).Text("KALAN BAKİYE");
                                 });
 
                                 bool isOdd = false;
@@ -225,6 +231,9 @@ namespace IsTakipWpf.Services
                                     table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(GetEnumDescription(j.Status));
                                     table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.StartDate?.ToString("dd.MM.yyyy") ?? "-");
                                     table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text(j.EndDate?.ToString("dd.MM.yyyy") ?? "-");
+                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text($"{j.Price:C2}");
+                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text($"{j.PaidAmount:C2}");
+                                    table.Cell().Element(c => RowStyle(c, currentIsOdd)).Text($"{j.Balance:C2}");
                                     isOdd = !isOdd;
                                 }
                             });

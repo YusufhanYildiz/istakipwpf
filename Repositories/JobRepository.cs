@@ -24,8 +24,8 @@ namespace IsTakipWpf.Repositories
             job.IsDeleted = false;
 
             const string sql = @"
-                INSERT INTO Jobs (CustomerId, JobTitle, Description, Status, StartDate, EndDate, CreatedDate, UpdatedDate, IsDeleted)
-                VALUES (@CustomerId, @JobTitle, @Description, @Status, @StartDate, @EndDate, @CreatedDate, @UpdatedDate, @IsDeleted);
+                INSERT INTO Jobs (CustomerId, JobTitle, Description, Status, StartDate, EndDate, Price, PaidAmount, CreatedDate, UpdatedDate, IsDeleted)
+                VALUES (@CustomerId, @JobTitle, @Description, @Status, @StartDate, @EndDate, @Price, @PaidAmount, @CreatedDate, @UpdatedDate, @IsDeleted);
                 SELECT last_insert_rowid();";
 
             using (var connection = CreateConnection())
@@ -127,8 +127,8 @@ namespace IsTakipWpf.Repositories
         public async Task<int> AddMultipleAsync(IEnumerable<Job> jobs)
         {
             const string sql = @"
-                INSERT INTO Jobs (CustomerId, JobTitle, Description, Status, StartDate, EndDate, CreatedDate, UpdatedDate, IsDeleted)
-                VALUES (@CustomerId, @JobTitle, @Description, @Status, @StartDate, @EndDate, @CreatedDate, @UpdatedDate, @IsDeleted);";
+                INSERT INTO Jobs (CustomerId, JobTitle, Description, Status, StartDate, EndDate, Price, PaidAmount, CreatedDate, UpdatedDate, IsDeleted)
+                VALUES (@CustomerId, @JobTitle, @Description, @Status, @StartDate, @EndDate, @Price, @PaidAmount, @CreatedDate, @UpdatedDate, @IsDeleted);";
 
             using (var connection = CreateConnection())
             {
@@ -161,6 +161,8 @@ namespace IsTakipWpf.Repositories
                     Status = @Status, 
                     StartDate = @StartDate, 
                     EndDate = @EndDate,
+                    Price = @Price,
+                    PaidAmount = @PaidAmount,
                     UpdatedDate = @UpdatedDate 
                 WHERE Id = @Id";
 

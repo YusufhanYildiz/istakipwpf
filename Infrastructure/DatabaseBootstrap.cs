@@ -8,8 +8,49 @@ namespace IsTakipWpf.Infrastructure
 {
     public static class DatabaseBootstrap
     {
-        private static readonly string DbFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
-        public static readonly string DbPath = Path.Combine(DbFolder, "database.db");
+        public static bool IsPortable 
+        {
+            get
+            {
+                if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "portable.txt")))
+                    return true;
+
+                string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                // Velopack klasörü (IsTakipApp) içinde miyiz?
+                bool isInAppData = AppDomain.CurrentDomain.BaseDirectory.StartsWith(localAppData, StringComparison.OrdinalIgnoreCase);
+                return !isInAppData;
+            }
+        }
+
+        private static string GetBaseDataFolder()
+        {
+            if (IsPortable)
+            {
+                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Veriler");
+            }
+
+            // Yüklü modda (Velopack): %LOCALAPPDATA%\IsTakipApp\VeriDeposu
+            // app-x.y.z klasöründen bir üst klasöre çıkıp VeriDeposu oluşturuyoruz.
+            try
+            {
+                string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                var parent = Directory.GetParent(appDirectory);
+                if (parent != null)
+                {
+                    // Velopack ana dizinindeysek (IsTakipApp) oraya VeriDeposu aç
+                    return Path.Combine(parent.FullName, "VeriDeposu");
+                }
+            }
+            catch { }
+
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IsTakipApp", "VeriDeposu");
+        }
+
+        private static readonly string AppDataFolder = GetBaseDataFolder();
+        public static readonly string DbPath = Path.Combine(AppDataFolder, "database.db");
+
+        private static readonly string OldDbFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
+        private static readonly string OldDbPath = Path.Combine(OldDbFolder, "database.db");
 
         /// <summary>
         /// Gets the SQLite connection string.
@@ -21,9 +62,10 @@ namespace IsTakipWpf.Infrastructure
         /// </summary>
         public static void Initialize()
         {
-            if (!Directory.Exists(DbFolder))
+            string dbFolder = Path.GetDirectoryName(DbPath);
+            if (!Directory.Exists(dbFolder))
             {
-                Directory.CreateDirectory(DbFolder);
+                Directory.CreateDirectory(dbFolder);
             }
 
             if (!File.Exists(DbPath))
@@ -62,6 +104,8 @@ namespace IsTakipWpf.Infrastructure
                         Status INTEGER NOT NULL DEFAULT 0,
                         StartDate DATETIME,
                         EndDate DATETIME,
+                        Price DECIMAL(10,2) DEFAULT 0,
+                        PaidAmount DECIMAL(10,2) DEFAULT 0,
                         CreatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
                         UpdatedDate DATETIME DEFAULT CURRENT_TIMESTAMP,
                         IsDeleted INTEGER DEFAULT 0,
@@ -94,7 +138,7 @@ namespace IsTakipWpf.Infrastructure
                         // Initial password setup
                         // Önemli: GitHub'a atmadan önce buradaki şifreyi placeholder ile değiştirdik.
                         // İlk kurulumda kullanılacak varsayılan şifre buraya yazılmalıdır.
-                        string defaultPassword = "IsTakipAdmin123!"; 
+                        string defaultPassword = "123"; 
                         string salt = Guid.NewGuid().ToString("N");
                         string hashed = HashPassword(defaultPassword, salt);
                         
@@ -118,6 +162,8 @@ namespace IsTakipWpf.Infrastructure
                 // Migrations
                 AddColumnIfNotExists(connection, "Customers", "City", "TEXT");
                 AddColumnIfNotExists(connection, "Customers", "District", "TEXT");
+                AddColumnIfNotExists(connection, "Jobs", "Price", "DECIMAL(10,2) DEFAULT 0");
+                AddColumnIfNotExists(connection, "Jobs", "PaidAmount", "DECIMAL(10,2) DEFAULT 0");
 
                 // Performance Indexes
                 ExecuteNonQuery(connection, "CREATE INDEX IF NOT EXISTS idx_customers_names ON Customers (FirstName, LastName);");

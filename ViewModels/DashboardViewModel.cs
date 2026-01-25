@@ -12,10 +12,12 @@ namespace IsTakipWpf.ViewModels
             private int _totalCustomers;
             private int _activeJobs;
             private int _waitingJobs;
+            private decimal _totalBalance;
     
             public int TotalCustomers { get => _totalCustomers; set => SetProperty(ref _totalCustomers, value); }
             public int ActiveJobs { get => _activeJobs; set => SetProperty(ref _activeJobs, value); }
             public int WaitingJobs { get => _waitingJobs; set => SetProperty(ref _waitingJobs, value); }
+            public decimal TotalBalance { get => _totalBalance; set => SetProperty(ref _totalBalance, value); }
     
             public DashboardViewModel(ICustomerService customerService, IJobService jobService)
             {
@@ -29,9 +31,10 @@ namespace IsTakipWpf.ViewModels
                 var customers = await _customerService.GetActiveCustomersAsync();
                 TotalCustomers = customers.Count();
     
-                var jobs = await _jobService.GetAllJobsAsync();
+                var jobs = (await _jobService.GetAllJobsAsync()).ToList();
                 ActiveJobs = jobs.Count(j => j.Status == JobStatus.DevamEdiyor);
                 WaitingJobs = jobs.Count(j => j.Status == JobStatus.Bekliyor);
+                TotalBalance = jobs.Sum(j => j.Balance);
             }
         }
     }

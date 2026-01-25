@@ -20,10 +20,17 @@ namespace IsTakipWpf.ViewModels
         private bool _isLoading;
         private City _selectedCityFilter;
         private string _selectedDistrictFilter;
+        private Customer _selectedCustomer;
 
         public ObservableCollection<Customer> Customers { get; } = new ObservableCollection<Customer>();
         public ObservableCollection<City> Cities { get; } = new ObservableCollection<City>();
         public ObservableCollection<string> Districts { get; } = new ObservableCollection<string>();
+
+        public Customer SelectedCustomer
+        {
+            get => _selectedCustomer;
+            set => SetProperty(ref _selectedCustomer, value);
+        }
 
         public string SearchTerm
         {
@@ -165,7 +172,10 @@ namespace IsTakipWpf.ViewModels
 
         private async Task ImportExcelAsync()
         {
-            var openFileDialog = new OpenFileDialog { Filter = "Excel Dosyası (*.xlsx)|*.xlsx" };
+            var openFileDialog = new OpenFileDialog 
+            { 
+                Filter = "Tüm Desteklenen Formatlar (*.xlsx, *.xls, *.csv)|*.xlsx;*.xls;*.csv|Yeni Nesil Excel (*.xlsx)|*.xlsx|Eski Nesil Excel (*.xls)|*.xls|CSV Dosyası (*.csv)|*.csv" 
+            };
             if (openFileDialog.ShowDialog() == true)
             {
                 var result = await _excelService.ImportCustomersAsync(openFileDialog.FileName);
@@ -184,7 +194,11 @@ namespace IsTakipWpf.ViewModels
 
         private async Task ExportExcelAsync()
         {
-            var saveFileDialog = new SaveFileDialog { Filter = "Excel Dosyası (*.xlsx)|*.xlsx", FileName = "Musteriler.xlsx" };
+            var saveFileDialog = new SaveFileDialog 
+            { 
+                Filter = "Yeni Nesil Excel (*.xlsx)|*.xlsx|Eski Nesil Excel (*.xls)|*.xls|CSV Dosyası (*.csv)|*.csv", 
+                FileName = "Musteriler.xlsx" 
+            };
             if (saveFileDialog.ShowDialog() == true)
             {
                 var result = await _excelService.ExportCustomersAsync(saveFileDialog.FileName, Customers);

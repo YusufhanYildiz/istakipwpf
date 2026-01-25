@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using IsTakipWpf.Models;
@@ -8,15 +8,22 @@ namespace IsTakipWpf.Services
 {
     public class CustomerService : ICustomerService
     {
-        private readonly ICustomerRepository _repository;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly ILicenseService _licenseService;
 
-        public CustomerService(ICustomerRepository repository)
+        public CustomerService(ICustomerRepository customerRepository, ILicenseService licenseService)
         {
-            _repository = repository;
+            _customerRepository = customerRepository;
+            _licenseService = licenseService;
         }
 
         public async Task<(bool Success, string Message, int CustomerId)> CreateCustomerAsync(Customer customer)
         {
+            if (!await _licenseService.IsTrialActiveAsync())
+            {
+                return (false, "Deneme süreniz dolmuştur. Lütfen devam etmek için lisans satın alınız.", 0);
+            }
+
             var (isValid, message) = ValidateCustomer(customer);
             if (!isValid)
             {
@@ -25,7 +32,7 @@ namespace IsTakipWpf.Services
 
             try
             {
-                var id = await _repository.AddAsync(customer);
+                var id = await _customerRepository.AddAsync(customer);
                 return (true, "Müşteri başarıyla oluşturuldu.", id);
             }
             catch (Exception ex)
@@ -36,17 +43,17 @@ namespace IsTakipWpf.Services
 
         public async Task<bool> DeleteCustomerAsync(int id)
         {
-            return await _repository.SoftDeleteAsync(id);
+            return await _customerRepository.SoftDeleteAsync(id);
         }
 
         public async Task<IEnumerable<Customer>> GetActiveCustomersAsync()
         {
-            return await _repository.GetAllAsync(includeDeleted: false);
+            return await _customerRepository.GetAllAsync(includeDeleted: false);
         }
 
         public async Task<Customer> GetCustomerAsync(int id)
         {
-            return await _repository.GetByIdAsync(id);
+            return await _customerRepository.GetByIdAsync(id);
         }
 
         public async Task<IEnumerable<Customer>> SearchCustomersAsync(string searchTerm, string city = null, string district = null)
@@ -55,11 +62,16 @@ namespace IsTakipWpf.Services
             {
                 return await GetActiveCustomersAsync();
             }
-            return await _repository.SearchAsync(searchTerm, city, district);
+            return await _customerRepository.SearchAsync(searchTerm, city, district);
         }
 
         public async Task<(bool Success, string Message)> UpdateCustomerAsync(Customer customer)
         {
+            if (!await _licenseService.IsTrialActiveAsync())
+            {
+                return (false, "Deneme süreniz dolmuştur. Lütfen devam etmek için lisans satın alınız.");
+            }
+
             var (isValid, message) = ValidateCustomer(customer);
             if (!isValid)
             {
@@ -68,7 +80,7 @@ namespace IsTakipWpf.Services
 
             try
             {
-                var result = await _repository.UpdateAsync(customer);
+                var result = await _customerRepository.UpdateAsync(customer);
                 return result ? (true, "Müşteri güncellendi.") : (false, "Müşteri bulunamadı veya güncellenemedi.");
             }
             catch (Exception ex)
@@ -79,7 +91,7 @@ namespace IsTakipWpf.Services
 
         public async Task<int> AddMultipleAsync(IEnumerable<Customer> customers)
         {
-            return await _repository.AddMultipleAsync(customers);
+            return await _customerRepository.AddMultipleAsync(customers);
         }
 
         private (bool IsValid, string Message) ValidateCustomer(Customer customer)
@@ -94,7 +106,6 @@ namespace IsTakipWpf.Services
                 return (false, "Soyad alanı boş bırakılamaz.");
             }
 
-            // Simple phone validation - can be improved later
             if (!string.IsNullOrWhiteSpace(customer.PhoneNumber) && customer.PhoneNumber.Length < 10)
             {
                 return (false, "Telefon numarası geçersiz.");

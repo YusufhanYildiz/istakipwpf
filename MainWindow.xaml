@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         Title="İş Takip Uygulaması" Height="700" Width="1100"
         Icon="/app_icon.ico"
+        WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"

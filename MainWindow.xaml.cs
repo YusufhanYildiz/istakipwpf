@@ -28,7 +28,12 @@ namespace IsTakipWpf
                 if (result == MessageBoxResult.Yes)
                 {
                     var backupService = Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<IsTakipWpf.Services.IBackupService>(App.ServiceProvider);
-                    var folder = await settings.GetValueAsync("BackupFolder") ?? System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Backups");
+                    
+                    // DatabaseBootstrap içindeki ana klasörü baz alarak varsayılan yedekleme yolunu bul
+                    string baseFolder = System.IO.Path.GetDirectoryName(Infrastructure.DatabaseBootstrap.DbPath);
+                    string defaultBackupFolder = System.IO.Path.Combine(baseFolder, "Yedekler");
+
+                    var folder = await settings.GetValueAsync("BackupFolder") ?? defaultBackupFolder;
                     await backupService.CreateBackupAsync(folder);
                 }
                 else if (result == MessageBoxResult.Cancel)

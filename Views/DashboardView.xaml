@@ -11,26 +11,81 @@
             <StackPanel>
                 <TextBlock Text="Panel" Style="{StaticResource MaterialDesignHeadline4TextBlock}" Margin="0,0,0,24"/>
                 
-                <UniformGrid Columns="3" Margin="0,0,0,24">
-                    <materialDesign:Card Padding="16" Margin="0,0,16,0" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueMidForegroundBrush}">
-                        <StackPanel>
-                            <TextBlock Text="Toplam Müşteri" Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
-                            <TextBlock Text="{Binding TotalCustomers}" FontSize="36" FontWeight="Bold" HorizontalAlignment="Right"/>
-                        </StackPanel>
+                <UniformGrid Columns="4" Margin="0,0,0,24">
+                    <!-- Toplam Müşteri -->
+                    <materialDesign:Card Margin="0,0,12,0" UniformCornerRadius="12" materialDesign:ElevationAssist.Elevation="Dp3">
+                        <Border CornerRadius="12">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#4A148C" Offset="0"/>
+                                    <GradientStop Color="#7B1FA2" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid Margin="16">
+                                <materialDesign:PackIcon Kind="AccountMultiple" Width="48" Height="48" Foreground="White" Opacity="0.2" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                                <StackPanel>
+                                    <TextBlock Text="Toplam Müşteri" Foreground="White" Opacity="0.9" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding TotalCustomers}" Foreground="White" FontSize="32" FontWeight="Bold" HorizontalAlignment="Right" Margin="0,8,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
                     </materialDesign:Card>
 
-                    <materialDesign:Card Padding="16" Margin="0,0,16,0" Background="LightBlue">
-                        <StackPanel>
-                            <TextBlock Text="Devam Eden İşler" Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
-                            <TextBlock Text="{Binding ActiveJobs}" FontSize="36" FontWeight="Bold" HorizontalAlignment="Right"/>
-                        </StackPanel>
+                    <!-- Devam Eden İşler -->
+                    <materialDesign:Card Margin="0,0,12,0" UniformCornerRadius="12" materialDesign:ElevationAssist.Elevation="Dp3">
+                        <Border CornerRadius="12">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#0D47A1" Offset="0"/>
+                                    <GradientStop Color="#1976D2" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid Margin="16">
+                                <materialDesign:PackIcon Kind="Briefcase" Width="48" Height="48" Foreground="White" Opacity="0.2" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                                <StackPanel>
+                                    <TextBlock Text="Devam Eden İşler" Foreground="White" Opacity="0.9" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding ActiveJobs}" Foreground="White" FontSize="32" FontWeight="Bold" HorizontalAlignment="Right" Margin="0,8,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
                     </materialDesign:Card>
 
-                    <materialDesign:Card Padding="16" Background="Orange">
-                        <StackPanel>
-                            <TextBlock Text="Bekleyen İşler" Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
-                            <TextBlock Text="{Binding WaitingJobs}" FontSize="36" FontWeight="Bold" HorizontalAlignment="Right"/>
-                        </StackPanel>
+                    <!-- Bekleyen İşler -->
+                    <materialDesign:Card Margin="0,0,12,0" UniformCornerRadius="12" materialDesign:ElevationAssist.Elevation="Dp3">
+                        <Border CornerRadius="12">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#E65100" Offset="0"/>
+                                    <GradientStop Color="#FB8C00" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid Margin="16">
+                                <materialDesign:PackIcon Kind="Clock" Width="48" Height="48" Foreground="White" Opacity="0.2" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                                <StackPanel>
+                                    <TextBlock Text="Bekleyen İşler" Foreground="White" Opacity="0.9" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding WaitingJobs}" Foreground="White" FontSize="32" FontWeight="Bold" HorizontalAlignment="Right" Margin="0,8,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </materialDesign:Card>
+
+                    <!-- Toplam Kalan Bakiye -->
+                    <materialDesign:Card UniformCornerRadius="12" materialDesign:ElevationAssist.Elevation="Dp3">
+                        <Border CornerRadius="12">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#B71C1C" Offset="0"/>
+                                    <GradientStop Color="#D32F2F" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid Margin="16">
+                                <materialDesign:PackIcon Kind="Finance" Width="48" Height="48" Foreground="White" Opacity="0.2" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                                <StackPanel>
+                                    <TextBlock Text="Toplam Kalan Bakiye" Foreground="White" Opacity="0.9" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding TotalBalance, StringFormat=C0}" Foreground="White" FontSize="28" FontWeight="Bold" HorizontalAlignment="Right" Margin="0,8,0,0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
                     </materialDesign:Card>
                 </UniformGrid>
 
@@ -58,15 +113,15 @@
                                 </materialDesign:ColorZone>
                                 <TextBlock Text="Sütun Sıralaması (A'dan F'ye):" FontWeight="SemiBold" Margin="0,0,0,4"/>
                                 <ItemsControl Margin="8,0,0,8">
-                                    <TextBlock Text="1. Ad (Zorunlu)"/>
-                                    <TextBlock Text="2. Soyad (Zorunlu)"/>
-                                    <TextBlock Text="3. Telefon (Örn: 05xx...)"/>
-                                    <TextBlock Text="4. Açık Adres"/>
-                                    <TextBlock Text="5. İl"/>
-                                    <TextBlock Text="6. İlçe"/>
+                                    <TextBlock Text="1. Ad (Zorunlu) - Metin"/>
+                                    <TextBlock Text="2. Soyad (Zorunlu) - Metin"/>
+                                    <TextBlock Text="3. Telefon (Zorunlu) - 05XXXXXXXXX"/>
+                                    <TextBlock Text="4. Adres (Opsiyonel) - Açık Adres"/>
+                                    <TextBlock Text="5. İl (Opsiyonel) - Metin"/>
+                                    <TextBlock Text="6. İlçe (Opsiyonel) - Metin"/>
                                 </ItemsControl>
                                 <materialDesign:Card Background="#FFF9C4" Padding="8">
-                                    <TextBlock Text="İpucu: İlk satır başlık olmalıdır. Telefon numaralarını bitişik yazmanız önerilir." TextWrapping="Wrap" FontSize="11" Foreground="#F57F17"/>
+                                    <TextBlock Text="İpucu: İlk satır başlık olmalıdır. .xlsx, .xls ve .csv formatları desteklenir. Telefon numaralarını 11 hane olacak şekilde bitişik yazınız." TextWrapping="Wrap" FontSize="11" Foreground="#F57F17"/>
                                 </materialDesign:Card>
                             </StackPanel>
 
@@ -77,19 +132,22 @@
                                 <materialDesign:ColorZone Mode="PrimaryMid" Padding="8" CornerRadius="4" Margin="0,0,0,8">
                                     <TextBlock Text="İş Takip Aktarımı" FontWeight="Bold" HorizontalAlignment="Center"/>
                                 </materialDesign:ColorZone>
-                                <TextBlock Text="Sütun Sıralaması (A'dan H'ye):" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                                <TextBlock Text="Sütun Sıralaması (A'dan K'ye):" FontWeight="SemiBold" Margin="0,0,0,4"/>
                                 <ItemsControl Margin="8,0,0,8">
-                                    <TextBlock Text="1. Müşteri Ad Soyad (Sistemle aynı olmalı)"/>
-                                    <TextBlock Text="2. [Boş Bırakılabilir - İl]"/>
-                                    <TextBlock Text="3. [Boş Bırakılabilir - İlçe]"/>
-                                    <TextBlock Text="4. İş Başlığı (Zorunlu)"/>
-                                    <TextBlock Text="5. İş Açıklaması"/>
-                                    <TextBlock Text="6. [Boş Bırakılabilir - Durum]"/>
-                                    <TextBlock Text="7. Başlangıç Tarihi (GG.AA.YYYY)"/>
-                                    <TextBlock Text="8. Bitiş Tarihi (GG.AA.YYYY)"/>
+                                    <TextBlock Text="1. Müşteri (Zorunlu) - Ad Soyad"/>
+                                    <TextBlock Text="2. İl (Opsiyonel) - Metin"/>
+                                    <TextBlock Text="3. İlçe (Opsiyonel) - Metin"/>
+                                    <TextBlock Text="4. İş Başlığı (Zorunlu) - Metin"/>
+                                    <TextBlock Text="5. Açıklama (Opsiyonel) - Metin"/>
+                                    <TextBlock Text="6. Durum (Zorunlu) - Bekliyor/Devam Ediyor/Tamamlandı"/>
+                                    <TextBlock Text="7. Başlangıç (Zorunlu) - GG.AA.YYYY"/>
+                                    <TextBlock Text="8. Bitiş (Opsiyonel) - GG.AA.YYYY"/>
+                                    <TextBlock Text="9. İş Tutarı (Zorunlu) - Sayı (Örn: 1500)"/>
+                                    <TextBlock Text="10. Alınan Ödeme (Zorunlu) - Sayı (Örn: 500)"/>
+                                    <TextBlock Text="11. Kalan Bakiye (Opsiyonel) - Sayı"/>
                                 </ItemsControl>
                                 <materialDesign:Card Background="#E1F5FE" Padding="8">
-                                    <TextBlock Text="Kritik: İşin yüklenebilmesi için 'Müşteri Ad Soyad' bilgisi sistemdeki müşteriyle birebir aynı olmalıdır." TextWrapping="Wrap" FontSize="11" Foreground="#0277BD"/>
+                                    <TextBlock Text="Kritik: Durum sütunu için tam olarak 'Bekliyor', 'Devam Ediyor', 'Tamamlandı' veya 'İptal Edildi' yazılmalıdır." TextWrapping="Wrap" FontSize="11" Foreground="#0277BD"/>
                                 </materialDesign:Card>
                             </StackPanel>
                         </Grid>

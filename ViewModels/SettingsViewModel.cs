@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -14,6 +14,7 @@ namespace IsTakipWpf.ViewModels
         private readonly ISettingsRepository _settingsRepository;
         private readonly IThemeService _themeService;
         private readonly IUpdateService _updateService;
+        private readonly ILicenseService _licenseService;
         private readonly MaterialDesignThemes.Wpf.ISnackbarMessageQueue _messageQueue;
         
         private string _backupFolder;
@@ -23,7 +24,13 @@ namespace IsTakipWpf.ViewModels
         private string _updateStatus = "Güncel";
         private bool _isUpdateChecking;
         private bool _isUpdateDownloading;
+        private bool _isUpdateDownloaded;
         private Velopack.UpdateInfo _availableUpdate;
+
+        private string _licenseKey;
+        private string _hardwareId;
+        private string _licenseStatus;
+        private int _remainingTrialDays;
 
         public string CurrentVersion => _updateService.CurrentVersion;
 
@@ -45,10 +52,45 @@ namespace IsTakipWpf.ViewModels
             set => SetProperty(ref _isUpdateDownloading, value);
         }
 
-        public bool CanDownloadUpdate => _availableUpdate != null && !IsUpdateDownloading;
-        public bool CanRestartToUpdate => _availableUpdate != null && !IsUpdateDownloading; // Gerçekte indirme bittikten sonra true olmalı
+        public bool IsUpdateDownloaded
+        {
+            get => _isUpdateDownloaded;
+            set
+            {
+                if (SetProperty(ref _isUpdateDownloaded, value))
+                {
+                    OnPropertyChanged(nameof(CanDownloadUpdate));
+                    OnPropertyChanged(nameof(CanRestartToUpdate));
+                }
+            }
+        }
 
-        // ... existing properties ...
+        public bool CanDownloadUpdate => _availableUpdate != null && !IsUpdateDownloading && !IsUpdateDownloaded;
+        public bool CanRestartToUpdate => IsUpdateDownloaded;
+
+        public string LicenseKey
+        {
+            get => _licenseKey;
+            set => SetProperty(ref _licenseKey, value);
+        }
+
+        public string HardwareId
+        {
+            get => _hardwareId;
+            set => SetProperty(ref _hardwareId, value);
+        }
+
+        public string LicenseStatus
+        {
+            get => _licenseStatus;
+            set => SetProperty(ref _licenseStatus, value);
+        }
+
+        public int RemainingTrialDays
+        {
+            get => _remainingTrialDays;
+            set => SetProperty(ref _remainingTrialDays, value);
+        }
 
         public string BackupFolder
         {
@@ -84,13 +126,15 @@ namespace IsTakipWpf.ViewModels
         public ICommand CheckForUpdatesCommand { get; }
         public ICommand DownloadUpdateCommand { get; }
         public ICommand ApplyUpdateCommand { get; }
+        public ICommand ActivateLicenseCommand { get; }
 
-        public SettingsViewModel(IBackupService backupService, ISettingsRepository settingsRepository, IThemeService themeService, IUpdateService updateService, MaterialDesignThemes.Wpf.ISnackbarMessageQueue messageQueue)
+        public SettingsViewModel(IBackupService backupService, ISettingsRepository settingsRepository, IThemeService themeService, IUpdateService updateService, ILicenseService licenseService, MaterialDesignThemes.Wpf.ISnackbarMessageQueue messageQueue)
         {
             _backupService = backupService;
             _settingsRepository = settingsRepository;
             _themeService = themeService;
             _updateService = updateService;
+            _licenseService = licenseService;
             _messageQueue = messageQueue;
 
             SelectFolderCommand = new RelayCommand(_ => SelectFolder());
@@ -100,41 +144,9 @@ namespace IsTakipWpf.ViewModels
             CheckForUpdatesCommand = new RelayCommand(async _ => await CheckForUpdatesAsync());
             DownloadUpdateCommand = new RelayCommand(async _ => await DownloadUpdateAsync());
             ApplyUpdateCommand = new RelayCommand(_ => ApplyUpdate());
+            ActivateLicenseCommand = new RelayCommand(async _ => await ActivateLicenseAsync());
 
             _ = InitializeAsync();
-        }
-
-        private async Task CheckForUpdatesAsync()
-        {
-            if (IsUpdateChecking) return;
-            
-            IsUpdateChecking = true;
-            UpdateStatus = "Güncellemeler denetleniyor...";
-            
-            try
-            {
-                // UI Thread'i bloklamamak için Task.Run kullanılabilir
-                _availableUpdate = await Task.Run(async () => await _updateService.CheckForUpdatesAsync());
-                
-                if (_availableUpdate != null)
-                {
-                    UpdateStatus = $"Yeni sürüm mevcut: {_availableUpdate.TargetFullRelease.Version}";
-                    OnPropertyChanged(nameof(CanDownloadUpdate));
-                }
-                else
-                {
-                    UpdateStatus = "Uygulama güncel.";
-                }
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus = "Güncelleme denetlenirken hata oluştu.";
-                _messageQueue.Enqueue($"Güncelleme hatası: {ex.Message}");
-            }
-            finally
-            {
-                IsUpdateChecking = false;
-            }
         }
 
         private async Task DownloadUpdateAsync()
@@ -147,12 +159,12 @@ namespace IsTakipWpf.ViewModels
             try
             {
                 await _updateService.DownloadUpdatesAsync(_availableUpdate);
+                IsUpdateDownloaded = true;
                 UpdateStatus = "İndirme tamamlandı. Yeniden başlatmaya hazır.";
-                OnPropertyChanged(nameof(CanRestartToUpdate));
             }
             catch (Exception ex)
             {
-                UpdateStatus = "İndirme sırasında hata oluştu.";
+                UpdateStatus = "İndirme hatası.";
                 _messageQueue.Enqueue($"İndirme hatası: {ex.Message}");
             }
             finally
@@ -167,6 +179,84 @@ namespace IsTakipWpf.ViewModels
             _updateService.ApplyUpdatesAndRestart(_availableUpdate);
         }
 
+        private async Task ActivateLicenseAsync()
+        {
+            if (string.IsNullOrWhiteSpace(LicenseKey))
+            {
+                _messageQueue.Enqueue("Lütfen bir lisans anahtarı giriniz.");
+                return;
+            }
+
+            var success = await _licenseService.ActivateLicenseAsync(LicenseKey);
+            if (success)
+            {
+                _messageQueue.Enqueue("Lisans başarıyla aktifleştirildi!");
+                await UpdateLicenseInfoAsync();
+            }
+            else
+            {
+                _messageQueue.Enqueue("Geçersiz lisans anahtarı. Lütfen HWID kodunuzu kontrol edin.");
+            }
+        }
+
+        private async Task UpdateLicenseInfoAsync()
+        {
+            HardwareId = _licenseService.GetHardwareId();
+            var isLicensed = await _licenseService.IsLicensedAsync();
+            
+            if (isLicensed)
+            {
+                var savedKey = await _settingsRepository.GetValueAsync("LicenseKey");
+                var parts = savedKey.Split('-');
+                if (parts.Length > 1 && DateTime.TryParseExact(parts[1], "yyyyMMdd", null, System.Globalization.DateTimeStyles.None, out DateTime expiryDate))
+                {
+                    LicenseStatus = $"Full Sürüm (Bitiş: {expiryDate.ToShortDateString()})";
+                }
+                else
+                {
+                    LicenseStatus = "Full Sürüm Aktif";
+                }
+                RemainingTrialDays = 9999;
+            }
+            else
+            {
+                RemainingTrialDays = await _licenseService.GetRemainingTrialDaysAsync();
+                LicenseStatus = RemainingTrialDays > 0 ? $"Deneme Sürümü ({RemainingTrialDays} gün kaldı)" : "Deneme Süresi Doldu";
+            }
+        }
+
+        private async Task CheckForUpdatesAsync()
+        {
+            if (IsUpdateChecking) return;
+            
+            IsUpdateChecking = true;
+            UpdateStatus = "Güncellemeler denetleniyor...";
+            
+            try
+            {
+                _availableUpdate = await Task.Run(async () => await _updateService.CheckForUpdatesAsync());
+                
+                if (_availableUpdate != null)
+                {
+                    UpdateStatus = $"Yeni sürüm mevcut: {_availableUpdate.TargetFullRelease.Version}";
+                    OnPropertyChanged(nameof(CanDownloadUpdate));
+                }
+                else
+                {
+                    UpdateStatus = "Uygulama güncel.";
+                }
+            }
+            catch (Exception ex)
+            {
+                UpdateStatus = "Hata oluştu.";
+                _messageQueue.Enqueue($"Güncelleme hatası: {ex.Message}");
+            }
+            finally
+            {
+                IsUpdateChecking = false;
+            }
+        }
+
         private async Task InitializeAsync()
         {
             // Load Theme
@@ -175,7 +265,10 @@ namespace IsTakipWpf.ViewModels
             var savedFolder = await _settingsRepository.GetValueAsync("BackupFolder");
             if (string.IsNullOrEmpty(savedFolder))
             {
-                savedFolder = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "backup");
+                // DatabaseBootstrap içindeki ana klasörü baz alarak bir Backups alt klasörü oluşturuyoruz
+                string baseFolder = System.IO.Path.GetDirectoryName(Infrastructure.DatabaseBootstrap.DbPath);
+                savedFolder = System.IO.Path.Combine(baseFolder, "Yedekler");
+                
                 if (!System.IO.Directory.Exists(savedFolder))
                 {
                     System.IO.Directory.CreateDirectory(savedFolder);
@@ -187,6 +280,7 @@ namespace IsTakipWpf.ViewModels
             AutoBackupOnExit = autoBackupStr == "True";
 
             await LoadHistoryAsync();
+            await UpdateLicenseInfoAsync();
         }
 
         private async Task LoadHistoryAsync()
