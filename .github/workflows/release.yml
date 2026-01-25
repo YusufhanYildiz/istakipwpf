@@ -62,10 +62,21 @@ jobs:
             Releases/*.json
           generate_release_notes: true
           body: |
-            # İş Takip Uygulaması - ${{ github.ref_name }}
+            # 🚀 İş Takip Uygulaması - v1.0.5 (Final Kalite Sürümü)
             
-            Bu sürümdeki yenilikler:
-            - Otomatik güncelleme desteği iyileştirildi.
-            - Hata düzeltmeleri ve performans iyileştirmeleri.
+            Bu sürüm, uygulamanın en kararlı ve gelişmiş halidir. Kullanıcı deneyimi ve veri güvenliği ön planda tutularak hazırlanan bu güncelleme, önemli altyapı iyileştirmeleri içermektedir.
+
+            ### ✨ Yenilikler ve İyileştirmeler:
+            - **💎 Veri ve Lisans Güvenliği:** Uygulama artık veritabanını ve lisans bilgilerini `%APPDATA%\Roaming` klasöründe saklayarak, uygulama dosyaları temizlense bile verilerinizin ve lisansınızın korunmasını sağlar.
+            - **⚡ Performans:** XAML binding hataları ve UI gecikmeleri giderildi, daha akıcı bir arayüz sağlandı.
+            - **🔄 Akıllı Güncelleme:** Velopack entegrasyonu optimize edildi, artık güncellemeler daha güvenli ve hızlı.
+            - **🛠️ Hata Düzeltmeleri:** Dashboard verilerindeki hesaplama hataları ve çeşitli görsel aksaklıklar giderildi.
+
+            ### 📦 Kurulum Notları:
+            1. Mevcut sürümünüzü kaldırmadan `v1.0.5-Setup.exe` dosyasını çalıştırabilirsiniz.
+            2. Güncelleme sonrası tüm eski verileriniz ve lisans bilgileriniz otomatik olarak tanınacaktır.
+            
+            ---
+            *İşletmenizi modernleştirmeye devam ediyoruz.*
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
