@@ -39,7 +39,12 @@ jobs:
       - name: Pack with Velopack
         run: |
           $version = "${{ github.ref_name }}".TrimStart('v')
-          vpk pack -u IsTakipWpf -v $version -p ./publish -e "İş Takip Uygulaması.exe" --icon app_icon.ico
+          # Copy icon to publish folder if it exists to ensure Velopack finds it
+          if (Test-Path "app_icon.ico") {
+            Copy-Item "app_icon.ico" -Destination "./publish/"
+          }
+          
+          vpk pack -u IsTakipWpf -v $version -p ./publish -e "İş Takip Uygulaması.exe" --icon "./publish/app_icon.ico"
         shell: pwsh
 
       - name: Create GitHub Release
