@@ -1,0 +1,8 @@
+﻿2026-01-25T17:11:21.4106716Z ##[group]Run dotnet restore
+2026-01-25T17:11:21.4107042Z [36;1mdotnet restore[0m
+2026-01-25T17:11:21.4173355Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-01-25T17:11:21.4173718Z env:
+2026-01-25T17:11:21.4173908Z   DOTNET_ROOT: C:\Program Files\dotnet
+2026-01-25T17:11:21.4174124Z ##[endgroup]
+2026-01-25T17:11:23.5523786Z   Determining projects to restore...
+2026-01-25T17:11:31.8770632Z   Restored D:\a\istakipwpf\istakipwpf\IsTakipWpf.csproj (in 8.02 sec).

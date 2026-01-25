@@ -11,6 +11,7 @@
 *.md
 !README.md
 *.ico
+!app_icon.ico
 
 # User-specific files
 *.user

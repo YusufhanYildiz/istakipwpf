@@ -1,0 +1,8 @@
+﻿2026-01-25T17:11:08.8574386Z ##[group]Run dotnet tool install -g vpk
+2026-01-25T17:11:08.8574785Z [36;1mdotnet tool install -g vpk[0m
+2026-01-25T17:11:08.8641370Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-01-25T17:11:08.8641674Z env:
+2026-01-25T17:11:08.8641853Z   DOTNET_ROOT: C:\Program Files\dotnet
+2026-01-25T17:11:08.8642085Z ##[endgroup]
+2026-01-25T17:11:21.2666911Z You can invoke the tool using the following command: vpk
+2026-01-25T17:11:21.2667792Z Tool 'vpk' (version '0.0.1298') was successfully installed.

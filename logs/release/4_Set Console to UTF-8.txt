@@ -1,0 +1,7 @@
+﻿2026-01-25T17:11:08.4438193Z ##[group]Run chcp 65001
+2026-01-25T17:11:08.4438545Z [36;1mchcp 65001[0m
+2026-01-25T17:11:08.4512832Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-01-25T17:11:08.4513168Z env:
+2026-01-25T17:11:08.4513333Z   DOTNET_ROOT: C:\Program Files\dotnet
+2026-01-25T17:11:08.4513584Z ##[endgroup]
+2026-01-25T17:11:08.7336472Z Active code page: 65001

@@ -33,13 +33,16 @@ jobs:
         run: dotnet restore
 
       - name: Publish Application
-        run: dotnet publish IsTakipWpf.csproj -c Release -r win-x64 --self-contained false -o ./publish
+        run: |
+          dotnet publish IsTakipWpf.csproj -c Release -r win-x64 --self-contained false -p:PublishReadyToRun=false -o ./publish
         # Note: We use -r win-x64 because Velopack works best with RID-specific builds
 
       - name: Pack with Velopack
         run: |
           $version = "${{ github.ref_name }}".TrimStart('v')
-          # Copy icon to publish folder if it exists to ensure Velopack finds it
+          # Ensure UTF8 for Turkish characters in filename
+          [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+          
           if (Test-Path "app_icon.ico") {
             Copy-Item "app_icon.ico" -Destination "./publish/"
           }
