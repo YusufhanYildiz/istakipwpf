@@ -47,7 +47,7 @@ jobs:
             Copy-Item "app_icon.ico" -Destination "./publish/"
           }
           
-          vpk pack -u IsTakipWpf -v $version -p ./publish -e "İş Takip Uygulaması.exe" --icon "./publish/app_icon.ico"
+          vpk pack -u IsTakipApp -v $version -p ./publish -e "İş Takip Uygulaması.exe" --icon "./publish/app_icon.ico"
         shell: pwsh
 
       - name: Create GitHub Release
@@ -59,6 +59,13 @@ jobs:
             Releases/*.msi
             Releases/RELEASES
             Releases/*.nupkg
+            Releases/*.json
           generate_release_notes: true
+          body: |
+            # İş Takip Uygulaması - ${{ github.ref_name }}
+            
+            Bu sürümdeki yenilikler:
+            - Otomatik güncelleme desteği iyileştirildi.
+            - Hata düzeltmeleri ve performans iyileştirmeleri.
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
