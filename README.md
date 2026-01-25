@@ -54,13 +54,13 @@ Uygulamaya ilk giriş için aşağıdaki varsayılan bilgileri kullanabilirsiniz
 - **Kullanıcı Adı:** `admin`
 - **Şifre:** `123`
 
-## 🚀 Son Sürümdeki Yenilikler (v1.0.5)
+## 🚀 Son Sürümdeki Yenilikler (v1.0.4)
 
 *   **💎 Veri ve Lisans Güvenliği:** Uygulama artık veritabanını ve lisans bilgilerini `%APPDATA%\Roaming` klasöründe saklayarak, uygulama dosyaları temizlense bile verilerinizin ve lisansınızın korunmasını sağlar.
-*   **⚡ Performans ve Kararlılık:** XAML binding hataları giderildi ve Dashboard verimliliği artırıldı.
-*   **🔄 İyileştirilmiş Velopack Desteği:** Güncelleme mekanizması daha kararlı hale getirildi.
-*   **Dashboard Hızlı Notlar:** Ana panele "Hızlı Not Ekle" widget'ı eklendi.
-*   **Global Türkçe Desteği:** Uygulama her zaman Türkçe (`tr-TR`) kültür ayarlarıyla çalışır.
+*   **📝 Dashboard Hızlı Notlar:** Ana panele "Hızlı Not Ekle" widget'ı eklendi. Artık uygulama açılır açılmaz hızlıca not alabilir ve son 5 notunuzu anlık olarak görebilirsiniz.
+*   **⚡ Performans ve Kararlılık:** UI optimizasyonları yapıldı ve uygulama genel hızı artırıldı.
+*   **🌍 Global Türkçe Desteği:** Windows sistem diliniz İngilizce olsa bile uygulama artık her zaman Türkçe (`tr-TR`) kültür ayarlarıyla çalışır.
+*   **🔄 İyileştirilmiş Güncelleme Desteği:** Velopack entegrasyonu modernize edilerek "İş Takip Uygulaması" adıyla daha profesyonel bir kurulum deneyimi sağlandı.
 
 ---
 

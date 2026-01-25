@@ -32,8 +32,8 @@ namespace IsTakipWpf
             if (!Infrastructure.DatabaseBootstrap.IsPortable)
             {
                 var result = System.Windows.MessageBox.Show(
-                    "Uygulama kaldırılıyor. Kayıtlı tüm verileriniz ve yedekleriniz kalıcı olarak silinsin mi?",
-                    "Verileri Temizle",
+                    "Uygulama kaldırılıyor. Uygulama kalıntıları ve geçici dosyalar temizlensin mi?\n\n(Not: Veritabanınız ve lisans bilgileriniz korunacaktır.)",
+                    "Uygulama Temizliği",
                     System.Windows.MessageBoxButton.YesNo,
                     System.Windows.MessageBoxImage.Question);
 

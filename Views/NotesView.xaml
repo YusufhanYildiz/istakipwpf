@@ -6,6 +6,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:converters="clr-namespace:IsTakipWpf.Infrastructure"
              mc:Ignorable="d" 
+             UseLayoutRounding="True"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
     </UserControl.Resources>
@@ -17,16 +18,13 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Border Grid.Row="0" Margin="16,16,16,8" CornerRadius="8" Background="{DynamicResource MaterialDesignPaper}">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="5" Direction="270" RenderingBias="Quality" ShadowDepth="1" Opacity="0.1"/>
-            </Border.Effect>
+        <materialDesign:Card Grid.Row="0" Margin="16,16,16,8" UniformCornerRadius="8" materialDesign:ElevationAssist.Elevation="Dp1" Background="{DynamicResource MaterialDesignPaper}">
             <DockPanel Margin="16,12">
                 <TextBlock Text="Notlarım" Style="{StaticResource MaterialDesignHeadline5TextBlock}" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding Notes.Count, StringFormat='({0} Not)'}" 
                            Margin="8,0,0,0" VerticalAlignment="Bottom" Opacity="0.6" Style="{StaticResource MaterialDesignCaptionTextBlock}"/>
             </DockPanel>
-        </Border>
+        </materialDesign:Card>
 
         <!-- Notes Area -->
         <Grid Grid.Row="1">
@@ -48,10 +46,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <materialDesign:Card Margin="8" Width="250" MinHeight="150" UniformCornerRadius="8" materialDesign:ElevationAssist.Elevation="Dp0">
-                                <materialDesign:Card.Effect>
-                                    <DropShadowEffect BlurRadius="8" Direction="270" RenderingBias="Quality" ShadowDepth="1.5" Opacity="0.15"/>
-                                </materialDesign:Card.Effect>
+                            <materialDesign:Card Margin="8" Width="250" MinHeight="150" UniformCornerRadius="8" materialDesign:ElevationAssist.Elevation="Dp2">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -64,14 +59,15 @@
                                             CornerRadius="8,8,0,0" 
                                             Padding="12,8">
                                         <DockPanel>
-                                            <ToggleButton Style="{StaticResource MaterialDesignActionToggleButton}"
+                                            <ToggleButton Style="{StaticResource MaterialDesignFlatToggleButton}"
                                                           Command="{Binding DataContext.PinNoteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                           CommandParameter="{Binding}"
                                                           IsChecked="{Binding IsPinned}"
-                                                          Width="24" Height="24"
+                                                          Width="32" Height="32"
+                                                          materialDesign:RippleAssist.IsCentered="True"
                                                           DockPanel.Dock="Right"
                                                           ToolTip="Sabitle">
-                                                <materialDesign:PackIcon Kind="Pin" Width="16" Height="16"/>
+                                                <materialDesign:PackIcon Kind="Pin" Width="18" Height="18"/>
                                             </ToggleButton>
                                             <TextBlock Text="{Binding Title}" 
                                                        Style="{StaticResource MaterialDesignSubtitle2TextBlock}" 
@@ -144,11 +140,13 @@
             </Border>
 
             <!-- FAB (Floating Action Button) -->
-            <Button Style="{StaticResource MaterialDesignFloatingActionSecondaryButton}"
+            <Button Style="{StaticResource MaterialDesignFloatingActionButton}"
                     Command="{Binding ToggleAddModeCommand}"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom"
                     Margin="0,0,32,32"
                     ToolTip="Yeni Not Ekle"
+                    materialDesign:ButtonProgressAssist.IsIndicatorVisible="False"
+                    materialDesign:ButtonProgressAssist.Value="0"
                     Visibility="{Binding IsAdding, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                 <materialDesign:PackIcon Kind="Plus" Width="24" Height="24" />
             </Button>

@@ -24,10 +24,7 @@
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <!-- Hesap Ayarları Kartı -->
-                <materialDesign:Card Padding="16" Margin="0,0,0,16" materialDesign:ElevationAssist.Elevation="Dp0">
-                    <materialDesign:Card.Effect>
-                        <DropShadowEffect BlurRadius="10" Direction="270" RenderingBias="Quality" ShadowDepth="1.5" Opacity="0.15"/>
-                    </materialDesign:Card.Effect>
+                <materialDesign:Card Padding="16" Margin="0,0,0,16" materialDesign:ElevationAssist.Elevation="Dp2" Background="{DynamicResource MaterialDesignPaper}">
                     <StackPanel>
                         <TextBlock Text="Hesap Ayarları" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,16"/>
                         
@@ -75,10 +72,7 @@
                 </materialDesign:Card>
 
                 <!-- Lisans Bilgileri Kartı -->
-                <materialDesign:Card Padding="16" Margin="0,0,0,16" materialDesign:ElevationAssist.Elevation="Dp0">
-                    <materialDesign:Card.Effect>
-                        <DropShadowEffect BlurRadius="10" Direction="270" RenderingBias="Quality" ShadowDepth="1.5" Opacity="0.15"/>
-                    </materialDesign:Card.Effect>
+                <materialDesign:Card Padding="16" Margin="0,0,0,16" materialDesign:ElevationAssist.Elevation="Dp2" Background="{DynamicResource MaterialDesignPaper}">
                     <StackPanel>
                         <TextBlock Text="Lisans Bilgileri" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,16"/>
                         
@@ -132,10 +126,7 @@
                 </materialDesign:Card>
 
                 <!-- Uygulama Güncelleme Kartı -->
-                <materialDesign:Card Padding="16" Margin="0,0,0,16" materialDesign:ElevationAssist.Elevation="Dp0">
-                    <materialDesign:Card.Effect>
-                        <DropShadowEffect BlurRadius="10" Direction="270" RenderingBias="Quality" ShadowDepth="1.5" Opacity="0.15"/>
-                    </materialDesign:Card.Effect>
+                <materialDesign:Card Padding="16" Margin="0,0,0,16" materialDesign:ElevationAssist.Elevation="Dp2" Background="{DynamicResource MaterialDesignPaper}">
                     <StackPanel>
                         <TextBlock Text="Uygulama Güncelleme" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,16"/>
                         
@@ -179,10 +170,7 @@
                 </materialDesign:Card>
 
                 <!-- Görünüm Ayarları Kartı -->
-                <materialDesign:Card Padding="16" Margin="0,0,0,16" materialDesign:ElevationAssist.Elevation="Dp0">
-                    <materialDesign:Card.Effect>
-                        <DropShadowEffect BlurRadius="10" Direction="270" RenderingBias="Quality" ShadowDepth="1.5" Opacity="0.15"/>
-                    </materialDesign:Card.Effect>
+                <materialDesign:Card Padding="16" Margin="0,0,0,16" materialDesign:ElevationAssist.Elevation="Dp2" Background="{DynamicResource MaterialDesignPaper}">
                     <StackPanel>
                         <TextBlock Text="Görünüm Ayarları" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,16"/>
                         <ComboBox materialDesign:HintAssist.Hint="Tema"
@@ -201,10 +189,7 @@
                 </materialDesign:Card>
 
                 <!-- Yedekleme Ayarları Kartı -->
-                <materialDesign:Card Padding="16" Margin="0,0,0,16" materialDesign:ElevationAssist.Elevation="Dp0">
-                    <materialDesign:Card.Effect>
-                        <DropShadowEffect BlurRadius="10" Direction="270" RenderingBias="Quality" ShadowDepth="1.5" Opacity="0.15"/>
-                    </materialDesign:Card.Effect>
+                <materialDesign:Card Padding="16" Margin="0,0,0,16" materialDesign:ElevationAssist.Elevation="Dp2" Background="{DynamicResource MaterialDesignPaper}">
                     <StackPanel>
                         <TextBlock Text="Yedekleme Ayarları" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,16"/>
                         
@@ -228,10 +213,7 @@
                 </materialDesign:Card>
 
                 <!-- Yedekleme Geçmişi Kartı -->
-                <materialDesign:Card Padding="16" materialDesign:ElevationAssist.Elevation="Dp0">
-                    <materialDesign:Card.Effect>
-                        <DropShadowEffect BlurRadius="10" Direction="270" RenderingBias="Quality" ShadowDepth="1.5" Opacity="0.15"/>
-                    </materialDesign:Card.Effect>
+                <materialDesign:Card Padding="16" materialDesign:ElevationAssist.Elevation="Dp2" Background="{DynamicResource MaterialDesignPaper}">
                     <StackPanel>
                         <Grid Margin="0,0,0,16">
                             <Grid.ColumnDefinitions>

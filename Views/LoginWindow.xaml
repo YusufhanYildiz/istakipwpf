@@ -83,11 +83,9 @@
 
                     <ToggleButton Grid.Column="1"
                                   IsChecked="{Binding IsPasswordVisible}"
-                                  Style="{StaticResource MaterialDesignActionToggleButton}"
+                                  Style="{StaticResource MaterialDesignFlatToggleButton}"
                                   Margin="5,0,0,0">
-                        <ToggleButton.Content>
-                            <materialDesign:PackIcon Kind="EyeOff" />
-                        </ToggleButton.Content>
+                        <materialDesign:PackIcon Kind="EyeOff" />
                         <materialDesign:ToggleButtonAssist.OnContent>
                             <materialDesign:PackIcon Kind="Eye" />
                         </materialDesign:ToggleButtonAssist.OnContent>
