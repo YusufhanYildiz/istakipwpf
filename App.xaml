@@ -16,6 +16,7 @@
             <infra:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
             <infra:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter" />
             <infra:LessThanZeroConverter x:Key="LessThanZeroConverter" />
+            <infra:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
