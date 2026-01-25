@@ -161,6 +161,7 @@ namespace IsTakipWpf.ViewModels
         public ICommand SelectFolderCommand { get; }
         public ICommand CreateManualBackupCommand { get; }
         public ICommand RestoreBackupCommand { get; }
+        public ICommand RestoreFromExternalFileCommand { get; }
         public ICommand CheckForUpdatesCommand { get; }
         public ICommand DownloadUpdateCommand { get; }
         public ICommand ApplyUpdateCommand { get; }
@@ -181,6 +182,7 @@ namespace IsTakipWpf.ViewModels
             SelectFolderCommand = new RelayCommand(_ => SelectFolder());
             CreateManualBackupCommand = new RelayCommand(async _ => await CreateBackupAsync());
             RestoreBackupCommand = new RelayCommand(async backup => await RestoreAsync(backup as BackupInfo));
+            RestoreFromExternalFileCommand = new RelayCommand(async _ => await RestoreFromExternalFileAsync());
             
             CheckForUpdatesCommand = new RelayCommand(async _ => await CheckForUpdatesAsync());
             DownloadUpdateCommand = new RelayCommand(async _ => await DownloadUpdateAsync());
@@ -412,6 +414,21 @@ namespace IsTakipWpf.ViewModels
             if (backup == null) return;
             var result = await _backupService.RestoreBackupAsync(backup.FilePath);
             _messageQueue.Enqueue(result.Message);
+        }
+
+        private async Task RestoreFromExternalFileAsync()
+        {
+            var dialog = new OpenFileDialog
+            {
+                Filter = "Veritabanı Dosyası (*.db)|*.db",
+                Title = "Geri Yüklenecek Veritabanını Seçin"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                var result = await _backupService.RestoreBackupAsync(dialog.FileName);
+                _messageQueue.Enqueue(result.Message);
+            }
         }
 
         private async Task SaveSettingsAsync()

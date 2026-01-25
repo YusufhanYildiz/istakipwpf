@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
@@ -38,30 +39,15 @@ namespace IsTakipWpf.Infrastructure
 
         private static string GetBaseDataFolder()
         {
-            string appDirectory = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-            string dirName = Path.GetFileName(appDirectory);
-            bool isInsideAppVersionDir = dirName.StartsWith("app-", StringComparison.OrdinalIgnoreCase);
-
-            if (isInsideAppVersionDir || !IsPortable)
-            {
-                try
-                {
-                    var parent = Directory.GetParent(appDirectory);
-                    if (parent != null)
-                    {
-                        // Velopack ana dizinindeysek (IsTakipApp veya kullanıcı nereye kurduysa) oraya VeriDeposu aç
-                        return Path.Combine(parent.FullName, "VeriDeposu");
-                    }
-                }
-                catch { }
-            }
-
             if (IsPortable)
             {
                 return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Veriler");
             }
 
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "IsTakipApp", "VeriDeposu");
+            // Velopack veya Yüklü Mod: %APPDATA%\IsTakipApp\VeriDeposu
+            // Bu konum en güvenlisidir, çünkü uygulama silinse bile (kullanıcı özellikle istemedikçe) silinmez.
+            string roamingData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            return Path.Combine(roamingData, "IsTakipApp", "VeriDeposu");
         }
 
         private static readonly string AppDataFolder = GetBaseDataFolder();
@@ -86,7 +72,19 @@ namespace IsTakipWpf.Infrastructure
                 Directory.CreateDirectory(dbFolder);
             }
 
-            // Kurtarma Mantığı: Eğer veritabanı yoksa eski app-x.y.z klasörlerini tara
+            // Geri yükleme dosyası kontrolü (.restore)
+            string restorePath = DbPath + ".restore";
+            if (File.Exists(restorePath))
+            {
+                try
+                {
+                    if (File.Exists(DbPath)) File.Delete(DbPath);
+                    File.Move(restorePath, DbPath);
+                }
+                catch { }
+            }
+
+            // Kurtarma Mantığı: Eğer veritabanı yoksa eski olası klasörleri tara
             if (!File.Exists(DbPath))
             {
                 TryRecoverData(DbPath);
@@ -275,29 +273,41 @@ namespace IsTakipWpf.Infrastructure
         {
             try
             {
-                string appDirectory = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-                var parent = Directory.GetParent(appDirectory);
-                if (parent == null) return;
+                // Olası eski konumları listele
+                var possiblePaths = new List<string>();
 
-                // app-* klasörlerini bul ve en yeniden eskiye sırala (alfabetik olarak app-1.1.0 > app-1.0.0)
-                var appFolders = Directory.GetDirectories(parent.FullName, "app-*")
-                    .OrderByDescending(f => f)
-                    .ToList();
+                // 1. Konum: Eski VeriDeposu (LocalAppData içinde olabilir)
+                string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                possiblePaths.Add(Path.Combine(localAppData, "IsTakipApp", "VeriDeposu", "database.db"));
 
-                foreach (var folder in appFolders)
+                // 2. Konum: Uygulamanın üst klasöründeki VeriDeposu
+                string appDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                var parent = Directory.GetParent(appDir);
+                if (parent != null)
                 {
-                    // Eğer bu klasör şu anki çalıştığımız klasörse atla
-                    if (folder.Equals(appDirectory, StringComparison.OrdinalIgnoreCase)) continue;
+                    possiblePaths.Add(Path.Combine(parent.FullName, "VeriDeposu", "database.db"));
 
-                    // Eski yapıda "Veriler/database.db" olarak kaydedilmiş olabilir
-                    string oldPath = Path.Combine(folder, "Veriler", "database.db");
-                    if (File.Exists(oldPath))
+                    // 3. Konum: Eski app-* klasörlerinin içindeki Veriler klasörü
+                    var appFolders = Directory.GetDirectories(parent.FullName, "app-*")
+                        .OrderByDescending(f => f);
+
+                    foreach (var folder in appFolders)
+                    {
+                        if (folder.Equals(appDir, StringComparison.OrdinalIgnoreCase)) continue;
+                        possiblePaths.Add(Path.Combine(folder, "Veriler", "database.db"));
+                        possiblePaths.Add(Path.Combine(folder, "Data", "database.db"));
+                    }
+                }
+
+                foreach (var oldPath in possiblePaths)
+                {
+                    if (File.Exists(oldPath) && oldPath != targetDbPath)
                     {
                         string targetFolder = Path.GetDirectoryName(targetDbPath);
                         if (!Directory.Exists(targetFolder)) Directory.CreateDirectory(targetFolder);
 
                         File.Copy(oldPath, targetDbPath, true);
-                        break; // En güncelini bulduk ve kopyaladık
+                        break; 
                     }
                 }
             }

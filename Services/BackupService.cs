@@ -58,10 +58,13 @@ namespace IsTakipWpf.Services
                         return (false, "Yedek dosyası bulunamadı.");
                     }
 
-                    // NOTE: SQLite connection might lock the file. 
-                    File.Copy(backupPath, DatabaseBootstrap.DbPath, true);
+                    // SQLite bağlantısı dosyayı kilitleyebilir. 
+                    // Bu yüzden dosyayı .restore uzantısıyla yanına kopyalıyoruz.
+                    // DatabaseBootstrap.Initialize() tarafında bu dosya varsa asıl dosyanın üzerine yazılacak.
+                    string restorePath = DatabaseBootstrap.DbPath + ".restore";
+                    File.Copy(backupPath, restorePath, true);
 
-                    return (true, "Geri yükleme başarılı. Uygulamayı yeniden başlatmanız önerilir.");
+                    return (true, "Geri yükleme hazırlandı. Değişikliklerin uygulanması için lütfen uygulamayı kapatıp yeniden açın.");
                 }
                 catch (Exception ex)
                 {
